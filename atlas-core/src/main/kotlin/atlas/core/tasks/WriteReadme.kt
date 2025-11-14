@@ -116,6 +116,7 @@ public abstract class WriteReadme : DefaultTask(), AtlasGenerationTask, TaskWith
     }
   }
 
+  @Suppress("ktlint:standard:when-entry-bracing")
   private fun diagramContents(tag: String, file: File) = when (file.extension.lowercase()) {
     "md", "txt" -> buildString {
       file

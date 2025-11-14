@@ -110,6 +110,8 @@ private fun IndentedStringBuilder.appendLink(config: D2ClassesConfig, type: Link
   appendLine("}")
 }
 
+// Remove suppression once https://github.com/pinterest/ktlint/pull/3177 is merged
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 private fun linkAttributes(config: D2ClassesConfig, link: LinkType): List<Pair<String, String>> {
   val attrs = mutableMapOf<String, String>()
   link.color?.let { attrs["style.stroke"] = it }
