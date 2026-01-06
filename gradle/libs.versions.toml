@@ -1,6 +1,6 @@
 [versions]
 agp = "9.0.0-rc02"
-junit = "6.0.1"
+junit = "6.0.2"
 kotlin = "2.3.0"
 
 [libraries]
