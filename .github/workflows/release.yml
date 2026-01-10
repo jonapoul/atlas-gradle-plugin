@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'jonapoul/atlas-gradle-plugin'
     container:
-      image: gradle:9.2.1-jdk21
+      image: gradle:9.2.1-jdk17
     permissions:
       contents: write
     needs: verify-version
