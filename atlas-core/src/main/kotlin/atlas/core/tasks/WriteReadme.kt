@@ -117,18 +117,22 @@ public abstract class WriteReadme : DefaultTask(), AtlasGenerationTask, TaskWith
   }
 
   private fun diagramContents(tag: String, file: File) = when (file.extension.lowercase()) {
-    "md", "txt" -> buildString {
-      file
-        .readLines()
-        .onEach { appendLine(it) }
+    "md", "txt" -> {
+      buildString {
+        file
+          .readLines()
+          .onEach { appendLine(it) }
+      }
     }
 
-    "mmd" -> buildString {
-      appendLine("```mermaid")
-      file
-        .readLines()
-        .forEach { appendLine(it) }
-      appendLine("```")
+    "mmd" -> {
+      buildString {
+        appendLine("```mermaid")
+        file
+          .readLines()
+          .forEach { appendLine(it) }
+        appendLine("```")
+      }
     }
 
     else -> {

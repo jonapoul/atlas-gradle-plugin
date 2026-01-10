@@ -120,7 +120,7 @@ private fun linkAttributes(config: D2ClassesConfig, link: LinkType): List<Pair<S
     LinkStyle.Dotted -> attrs["style.stroke-dash"] = "2"
     LinkStyle.Basic -> Unit
     LinkStyle.Invisible -> attrs["style.opacity"] = "0"
-    LinkStyle.Bold -> attrs["style.stroke-width"] = "3" // default 2
+    LinkStyle.Bold -> attrs["style.stroke-width"] = "3"
     null -> Unit
   }
 
