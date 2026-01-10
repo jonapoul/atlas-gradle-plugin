@@ -1,5 +1,5 @@
 [versions]
-agp = "9.0.0-rc03"
+agp = "8.13.2"
 junit = "6.0.2"
 kotlin = "2.2.0"
 

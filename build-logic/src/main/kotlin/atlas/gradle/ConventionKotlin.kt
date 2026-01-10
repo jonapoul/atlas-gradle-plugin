@@ -19,10 +19,12 @@ class ConventionKotlin : Plugin<Project> {
       apply(ConventionLicensee::class)
     }
 
+    val javaVersion = providers.gradleProperty("atlas.javaVersion")
+
     extensions.configure<KotlinJvmProjectExtension> {
       compilerOptions {
         allWarningsAsErrors.set(true)
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(javaVersion.map(JvmTarget::fromTarget))
         explicitApi()
 
         freeCompilerArgs.addAll(
@@ -34,8 +36,9 @@ class ConventionKotlin : Plugin<Project> {
     }
 
     extensions.configure<JavaPluginExtension> {
-      sourceCompatibility = JavaVersion.VERSION_21
-      targetCompatibility = JavaVersion.VERSION_21
+      val version = javaVersion.map(JavaVersion::toVersion).get()
+      sourceCompatibility = version
+      targetCompatibility = version
     }
   }
 }
