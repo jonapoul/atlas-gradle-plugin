@@ -1,4 +1,4 @@
-FROM gradle:9.2.1-jdk17
+FROM gradle:9.3.1-jdk17
 
 RUN apt-get update
 RUN apt-get install -y graphviz curl
