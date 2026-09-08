@@ -447,6 +447,7 @@ atlas {
 
       elk {
         algorithm = ElkAlgorithm.Layered
+        edgeEdgeBetweenLayers = 50
         edgeNodeBetweenLayers = 40
         nodeNodeBetweenLayers = 70
         nodeSelfLoop = 50
@@ -469,7 +470,7 @@ atlas {
 Defines the underlying engine used by D2 to organise the project nodes in each chart. [See this link in the D2 docs for more detailed information](https://d2lang.com/tour/layouts/). The available options are:
 
 - **Dagre**: default option.
-- **Elk**: Framework from Eclipse for diagram generation - also supported by [Mermaid](usage-mermaid.md).
+- **Elk**: Framework from Eclipse for diagram generation - also supported by [Mermaid](usage-mermaid.md). Its four spacing settings are what you'd tune to control how tightly the chart is packed. `edgeEdgeBetweenLayers` is the one to reach for when a chart comes out far taller than it needs to be: ELK gives every connector crossing between two layers its own routing slot, so the gap between those layers works out as `max(nodeNodeBetweenLayers, (slots - 1) * edgeEdgeBetweenLayers + 2 * edgeNodeBetweenLayers)`. On a wide chart where one layer has a lot of links to the one below, the first term stops mattering and the layers get pushed a long way apart, so turning `edgeEdgeBetweenLayers` down is what pulls them back together. It needs a D2 newer than 0.9.0, which is where `--elk-edgeEdgeBetweenLayers` was added - on 0.9.0 and older it was fixed at 50, and passing the flag fails the task with `unknown flag: --elk-edgeEdgeBetweenLayers`.
 - **Tala**: D2's own engine, built for software architecture diagrams. It was a paid closed-source plugin until D2 0.9.0, which open sourced it and bundled it into the standard installation, so it now works out of the box. Its only setting is `seeds`: D2 lays the chart out once per seed and keeps the best complete result, so more seeds gives a tidier chart and a slower build. Layout is deterministic for a given set of seeds, which matters if you commit your charts. D2 takes at most 16 of them.
 
 Screenshots below are with all default settings.
