@@ -1,4 +1,4 @@
-FROM gradle:9.7.1-jdk21@sha256:c0ce93e022ea2e705332dabe090019c749356576fc8fe39c38129b2aae9ed68f
+FROM gradle:9.7.1-jdk21@sha256:52016096dc2fa801f949ae2715daf42296228ec6112882bf714f2f0d9e98935f
 
 # apt-get update shares a layer with the installs on purpose: cached on its own, the package
 # index goes stale and later fetches start 404ing on superseded versions.
