@@ -220,7 +220,8 @@ The `PathTransformSpec` allows regex-based transformations of project paths in g
 
 ## File Locations
 
-- Generated diagrams: `atlas/<framework>/` in each project, e.g. `atlas/d2/chart.d2`. Legends only in the root project, resolved from `AtlasConfig.rootDir`
+- Generated diagrams: `atlas/<framework>/` in each project, e.g. `atlas/d2/chart.svg`. Legends only in the root project, resolved from `AtlasConfig.rootDir`
+- Intermediate files (D2 `.d2`, Graphviz `.dot`): `build/atlas/<framework>/`, unless `intermediateFilesInBuildDir` is disabled in that framework's block
 - Per-project data: `build/atlas/*.json` in each subproject
 - Test fixtures: `src/test/kotlin/atlas/test/scenarios/`
 - Documentation: `docs/` (MkDocs-based, deployed to GitHub Pages)

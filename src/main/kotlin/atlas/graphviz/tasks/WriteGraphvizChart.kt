@@ -5,8 +5,8 @@ import atlas.core.internal.ATLAS_TASK_GROUP
 import atlas.core.internal.AtlasContext
 import atlas.core.internal.DummyAtlasGenerationTask
 import atlas.core.internal.atlasBuildDirectory
+import atlas.core.internal.intermediateFile
 import atlas.core.internal.logIfConfigured
-import atlas.core.internal.outputFile
 import atlas.core.internal.qualifier
 import atlas.core.internal.readProjectLinks
 import atlas.core.internal.readProjectTypes
@@ -83,11 +83,12 @@ public abstract class WriteGraphvizChart : DefaultTask(), TaskWithOutputFile, At
         context = context,
         spec = spec,
         outputFile =
-          context.project.outputFile(
+          context.project.intermediateFile(
             config = context.config,
             framework = Graphviz,
             variant = Chart,
             fileExtension = spec.fileExtension.get(),
+            inBuildDir = spec.intermediateFilesInBuildDir.get(),
           ),
       )
 

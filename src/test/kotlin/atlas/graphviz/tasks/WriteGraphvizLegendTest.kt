@@ -20,7 +20,7 @@ internal class WriteGraphvizLegendTest : ScenarioTest() {
       assertThatTask("writeGraphvizLegend").buildsSuccessfully()
 
       // then the file was generated, with projects in declaration order
-      assertThat(resolve("atlas/graphviz/legend.dot"))
+      assertThat(resolve("build/atlas/graphviz/legend.dot"))
         .exists()
         .contentContains(
           """
@@ -47,7 +47,7 @@ internal class WriteGraphvizLegendTest : ScenarioTest() {
       assertThatTask("writeGraphvizLegend").buildsSuccessfully()
 
       // then the file was generated, overriding build script
-      assertThat(resolve("atlas/graphviz/legend.dot"))
+      assertThat(resolve("build/atlas/graphviz/legend.dot"))
         .exists()
         .contentEquals(
           """

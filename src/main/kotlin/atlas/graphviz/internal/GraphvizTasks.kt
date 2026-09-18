@@ -23,6 +23,7 @@ internal object GraphvizTasks : FrameworkTasks {
       val execLegend =
         ExecGraphviz.register(
           target = this,
+          config = context.config,
           spec = spec,
           variant = Legend,
           dotFileTask = realTask,
@@ -36,17 +37,19 @@ internal object GraphvizTasks : FrameworkTasks {
         builtBy = execLegend,
       )
 
-      // Also validate the legend's dotfile when we call gradle check
-      val dummyTask = WriteGraphvizLegend.dummy(context = context, spec = spec)
+      // Also validate the legend's dotfile when we call gradle check, unless it's in the build dir
+      if (!spec.intermediateFilesInBuildDir.get()) {
+        val dummyTask = WriteGraphvizLegend.dummy(context = context, spec = spec)
 
-      CheckFileDiff.register(
-        target = this,
-        config = context.config,
-        spec = spec,
-        variant = Legend,
-        realTask = realTask,
-        dummyTask = dummyTask,
-      )
+        CheckFileDiff.register(
+          target = this,
+          config = context.config,
+          spec = spec,
+          variant = Legend,
+          realTask = realTask,
+          dummyTask = dummyTask,
+        )
+      }
     }
 
   override fun registerChildTasks(context: AtlasContext): ChartFiles =
@@ -54,20 +57,24 @@ internal object GraphvizTasks : FrameworkTasks {
       val graphvizSpec = context.graphviz
 
       val chartTask = WriteGraphvizChart.real(context = context, spec = graphvizSpec)
-      val dummyChartTask = WriteGraphvizChart.dummy(context = context, spec = graphvizSpec)
+      // Nothing to check when the dotfile lives in the build directory
+      if (!graphvizSpec.intermediateFilesInBuildDir.get()) {
+        val dummyChartTask = WriteGraphvizChart.dummy(context = context, spec = graphvizSpec)
 
-      CheckFileDiff.register(
-        target = this,
-        config = context.config,
-        spec = graphvizSpec,
-        variant = Chart,
-        realTask = chartTask,
-        dummyTask = dummyChartTask,
-      )
+        CheckFileDiff.register(
+          target = this,
+          config = context.config,
+          spec = graphvizSpec,
+          variant = Chart,
+          realTask = chartTask,
+          dummyTask = dummyChartTask,
+        )
+      }
 
       val graphvizTask =
         ExecGraphviz.register(
           target = this,
+          config = context.config,
           spec = graphvizSpec,
           variant = Chart,
           dotFileTask = chartTask,

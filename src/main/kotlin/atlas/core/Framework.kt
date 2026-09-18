@@ -11,7 +11,7 @@ package atlas.core
  * }
  * ```
  *
- * Generated files are written to a per-framework directory, e.g. `atlas/d2/chart.d2`, so enabling
+ * Generated files are written to a per-framework directory, e.g. `atlas/d2/chart.svg`, so enabling
  * several frameworks at once never causes them to overwrite each other.
  */
 public enum class Framework(override val string: String) : StringEnum {

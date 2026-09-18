@@ -39,9 +39,9 @@ internal class NoRootBuildFileTest : ScenarioTest() {
 
       // then
       assertThat(rootDir)
-        .childExists("a/atlas/d2/chart.d2")
-        .childExists("a/atlas/graphviz/chart.dot")
+        .childExists("a/build/atlas/d2/chart.d2")
+        .childExists("a/build/atlas/graphviz/chart.dot")
         .childExists("a/atlas/mermaid/chart.mmd")
-        .childExists("atlas/d2/classes.d2")
+        .childExists("build/atlas/d2/classes.d2")
     }
 }

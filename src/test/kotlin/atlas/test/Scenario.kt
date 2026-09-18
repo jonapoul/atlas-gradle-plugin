@@ -46,11 +46,25 @@ internal interface MermaidScenario : Scenario {
     get() = setOf(Mermaid)
 }
 
+internal fun Scenario.withIntermediatesInProjectDir(): Scenario {
+  val base = this
+  return object : Scenario by base {
+    override val atlasConfig =
+      (frameworks - Framework.Mermaid).joinToString(
+        separator = "\n",
+        prefix = base.atlasConfig + "\n",
+      ) {
+        "${it.string} { intermediateFilesInBuildDir = false }"
+      }
+  }
+}
+
 /** The single framework a scenario uses, for tests which assert on generated file paths. */
 internal val Scenario.framework: Framework
   get() = frameworks.single()
 
 // Subprojects no longer apply the plugin themselves - the settings plugin wires every project.
+@Suppress("UnusedReceiverParameter")
 internal val Scenario.javaBuildScript
   get() =
     """
@@ -60,6 +74,7 @@ internal val Scenario.javaBuildScript
     """
       .trimIndent()
 
+@Suppress("UnusedReceiverParameter")
 internal val Scenario.kotlinJvmBuildScript
   get() =
     """

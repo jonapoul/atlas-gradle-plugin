@@ -15,6 +15,7 @@ import org.gradle.api.provider.Property
  *   graphviz {
  *     pathToDotCommand = "/custom/path/to/dot"
  *     fileFormat = FileFormat.Svg
+ *     intermediateFilesInBuildDir = false
  *     layoutEngine = LayoutEngine.Dot
  *
  *     node {
@@ -42,6 +43,16 @@ public interface GraphvizSpec : AtlasSpec {
 
   /** Manually interact with output formats from Graphviz. Defaults to [FileFormat.Svg]. */
   public val fileFormat: Property<FileFormat>
+
+  /**
+   * Set to true to write the `chart.dot` and `legend.dot` files to `build/atlas/graphviz/` instead
+   * of the project's `atlas/graphviz/` directory. Only the rendered image goes in
+   * `atlas/graphviz/`. Defaults to true.
+   *
+   * [atlas.core.AtlasExtension.checkOutputs] only verifies these files, so no Graphviz check tasks
+   * are registered while this is enabled.
+   */
+  public val intermediateFilesInBuildDir: Property<Boolean>
 
   /**
    * Customise the layout engine used to organise your project nodes in the chart. Defaults to

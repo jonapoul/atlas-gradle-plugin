@@ -1,10 +1,11 @@
 package atlas.d2.tasks
 
 import atlas.core.internal.ATLAS_TASK_GROUP
+import atlas.core.internal.AtlasConfig
 import atlas.core.internal.Variant
 import atlas.core.internal.logIfConfigured
+import atlas.core.internal.outputFile
 import atlas.core.internal.singleFile
-import atlas.core.internal.withExtension
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.TaskWithOutputFile
 import atlas.d2.D2Spec
@@ -105,32 +106,34 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
 
     internal fun <T : TaskWithOutputFile> register(
       target: Project,
+      config: AtlasConfig,
       spec: D2Spec,
       variant: Variant,
-      dotFileTask: TaskProvider<T>,
+      d2FileTask: TaskProvider<T>,
       classesFile: FileCollection,
     ): TaskProvider<ExecD2> =
       with(target) {
         val name = "execD2$variant"
-        val execGraphviz = tasks.register(name, ExecD2::class.java)
+        val execD2 = tasks.register(name, ExecD2::class.java)
 
-        execGraphviz.configure { task ->
-          val d2File = dotFileTask.flatMap { it.outputFile }
-          val outputFile =
-            d2File.withExtension(target, extension = provider { spec.fileFormat.get() })
+        execD2.configure { task ->
+          val d2File = d2FileTask.flatMap { it.outputFile }
+          val imageFile = provider {
+            outputFile(config, D2, variant, fileExtension = spec.fileFormat.get().string)
+          }
 
           task.classesFile.fileProvider(classesFile.singleFile(D2Classes))
           task.dependsOn(classesFile)
           task.inputFile.convention(d2File)
           task.pathToD2Command.convention(spec.pathToD2Command)
           task.outputFormat.convention(spec.fileFormat)
-          task.outputFile.convention(outputFile)
+          task.outputFile.convention(layout.file(imageFile))
           task.cliArguments.convention(spec.layoutEngine.properties)
           task.animateInterval.convention(spec.animateInterval)
           task.scale.convention(spec.scale)
         }
 
-        return execGraphviz
+        return execD2
       }
   }
 }

@@ -25,6 +25,8 @@ internal class D2GradleProperties(override val providers: ProviderFactory) : IGr
   val fileFormat: Provider<FileFormat> = enum("atlas.d2.fileFormat", default = Svg)
   val groupLabelLocation: Provider<Location> = enum("atlas.d2.groupLabelLocation", default = null)
   val groupLabelPosition: Provider<Position> = enum("atlas.d2.groupLabelPosition", default = null)
+  val intermediateFilesInBuildDir: Provider<Boolean> =
+    bool("atlas.d2.intermediateFilesInBuildDir", default = true)
   val pad: Provider<Int> = int("atlas.d2.pad", default = null)
   val pathToD2Command: Provider<String> = string("atlas.d2.pathToD2Command", default = null)
   val scale: Provider<Float> = float("atlas.d2.scale", default = null)
