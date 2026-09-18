@@ -47,7 +47,7 @@ import org.gradle.internal.impldep.org.intellij.lang.annotations.Language
  *
  *     // plus some manually-defined ones
  *     hasPluginId(name = "UI", color = "#ABC123", pluginId = "org.jetbrains.kotlin.plugin.compose")
- *     pathMatches(name = "Data", color = "#ABCDEF", pathMatches = ".*data$".toRegex())
+ *     pathMatches(name = "Data", color = "#ABCDEF", pathMatches = ".*data$")
  *     pathContains(name = "Domain", pathContains = "domain") {
  *       // plus any style properties from the frameworks you've configured
  *     }
@@ -58,10 +58,9 @@ import org.gradle.internal.impldep.org.intellij.lang.annotations.Language
  * Remember that priority is given in descending order, so in the example above the UI project type
  * will be checked before the data or domain types.
  *
- * Exactly one of [ProjectTypeSpec.pathContains], [ProjectTypeSpec.pathMatches] or
- * [ProjectTypeSpec.hasPluginId] must be set. If not, Gradle will:
- * - warn you during IDE sync, or
- * - fail when running any tasks which reference them.
+ * Set one of [ProjectTypeSpec.pathContains], [ProjectTypeSpec.pathMatches] or
+ * [ProjectTypeSpec.hasPluginId]. If none are set, Atlas logs a warning and ignores the type. If
+ * more than one is set, only the first of those three is checked.
  */
 @AtlasDsl
 public interface NamedProjectTypeContainer : NamedDomainObjectContainer<ProjectTypeSpec> {
@@ -132,7 +131,7 @@ public interface ProjectTypeSpec : StyleSpec {
 
   /**
    * Similar to [pathContains] but more flexible with [Regex] pattern checking instead of straight
-   * string comparison.
+   * string comparison. The pattern has to match the whole path.
    */
   public val pathMatches: Property<String>
 
@@ -175,35 +174,46 @@ public interface ProjectTypeSpec : StyleSpec {
   // D2 only - see [the D2 docs](https://d2lang.com/tour/style)
   // -----------------------------------------------------------------------------------------
 
+  /** Animates the node's border. Only shows in animatable file formats, i.e. SVG and GIF. */
   public var animated: Boolean?
 
+  /** Draws the node's label text in bold. */
   public var bold: Boolean?
 
+  /** How rounded the node's corners are. */
   public var borderRadius: Int?
 
   /** Only applicable to [D2Shape.Rectangle] and [D2Shape.Oval]. */
   public var doubleBorder: Boolean?
 
+  /** A texture drawn over the node's background. */
   public var fillPattern: FillPattern?
 
+  /** The font of the node's label text. */
   public var font: Font?
 
+  /** Draws the node's label text in italics. */
   public var italic: Boolean?
 
+  /** Draws the node as a stack of several shapes, as if there are more than one of it. */
   public var multiple: Boolean?
 
   /** Only applicable to [D2Shape.Rectangle] and [D2Shape.Square]. */
   public var render3D: Boolean?
 
+  /** Draws a drop shadow under the node. */
   public var shadow: Boolean?
 
   /** The shape of the node in D2 charts. See [graphvizShape] for the Graphviz equivalent. */
   public var d2Shape: D2Shape?
 
+  /** Draws the node's border as a dashed line, with this as the gap between dashes. */
   public var strokeDash: Int?
 
+  /** Changes the case of the node's label text. */
   public var textTransform: TextTransform?
 
+  /** Underlines the node's label text. */
   public var underline: Boolean?
 
   // -----------------------------------------------------------------------------------------
@@ -222,85 +232,136 @@ public interface ProjectTypeSpec : StyleSpec {
   /** The shape of the node in Graphviz charts. See [d2Shape] for the D2 equivalent. */
   public var graphvizShape: GraphvizShape?
 
+  /**
+   * [https://graphviz.org/docs/attrs/colorscheme/](https://graphviz.org/docs/attrs/colorscheme/)
+   */
   public var colorScheme: String?
 
+  /** [https://graphviz.org/docs/attrs/comment/](https://graphviz.org/docs/attrs/comment/) */
   public var comment: String?
 
+  /** [https://graphviz.org/docs/attrs/distortion/](https://graphviz.org/docs/attrs/distortion/) */
   public var distortion: String?
 
+  /** [https://graphviz.org/docs/attrs/fixedsize/](https://graphviz.org/docs/attrs/fixedsize/) */
   public var fixedSize: String?
 
+  /** [https://graphviz.org/docs/attrs/fontname/](https://graphviz.org/docs/attrs/fontname/) */
   public var fontName: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/gradientangle/](https://graphviz.org/docs/attrs/gradientangle/)
+   */
   public var gradientAngle: Int?
 
+  /** [https://graphviz.org/docs/attrs/group/](https://graphviz.org/docs/attrs/group/) */
   public var group: String?
 
+  /** [https://graphviz.org/docs/attrs/height/](https://graphviz.org/docs/attrs/height/) */
   public var height: Number?
 
+  /** [https://graphviz.org/docs/attrs/href/](https://graphviz.org/docs/attrs/href/) */
   public var href: String?
 
+  /** [https://graphviz.org/docs/attrs/id/](https://graphviz.org/docs/attrs/id/) */
   public var id: String?
 
+  /** [https://graphviz.org/docs/attrs/image/](https://graphviz.org/docs/attrs/image/) */
   public var image: String?
 
+  /** [https://graphviz.org/docs/attrs/imagepos/](https://graphviz.org/docs/attrs/imagepos/) */
   public var imagePos: ImagePos?
 
+  /** [https://graphviz.org/docs/attrs/imagescale/](https://graphviz.org/docs/attrs/imagescale/) */
   public var imageScale: String?
 
+  /** [https://graphviz.org/docs/attrs/label/](https://graphviz.org/docs/attrs/label/) */
   public var label: String?
 
+  /** [https://graphviz.org/docs/attrs/labelloc/](https://graphviz.org/docs/attrs/labelloc/) */
   public var labelLoc: String?
 
+  /** [https://graphviz.org/docs/attrs/layer/](https://graphviz.org/docs/attrs/layer/) */
   public var layer: String?
 
+  /** [https://graphviz.org/docs/attrs/margin/](https://graphviz.org/docs/attrs/margin/) */
   public var margin: String?
 
+  /** [https://graphviz.org/docs/attrs/nojustify/](https://graphviz.org/docs/attrs/nojustify/) */
   public var noJustify: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/ordering/](https://graphviz.org/docs/attrs/ordering/) */
   public var ordering: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/orientation/](https://graphviz.org/docs/attrs/orientation/)
+   */
   public var orientation: Number?
 
+  /**
+   * [https://graphviz.org/docs/attrs/peripheries/](https://graphviz.org/docs/attrs/peripheries/)
+   */
   public var peripheries: Int?
 
+  /** [https://graphviz.org/docs/attrs/pin/](https://graphviz.org/docs/attrs/pin/) */
   public var pin: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/pos/](https://graphviz.org/docs/attrs/pos/) */
   public var pos: String?
 
+  /** [https://graphviz.org/docs/attrs/rects/](https://graphviz.org/docs/attrs/rects/) */
   public var rects: String?
 
+  /** [https://graphviz.org/docs/attrs/regular/](https://graphviz.org/docs/attrs/regular/) */
   public var regular: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/root/](https://graphviz.org/docs/attrs/root/) */
   public var root: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/samplepoints/](https://graphviz.org/docs/attrs/samplepoints/)
+   */
   public var samplePoints: Int?
 
+  /** [https://graphviz.org/docs/attrs/shapefile/](https://graphviz.org/docs/attrs/shapefile/) */
   public var shapeFile: String?
 
+  /** [https://graphviz.org/docs/attrs/showboxes/](https://graphviz.org/docs/attrs/showboxes/) */
   public var showBoxes: Int?
 
+  /** [https://graphviz.org/docs/attrs/sides/](https://graphviz.org/docs/attrs/sides/) */
   public var sides: Int?
 
+  /** [https://graphviz.org/docs/attrs/skew/](https://graphviz.org/docs/attrs/skew/) */
   public var skew: Number?
 
+  /** [https://graphviz.org/docs/attrs/sortv/](https://graphviz.org/docs/attrs/sortv/) */
   public var sortv: Int?
 
+  /** [https://graphviz.org/docs/attrs/style/](https://graphviz.org/docs/attrs/style/) */
   public var style: NodeStyle?
 
+  /** [https://graphviz.org/docs/attrs/target/](https://graphviz.org/docs/attrs/target/) */
   public var target: String?
 
+  /** [https://graphviz.org/docs/attrs/tooltip/](https://graphviz.org/docs/attrs/tooltip/) */
   public var tooltip: String?
 
+  /** [https://graphviz.org/docs/attrs/URL/](https://graphviz.org/docs/attrs/URL/) */
   public var url: String?
 
+  /** [https://graphviz.org/docs/attrs/vertices/](https://graphviz.org/docs/attrs/vertices/) */
   public var vertices: String?
 
+  /** [https://graphviz.org/docs/attrs/width/](https://graphviz.org/docs/attrs/width/) */
   public var width: Number?
 
+  /** [https://graphviz.org/docs/attrs/xlabel/](https://graphviz.org/docs/attrs/xlabel/) */
   public var xlabel: String?
 
+  /** [https://graphviz.org/docs/attrs/xlp/](https://graphviz.org/docs/attrs/xlp/) */
   public var xlp: String?
 
+  /** [https://graphviz.org/docs/attrs/z/](https://graphviz.org/docs/attrs/z/) */
   public var z: Number?
 }

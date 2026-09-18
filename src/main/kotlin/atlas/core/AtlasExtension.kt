@@ -43,14 +43,15 @@ public interface AtlasExtension {
 
   /**
    * Use this to configure Gradle [org.gradle.api.artifacts.Configuration]s to block from
-   * consideration when collating project diagrams. Defaults to ["debug", "kover", "ksp", "test"].
+   * consideration when collating project diagrams. A configuration is ignored if its name contains
+   * any of these strings, ignoring case. Defaults to ["debug", "kover", "ksp", "test"].
    */
   public val ignoredConfigs: SetProperty<String>
 
   /**
    * Use this to block projects from inclusion in your project charts, based on their path string.
    * E.g. a project at ":path:to:my:project" will be ignored if I add `".*:to:my:.*".toRegex()` to
-   * this property.
+   * this property. Each pattern has to match the whole path. Defaults to an empty set.
    */
   public val ignoredProjects: SetProperty<Regex>
 
@@ -71,6 +72,8 @@ public interface AtlasExtension {
    * Set to true to attach a diffing task to `gradle check`. It will verify that your generated
    * charts match the current state of the project layout, failing if not with a useful error
    * message. Defaults to true.
+   *
+   * D2 and Graphviz only register these tasks when their `intermediateFilesInBuildDir` is false.
    */
   public val checkOutputs: Property<Boolean>
 

@@ -148,20 +148,28 @@ public interface LinkTypeSpec : StyleSpec {
   // D2 only - see [the D2 docs](https://d2lang.com/tour/style)
   // -----------------------------------------------------------------------------------------
 
+  /** Animates the line. Only shows in animatable file formats, i.e. SVG and GIF. */
   public var animated: Boolean?
 
+  /** Draws the link's label text in bold. */
   public var bold: Boolean?
 
+  /** How rounded the line's corners are, where it bends. */
   public var borderRadius: Int?
 
+  /** The font of the link's label text. */
   public var font: Font?
 
+  /** Draws the link's label text in italics. */
   public var italic: Boolean?
 
+  /** Draws the line dashed, with this as the gap between dashes. */
   public var strokeDash: Int?
 
+  /** Changes the case of the link's label text. */
   public var textTransform: TextTransform?
 
+  /** Underlines the link's label text. */
   public var underline: Boolean?
 
   // -----------------------------------------------------------------------------------------
@@ -177,124 +185,204 @@ public interface LinkTypeSpec : StyleSpec {
   // validate any of these, it just passes them through and lets Graphviz complain.
   // -----------------------------------------------------------------------------------------
 
+  /** [https://graphviz.org/docs/attrs/arrowhead/](https://graphviz.org/docs/attrs/arrowhead/) */
   public var arrowHead: ArrowType?
 
+  /** [https://graphviz.org/docs/attrs/arrowsize/](https://graphviz.org/docs/attrs/arrowsize/) */
   public var arrowSize: Number?
 
+  /** [https://graphviz.org/docs/attrs/arrowtail/](https://graphviz.org/docs/attrs/arrowtail/) */
   public var arrowTail: ArrowType?
 
+  /**
+   * [https://graphviz.org/docs/attrs/colorscheme/](https://graphviz.org/docs/attrs/colorscheme/)
+   */
   public var colorScheme: String?
 
+  /** [https://graphviz.org/docs/attrs/comment/](https://graphviz.org/docs/attrs/comment/) */
   public var comment: String?
 
+  /** [https://graphviz.org/docs/attrs/constraint/](https://graphviz.org/docs/attrs/constraint/) */
   public var constraint: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/decorate/](https://graphviz.org/docs/attrs/decorate/) */
   public var decorate: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/dir/](https://graphviz.org/docs/attrs/dir/) */
   public var dir: Dir?
 
+  /** [https://graphviz.org/docs/attrs/edgehref/](https://graphviz.org/docs/attrs/edgehref/) */
   public var edgeHref: String?
 
+  /** [https://graphviz.org/docs/attrs/edgetarget/](https://graphviz.org/docs/attrs/edgetarget/) */
   public var edgeTarget: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/edgetooltip/](https://graphviz.org/docs/attrs/edgetooltip/)
+   */
   public var edgeTooltip: String?
 
+  /** [https://graphviz.org/docs/attrs/edgeURL/](https://graphviz.org/docs/attrs/edgeURL/) */
   public var edgeUrl: String?
 
+  /** [https://graphviz.org/docs/attrs/fillcolor/](https://graphviz.org/docs/attrs/fillcolor/) */
   public var fillColor: String?
 
+  /** [https://graphviz.org/docs/attrs/fontname/](https://graphviz.org/docs/attrs/fontname/) */
   public var fontName: String?
 
+  /** [https://graphviz.org/docs/attrs/head_lp/](https://graphviz.org/docs/attrs/head_lp/) */
   public var headLp: String?
 
+  /** [https://graphviz.org/docs/attrs/headclip/](https://graphviz.org/docs/attrs/headclip/) */
   public var headClip: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/headhref/](https://graphviz.org/docs/attrs/headhref/) */
   public var headHref: String?
 
+  /** [https://graphviz.org/docs/attrs/headlabel/](https://graphviz.org/docs/attrs/headlabel/) */
   public var headLabel: String?
 
+  /** [https://graphviz.org/docs/attrs/headport/](https://graphviz.org/docs/attrs/headport/) */
   public var headPort: String?
 
+  /** [https://graphviz.org/docs/attrs/headtarget/](https://graphviz.org/docs/attrs/headtarget/) */
   public var headTarget: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/headtooltip/](https://graphviz.org/docs/attrs/headtooltip/)
+   */
   public var headTooltip: String?
 
+  /** [https://graphviz.org/docs/attrs/headURL/](https://graphviz.org/docs/attrs/headURL/) */
   public var headUrl: String?
 
+  /** [https://graphviz.org/docs/attrs/href/](https://graphviz.org/docs/attrs/href/) */
   public var href: String?
 
+  /** [https://graphviz.org/docs/attrs/id/](https://graphviz.org/docs/attrs/id/) */
   public var id: String?
 
+  /** [https://graphviz.org/docs/attrs/label/](https://graphviz.org/docs/attrs/label/) */
   public var label: String?
 
+  /** [https://graphviz.org/docs/attrs/labelangle/](https://graphviz.org/docs/attrs/labelangle/) */
   public var labelAngle: Number?
 
+  /**
+   * [https://graphviz.org/docs/attrs/labeldistance/](https://graphviz.org/docs/attrs/labeldistance/)
+   */
   public var labelDistance: Number?
 
+  /** [https://graphviz.org/docs/attrs/labelfloat/](https://graphviz.org/docs/attrs/labelfloat/) */
   public var labelFloat: Boolean?
 
+  /**
+   * [https://graphviz.org/docs/attrs/labelfontcolor/](https://graphviz.org/docs/attrs/labelfontcolor/)
+   */
   public var labelFontColor: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/labelfontname/](https://graphviz.org/docs/attrs/labelfontname/)
+   */
   public var labelFontName: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/labelfontsize/](https://graphviz.org/docs/attrs/labelfontsize/)
+   */
   public var labelFontSize: String?
 
+  /** [https://graphviz.org/docs/attrs/labelhref/](https://graphviz.org/docs/attrs/labelhref/) */
   public var labelHref: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/labeltarget/](https://graphviz.org/docs/attrs/labeltarget/)
+   */
   public var labelTarget: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/labeltooltip/](https://graphviz.org/docs/attrs/labeltooltip/)
+   */
   public var labelTooltip: String?
 
+  /** [https://graphviz.org/docs/attrs/labelurl/](https://graphviz.org/docs/attrs/labelurl/) */
   public var labelUrl: String?
 
+  /** [https://graphviz.org/docs/attrs/layer/](https://graphviz.org/docs/attrs/layer/) */
   public var layer: String?
 
+  /** [https://graphviz.org/docs/attrs/len/](https://graphviz.org/docs/attrs/len/) */
   public var len: Number?
 
+  /** [https://graphviz.org/docs/attrs/lhead/](https://graphviz.org/docs/attrs/lhead/) */
   public var lhead: String?
 
+  /** [https://graphviz.org/docs/attrs/lp/](https://graphviz.org/docs/attrs/lp/) */
   public var lp: String?
 
+  /** [https://graphviz.org/docs/attrs/ltail/](https://graphviz.org/docs/attrs/ltail/) */
   public var ltail: String?
 
+  /** [https://graphviz.org/docs/attrs/minlen/](https://graphviz.org/docs/attrs/minlen/) */
   public var minLen: Int?
 
+  /** [https://graphviz.org/docs/attrs/nojustify/](https://graphviz.org/docs/attrs/nojustify/) */
   public var noJustify: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/pos/](https://graphviz.org/docs/attrs/pos/) */
   public var pos: String?
 
+  /** [https://graphviz.org/docs/attrs/samehead/](https://graphviz.org/docs/attrs/samehead/) */
   public var sameHead: String?
 
+  /** [https://graphviz.org/docs/attrs/sametail/](https://graphviz.org/docs/attrs/sametail/) */
   public var sameTail: String?
 
+  /** [https://graphviz.org/docs/attrs/showboxes/](https://graphviz.org/docs/attrs/showboxes/) */
   public var showBoxes: Int?
 
+  /** [https://graphviz.org/docs/attrs/tail_lp/](https://graphviz.org/docs/attrs/tail_lp/) */
   public var tailLp: String?
 
+  /** [https://graphviz.org/docs/attrs/tailclip/](https://graphviz.org/docs/attrs/tailclip/) */
   public var tailClip: Boolean?
 
+  /** [https://graphviz.org/docs/attrs/tailhref/](https://graphviz.org/docs/attrs/tailhref/) */
   public var tailHref: String?
 
+  /** [https://graphviz.org/docs/attrs/taillabel/](https://graphviz.org/docs/attrs/taillabel/) */
   public var tailLabel: String?
 
+  /** [https://graphviz.org/docs/attrs/tailport/](https://graphviz.org/docs/attrs/tailport/) */
   public var tailPort: String?
 
+  /** [https://graphviz.org/docs/attrs/tailtarget/](https://graphviz.org/docs/attrs/tailtarget/) */
   public var tailTarget: String?
 
+  /**
+   * [https://graphviz.org/docs/attrs/tailtooltip/](https://graphviz.org/docs/attrs/tailtooltip/)
+   */
   public var tailTooltip: String?
 
+  /** [https://graphviz.org/docs/attrs/tailURL/](https://graphviz.org/docs/attrs/tailURL/) */
   public var tailUrl: String?
 
+  /** [https://graphviz.org/docs/attrs/target/](https://graphviz.org/docs/attrs/target/) */
   public var target: String?
 
+  /** [https://graphviz.org/docs/attrs/tooltip/](https://graphviz.org/docs/attrs/tooltip/) */
   public var tooltip: String?
 
+  /** [https://graphviz.org/docs/attrs/url/](https://graphviz.org/docs/attrs/url/) */
   public var url: String?
 
+  /** [https://graphviz.org/docs/attrs/weight/](https://graphviz.org/docs/attrs/weight/) */
   public var weight: Number?
 
+  /** [https://graphviz.org/docs/attrs/xlabel/](https://graphviz.org/docs/attrs/xlabel/) */
   public var xLabel: String?
 
+  /** [https://graphviz.org/docs/attrs/xlp/](https://graphviz.org/docs/attrs/xlp/) */
   public var xlp: String?
 }
 

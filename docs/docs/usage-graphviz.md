@@ -1,6 +1,6 @@
 ---
 title: Graphviz
-description: Configuration steps for the Graphviz Atlas Gradle plugin
+description: Configuring Graphviz diagrams in Atlas
 icon: lucide/chart-line
 ---
 
@@ -272,10 +272,12 @@ There's plenty you can do here, not all of it is immediately easy to figure out 
         implementation()
       }
 
-      edge {
-        // all others are black boxes by default
-        arrowHead = ArrowType.Box
-        linkColor = "black"
+      graphviz {
+        edge {
+          // all others are black boxes by default
+          arrowHead = ArrowType.Box
+          linkColor = "black"
+        }
       }
     }
     ```
@@ -350,7 +352,7 @@ There's plenty you can do here, not all of it is immediately easy to figure out 
 
 ### graph
 
-Set a bunch of properties to be applied to the chart itself. Some examples below, though you'll want to [go through the Graphviz docs](https://graphviz.org/docs/edges/) for all restrictions/requirements:
+Set a bunch of properties to be applied to the chart itself. Some examples below, though you'll want to [go through the Graphviz docs](https://graphviz.org/docs/graph/) for all restrictions/requirements:
 
 ``` kotlin
 atlas {
