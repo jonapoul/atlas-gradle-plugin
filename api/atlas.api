@@ -722,6 +722,7 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getGlobalProps ()Latlas/d2/D2GlobalPropsSpec;
 	public abstract fun getGroupLabelLocation ()Lorg/gradle/api/provider/Property;
 	public abstract fun getGroupLabelPosition ()Lorg/gradle/api/provider/Property;
+	public abstract fun getIntermediateFilesInBuildDir ()Lorg/gradle/api/provider/Property;
 	public abstract fun getLayoutEngine ()Latlas/d2/D2LayoutEngineSpec;
 	public abstract fun getPad ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPathToD2Command ()Lorg/gradle/api/provider/Property;
@@ -1480,6 +1481,7 @@ public abstract interface class atlas/graphviz/GraphvizSpec : atlas/core/AtlasSp
 	public abstract fun getEdge ()Latlas/graphviz/EdgeAttributes;
 	public abstract fun getFileFormat ()Lorg/gradle/api/provider/Property;
 	public abstract fun getGraph ()Latlas/graphviz/GraphAttributes;
+	public abstract fun getIntermediateFilesInBuildDir ()Lorg/gradle/api/provider/Property;
 	public abstract fun getLayoutEngine ()Lorg/gradle/api/provider/Property;
 	public abstract fun getNode ()Latlas/graphviz/NodeAttributes;
 	public abstract fun getPathToDotCommand ()Lorg/gradle/api/provider/Property;

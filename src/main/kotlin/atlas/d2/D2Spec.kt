@@ -21,6 +21,7 @@ import org.gradle.api.provider.Property
  *     groupLabelLocation = Location.Inside
  *     groupLabelPosition = Position.TopCenter
  *     layoutEngine = LayoutEngine.Dagre
+ *     intermediateFilesInBuildDir = false
  *     pad = 5
  *     pathToD2Command = "/path/to/d2"
  *     scale = 0.5f
@@ -52,6 +53,7 @@ public interface D2Spec : AtlasSpec {
   public val fileFormat: Property<FileFormat>
   public val groupLabelLocation: Property<Location>
   public val groupLabelPosition: Property<Position>
+  public val intermediateFilesInBuildDir: Property<Boolean>
   public val pad: Property<Int>
   public val pathToD2Command: Property<String>
   public val scale: Property<Float>

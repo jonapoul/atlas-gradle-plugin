@@ -7,8 +7,8 @@ import atlas.core.internal.AtlasContext
 import atlas.core.internal.DummyAtlasGenerationTask
 import atlas.core.internal.atlasBuildDirectory
 import atlas.core.internal.buildIndentedString
+import atlas.core.internal.intermediateFile
 import atlas.core.internal.logIfConfigured
-import atlas.core.internal.outputFile
 import atlas.core.internal.qualifier
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.TaskWithOutputFile
@@ -130,11 +130,12 @@ public abstract class WriteGraphvizLegend : DefaultTask(), TaskWithOutputFile, A
         context = context,
         spec = spec,
         outputFile =
-          context.project.outputFile(
+          context.project.intermediateFile(
             config = context.config,
             framework = Graphviz,
             variant = Legend,
             fileExtension = spec.fileExtension.get(),
+            inBuildDir = spec.intermediateFilesInBuildDir.get(),
           ),
       )
 

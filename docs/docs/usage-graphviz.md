@@ -25,6 +25,7 @@ atlas {
   graphviz {
     pathToDotCommand = "/path/to/dot"
     fileFormat = FileFormat.Svg
+    intermediateFilesInBuildDir = true
     layoutEngine = LayoutEngine.Dot
 
     node {
@@ -53,7 +54,7 @@ atlas {
 
 ## Generated Files
 
-Atlas Graphviz will generate a `chart.dot` file in each project's `atlas/graphviz` directory, plus an image file based on your choice of [`fileFormat`](#fileformat). In the root project it'll also generate a `legend.dot` and an accompanying image. Both of these will be auto-added to the project readme when either `gradle atlasGenerate` or `gradle writeReadme` is run.
+Atlas Graphviz will generate a `chart.dot` file in each project's `build/atlas/graphviz` directory, plus an image file in `atlas/graphviz` based on your choice of [`fileFormat`](#fileformat). In the root project it'll also generate a `legend.dot` and an accompanying image. Both of these will be auto-added to the project readme when either `gradle atlasGenerate` or `gradle writeReadme` is run. Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.dot` files in `atlas/graphviz` instead.
 
 ## Properties
 
@@ -80,6 +81,22 @@ atlas {
 ```
 
 There are plenty of options here, [all those specified in the Graphviz docs](https://graphviz.org/docs/outputs/) are provided as options by Atlas in the [`FileFormat` enum](api/atlas/atlas.graphviz/-file-format/index.html). Not all have been tested, so please raise an issue on Github if you see anything weird.
+
+### intermediateFilesInBuildDir
+
+``` kotlin
+atlas {
+  graphviz {
+    intermediateFilesInBuildDir = true
+  }
+}
+```
+
+When enabled, the `chart.dot` and `legend.dot` files go in `build/atlas/graphviz/` instead of the project's `atlas/graphviz/` folder, so you don't need to commit them. The rendered images stay in `atlas/graphviz/`.
+
+[checkOutputs](usage-common.md#checkoutputs) only compares the `.dot` files, so no Graphviz check tasks are registered while this is enabled.
+
+Enabled by default.
 
 ### layoutEngine
 

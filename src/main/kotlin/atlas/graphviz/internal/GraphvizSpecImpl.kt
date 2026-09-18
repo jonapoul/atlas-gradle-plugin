@@ -1,5 +1,6 @@
 package atlas.graphviz.internal
 
+import atlas.core.internal.bool
 import atlas.core.internal.enum
 import atlas.core.internal.string
 import atlas.graphviz.EdgeAttributes
@@ -23,6 +24,8 @@ internal class GraphvizSpecImpl(
   override val fileExtension: Property<String> = objects.string(convention = "dot")
   override val pathToDotCommand: Property<String> = objects.string(convention = null)
   override val fileFormat: Property<FileFormat> = objects.enum(properties.fileFormat)
+  override val intermediateFilesInBuildDir: Property<Boolean> =
+    objects.bool(properties.intermediateFilesInBuildDir)
   override val layoutEngine: Property<LayoutEngine> = objects.enum(properties.layoutEngine)
 
   override val node = NodeAttributesImpl(objects)

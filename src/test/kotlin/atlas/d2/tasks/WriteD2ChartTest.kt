@@ -6,6 +6,7 @@ import atlas.test.ScenarioTest
 import atlas.test.resolve
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2NestedProjects
+import atlas.test.withIntermediatesInProjectDir
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
@@ -24,15 +25,15 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThatTask("writeD2Chart").buildsSuccessfully().allTasksSuccessful()
 
       // and the files were generated
-      val d2FileA = resolve("a/atlas/d2/chart.d2")
-      val d2FileB = resolve("b/atlas/d2/chart.d2")
-      val d2FileC = resolve("c/atlas/d2/chart.d2")
+      val d2FileA = resolve("a/build/atlas/d2/chart.d2")
+      val d2FileB = resolve("b/build/atlas/d2/chart.d2")
+      val d2FileC = resolve("c/build/atlas/d2/chart.d2")
 
       // and contain expected contents, with projects in declaration order
       assertThat(d2FileA)
         .contentEquals(
           """
-          ...@../../../atlas/d2/classes.d2
+          ...@../../../../build/atlas/d2/classes.d2
           a: :a { class: project-KotlinJVM }
           b: :b { class: project-Java }
           c: :c { class: project-Java }
@@ -51,7 +52,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThat(d2FileB)
         .contentEquals(
           """
-          ...@../../../atlas/d2/classes.d2
+          ...@../../../../build/atlas/d2/classes.d2
           b: :b { class: project-Java }
           vars: {
             d2-legend: {
@@ -65,7 +66,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThat(d2FileC)
         .contentEquals(
           """
-          ...@../../../atlas/d2/classes.d2
+          ...@../../../../build/atlas/d2/classes.d2
           c: :c { class: project-Java }
           vars: {
             d2-legend: {
@@ -85,7 +86,24 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
 
       // and the files were generated
-      assertThat(rootDir).childExists("atlas/d2/classes.d2")
+      assertThat(rootDir).childExists("build/atlas/d2/classes.d2")
+      assertThat(resolve("path/to/my/project/build/atlas/d2/chart.d2"))
+        .exists()
+        .contentEquals(
+          """
+          ...@../../../../../../../build/atlas/d2/classes.d2
+          path_to_my_project: :path:to:my:project
+          """
+            .trimIndent()
+        )
+    }
+
+  @Test
+  @RequiresD2
+  fun `Check nested projects with intermediates in the project dir`() =
+    runScenario(D2NestedProjects.withIntermediatesInProjectDir()) {
+      // given
+      assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
       assertThat(resolve("path/to/my/project/atlas/d2/chart.d2"))
         .exists()
         .contentEquals(
@@ -96,7 +114,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
             .trimIndent()
         )
 
-      // when we check
+      // when we check, then the dummy chart matches despite living at a different depth
       assertThatTask("check").buildsSuccessfully().taskSucceeded(":path:to:my:project:checkD2Chart")
     }
 }

@@ -25,7 +25,7 @@ internal class EmptyFrameworkBlockTest : ScenarioTest() {
       assertThatTask("writeD2Chart").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("a/atlas/d2/chart.d2")).exists()
+      assertThat(resolve("a/build/atlas/d2/chart.d2")).exists()
     }
 
   @Test
@@ -35,7 +35,7 @@ internal class EmptyFrameworkBlockTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("a/atlas/graphviz/chart.dot")).exists()
+      assertThat(resolve("a/build/atlas/graphviz/chart.dot")).exists()
     }
 
   @Test

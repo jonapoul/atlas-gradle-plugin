@@ -21,11 +21,11 @@ internal class MultipleFrameworksTest : ScenarioTest() {
       // then each framework wrote to its own directory, so nothing was overwritten, and the shared
       // legends live in the root project
       assertThat(rootDir)
-        .childExists("a/atlas/d2/chart.d2")
-        .childExists("a/atlas/graphviz/chart.dot")
+        .childExists("a/build/atlas/d2/chart.d2")
+        .childExists("a/build/atlas/graphviz/chart.dot")
         .childExists("a/atlas/mermaid/chart.mmd")
-        .childExists("atlas/d2/classes.d2")
-        .childExists("atlas/graphviz/legend.dot")
+        .childExists("build/atlas/d2/classes.d2")
+        .childExists("build/atlas/graphviz/legend.dot")
         .childExists("atlas/mermaid/legend.md")
     }
 

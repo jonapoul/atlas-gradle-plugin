@@ -5,6 +5,7 @@ import atlas.core.internal.AtlasContext
 import atlas.core.internal.ChartFiles
 import atlas.core.internal.FrameworkTasks
 import atlas.core.internal.atlasBuildDirectory
+import atlas.core.internal.intermediateFile
 import atlas.core.internal.outputFile
 import atlas.core.internal.publishAtlasArtifact
 import atlas.core.internal.singleFile
@@ -29,11 +30,12 @@ internal object D2Tasks : FrameworkTasks {
         WriteD2Classes.real(
           context = context,
           outputFile =
-            outputFile(
+            intermediateFile(
               config = context.config,
               framework = framework,
               variant = Legend,
               fileExtension = "d2",
+              inBuildDir = d2.intermediateFilesInBuildDir.get(),
               filename = "classes",
             ),
         )
@@ -46,20 +48,23 @@ internal object D2Tasks : FrameworkTasks {
         builtBy = classes,
       )
 
-      val dummyClasses =
-        WriteD2Classes.dummy(
-          context = context,
-          outputFile = atlasBuildDirectory.get().file("classes-temp.d2").asFile,
-        )
+      // Nothing to check when the classes file lives in the build directory
+      if (!d2.intermediateFilesInBuildDir.get()) {
+        val dummyClasses =
+          WriteD2Classes.dummy(
+            context = context,
+            outputFile = atlasBuildDirectory.get().file("classes-temp.d2").asFile,
+          )
 
-      CheckFileDiff.register(
-        target = this,
-        config = context.config,
-        spec = d2,
-        variant = Chart,
-        realTask = classes,
-        dummyTask = dummyClasses,
-      )
+        CheckFileDiff.register(
+          target = this,
+          config = context.config,
+          spec = d2,
+          variant = Chart,
+          realTask = classes,
+          dummyTask = dummyClasses,
+        )
+      }
     }
 
   override fun registerChildTasks(context: AtlasContext): ChartFiles =
@@ -69,47 +74,52 @@ internal object D2Tasks : FrameworkTasks {
       // need to use the same pathToClassesFile string for real and dummy tasks, otherwise the check
       // operation might fail if the project and the build directory have different relative paths.
       val classesFile = context.fromRoot(D2Classes)
-      val outputFile =
-        outputFile(
+      val d2File =
+        intermediateFile(
           config = context.config,
           framework = framework,
           variant = Chart,
           fileExtension = d2Spec.fileExtension.get(),
+          inBuildDir = d2Spec.intermediateFilesInBuildDir.get(),
         )
       val pathToClassesFile =
         classesFile.singleFile(D2Classes).map {
-          it.relativeTo(outputFile.parentFile).path
+          it.relativeTo(d2File.parentFile).path
         }
 
       val chartTask =
         WriteD2Chart.real(
           context = context,
-          outputFile = outputFile,
+          outputFile = d2File,
           pathToClassesFile = pathToClassesFile,
         )
 
-      val dummyChartTask =
-        WriteD2Chart.dummy(
-          context = context,
-          outputFile = atlasBuildDirectory.get().file("chart-temp.d2").asFile,
-          pathToClassesFile = pathToClassesFile,
-        )
+      // Nothing to check when the chart file lives in the build directory
+      if (!d2Spec.intermediateFilesInBuildDir.get()) {
+        val dummyChartTask =
+          WriteD2Chart.dummy(
+            context = context,
+            outputFile = atlasBuildDirectory.get().file("chart-temp.d2").asFile,
+            pathToClassesFile = pathToClassesFile,
+          )
 
-      CheckFileDiff.register(
-        target = this,
-        config = context.config,
-        spec = d2Spec,
-        variant = Chart,
-        realTask = chartTask,
-        dummyTask = dummyChartTask,
-      )
+        CheckFileDiff.register(
+          target = this,
+          config = context.config,
+          spec = d2Spec,
+          variant = Chart,
+          realTask = chartTask,
+          dummyTask = dummyChartTask,
+        )
+      }
 
       val d2Task =
         ExecD2.register(
           target = this,
+          config = context.config,
           spec = d2Spec,
           variant = Chart,
-          dotFileTask = chartTask,
+          d2FileTask = chartTask,
           classesFile = classesFile,
         )
 

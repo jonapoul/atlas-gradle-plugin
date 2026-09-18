@@ -83,7 +83,7 @@ internal fun Project.fileInBuildDirectory(path: String): Provider<RegularFile> =
 private const val DIR_NAME = "atlas"
 
 /**
- * Generated files live in a per-framework directory, e.g. `atlas/d2/chart.d2`, so that enabling
+ * Generated files live in a per-framework directory, e.g. `atlas/d2/chart.svg`, so that enabling
  * several frameworks at once never has two of them writing the same file. Charts are written
  * alongside the project they describe, legends only in the root project.
  */
@@ -101,6 +101,25 @@ internal fun Project.outputFile(
     }
   return directory.resolve(framework.string).resolve("$filename.$fileExtension")
 }
+
+/**
+ * Like [outputFile], but for a file which is only an input to the framework's own renderer, e.g.
+ * D2's `chart.d2`. These go in the build directory when [inBuildDir] is set, which comes from the
+ * framework's `intermediateFilesInBuildDir` property.
+ */
+internal fun Project.intermediateFile(
+  config: AtlasConfig,
+  framework: Framework,
+  variant: Variant,
+  fileExtension: String,
+  inBuildDir: Boolean,
+  filename: String = defaultFilename(variant),
+): File =
+  if (inBuildDir) {
+    atlasBuildDirectory.get().asFile.resolve(framework.string).resolve("$filename.$fileExtension")
+  } else {
+    outputFile(config, framework, variant, fileExtension, filename)
+  }
 
 private fun defaultFilename(variant: Variant) =
   when (variant) {

@@ -24,7 +24,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then
-      assertThat(resolve("app/atlas/graphviz/chart.dot"))
+      assertThat(resolve("app/build/atlas/graphviz/chart.dot"))
         .contentEquals(
           """
           digraph {
@@ -59,9 +59,9 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then the files were generated
-      val dotFileA = resolve("a/atlas/graphviz/chart.dot")
-      val dotFileB = resolve("b/atlas/graphviz/chart.dot")
-      val dotFileC = resolve("c/atlas/graphviz/chart.dot")
+      val dotFileA = resolve("a/build/atlas/graphviz/chart.dot")
+      val dotFileB = resolve("b/build/atlas/graphviz/chart.dot")
+      val dotFileC = resolve("c/build/atlas/graphviz/chart.dot")
 
       // and contain expected contents, with projects in declaration order
       assertThat(dotFileA)
@@ -105,7 +105,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then the file was generated, with projects in alphabetical order
-      assertThat(resolve("a/atlas/graphviz/chart.dot"))
+      assertThat(resolve("a/build/atlas/graphviz/chart.dot"))
         .exists()
         .contentEquals(
           """
@@ -131,7 +131,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then the file was generated, with projects in alphabetical order
-      assertThat(resolve("a/atlas/graphviz/chart.dot"))
+      assertThat(resolve("a/build/atlas/graphviz/chart.dot"))
         .exists()
         .contentEquals(
           """
@@ -155,7 +155,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then the file was generated, with colons removed from project prefixes and "b" -> "B"
-      assertThat(resolve("a/atlas/graphviz/chart.dot"))
+      assertThat(resolve("a/build/atlas/graphviz/chart.dot"))
         .exists()
         .contentEquals(
           """
@@ -178,7 +178,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then the file was generated, with the expected link styles
-      assertThat(resolve("a/atlas/graphviz/chart.dot"))
+      assertThat(resolve("a/build/atlas/graphviz/chart.dot"))
         .exists()
         .contentEquals(
           """
@@ -203,7 +203,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
       assertThatTask("writeGraphvizChart").buildsSuccessfully()
 
       // then the file was generated, with the expected link styles
-      assertThat(resolve("app/atlas/graphviz/chart.dot"))
+      assertThat(resolve("app/build/atlas/graphviz/chart.dot"))
         .exists()
         .contentEquals(
           """
