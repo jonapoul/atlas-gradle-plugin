@@ -640,11 +640,13 @@ public final class atlas/d2/D2DagreSpec$DefaultImpls {
 
 public abstract interface class atlas/d2/D2ElkSpec : atlas/core/PropertiesSpec {
 	public abstract fun getAlgorithm ()Latlas/d2/ElkAlgorithm;
+	public abstract fun getEdgeEdgeBetweenLayers ()Ljava/lang/Integer;
 	public abstract fun getEdgeNodeBetweenLayers ()Ljava/lang/Integer;
 	public abstract fun getNodeNodeBetweenLayers ()Ljava/lang/Integer;
 	public abstract fun getNodeSelfLoop ()Ljava/lang/Integer;
 	public abstract fun getPadding ()Ljava/lang/String;
 	public abstract fun setAlgorithm (Latlas/d2/ElkAlgorithm;)V
+	public abstract fun setEdgeEdgeBetweenLayers (Ljava/lang/Integer;)V
 	public abstract fun setEdgeNodeBetweenLayers (Ljava/lang/Integer;)V
 	public abstract fun setNodeNodeBetweenLayers (Ljava/lang/Integer;)V
 	public abstract fun setNodeSelfLoop (Ljava/lang/Integer;)V

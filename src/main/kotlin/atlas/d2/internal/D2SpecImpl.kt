@@ -107,6 +107,7 @@ internal class D2LayoutEngineSpecImpl(objects: ObjectFactory) :
 
 internal class D2ElkSpecImpl(parent: PropertiesSpec) : D2ElkSpec, PropertiesSpec by parent {
   override var algorithm by enum<ElkAlgorithm>("elk-algorithm")
+  override var edgeEdgeBetweenLayers by int("elk-edgeEdgeBetweenLayers")
   override var edgeNodeBetweenLayers by int("elk-edgeNodeBetweenLayers")
   override var nodeNodeBetweenLayers by int("elk-nodeNodeBetweenLayers")
   override var nodeSelfLoop by int("elk-nodeSelfLoop")

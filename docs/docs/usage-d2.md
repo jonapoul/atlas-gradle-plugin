@@ -367,6 +367,7 @@ atlas {
 
       elk {
         algorithm = ElkAlgorithm.Layered
+        edgeEdgeBetweenLayers = 50
         edgeNodeBetweenLayers = 40
         nodeNodeBetweenLayers = 70
         nodeSelfLoop = 50

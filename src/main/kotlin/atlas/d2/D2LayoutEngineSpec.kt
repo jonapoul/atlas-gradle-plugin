@@ -36,6 +36,18 @@ public interface D2ElkSpec : PropertiesSpec {
   public var algorithm: ElkAlgorithm?
 
   /**
+   * The spacing to be preserved between pairs of edges routed between the same pair of layers
+   * (default 50).
+   *
+   * ELK gives every connector that crosses between two layers its own routing slot, so the gap
+   * between those layers works out as `max(nodeNodeBetweenLayers, (slots - 1) *
+   * edgeEdgeBetweenLayers + 2 * edgeNodeBetweenLayers)`. On a wide chart where a layer has many
+   * links to the one below, that first term stops mattering and the layers get pushed a long way
+   * apart. Turning this down is the way to pull them back together.
+   */
+  public var edgeEdgeBetweenLayers: Int?
+
+  /**
    * The spacing to be preserved between nodes and edges that are routed next to the node’s layer
    * (default 40)
    */
