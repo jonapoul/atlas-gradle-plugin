@@ -5,8 +5,16 @@ import atlas.core.PropertiesSpec
 import org.gradle.api.Action
 import org.gradle.api.provider.Property
 
+/**
+ * Chooses and configures the engine D2 uses to arrange the chart. Call only one of [elk], [dagre]
+ * or [tala] - if you call more than one, the last one wins.
+ */
 @AtlasDsl
 public interface D2LayoutEngineSpec : PropertiesSpec {
+  /**
+   * The engine picked by calling [elk], [dagre] or [tala]. Unset by default, so D2 uses
+   * [LayoutEngine.Dagre].
+   */
   public val layoutEngine: Property<LayoutEngine>
 
   /** Configure ELK layout engine for the output chart. */

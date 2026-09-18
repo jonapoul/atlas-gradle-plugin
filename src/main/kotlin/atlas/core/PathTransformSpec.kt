@@ -27,14 +27,19 @@ import org.gradle.internal.impldep.org.intellij.lang.annotations.Language
  */
 @AtlasDsl
 public interface PathTransformSpec {
+  /** Every transform added by [remove] or [replace], applied in the order they were added. */
   public val replacements: SetProperty<Replacement>
 
+  /** Removes every match of [pattern] from the path. */
   public fun remove(@Language("RegExp") pattern: String)
 
+  /** Removes every match of [pattern] from the path. */
   public fun remove(pattern: Regex)
 
+  /** Replaces every match of [pattern] in the path with [replacement]. */
   public fun replace(@Language("RegExp") pattern: String, replacement: String)
 
+  /** Replaces every match of [pattern] in the path with [replacement]. */
   public fun replace(pattern: Regex, replacement: String)
 }
 

@@ -10,9 +10,12 @@ import org.gradle.api.provider.MapProperty
  */
 @AtlasDsl
 public interface PropertiesSpec {
+  /** The raw key/value attributes which will be handed to the framework when writing charts. */
   public val properties: MapProperty<String, String>
 
+  /** Sets a single raw attribute. [value] is converted with [toString]. */
   public fun put(key: String, value: Any): Unit = properties.put(key, value.toString())
 
+  /** Removes every attribute set on this spec. */
   public fun clear(): Unit = properties.set(emptyMap())
 }

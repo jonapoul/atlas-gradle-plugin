@@ -1,6 +1,6 @@
 ---
 title: Common Config
-description: Common configuration steps across all Atlas Gradle plugins
+description: Configuration shared by every Atlas diagram framework
 icon: lucide/component
 ---
 
@@ -19,7 +19,7 @@ atlas {
   generateOnSync = false
   groupProjects = false
   ignoredConfigs = setOf("debug", "kover", "ksp", "test")
-  ignoredProjects = emptySet<String>()
+  ignoredProjects = emptySet<Regex>()
   printFilesToConsole = false
 
   projectTypes {
@@ -131,6 +131,8 @@ The generated task name will depend on your chosen framework (`D2`, `Mermaid` or
 
 Even if this option is disabled, the task will still be created, it just won't be attached to `gradle check`.
 
+D2 and Graphviz only create these tasks when their `intermediateFilesInBuildDir` is set to false, which isn't the default. See the [D2](usage-d2.md#intermediatefilesinbuilddir) and [Graphviz](usage-graphviz.md#intermediatefilesinbuilddir) docs.
+
 ### displayLinkLabels
 
 ``` kotlin
@@ -144,7 +146,7 @@ atlas {
 }
 ```
 
-When enabled, a string label is attached on each project link, showing which configuration caused represents the link. When true, the `LinkTypeSpec.name` property will be used. Disabled by default.
+When enabled, a string label is attached on each project link, showing which configuration caused the link. When true, the `LinkTypeSpec.name` property will be used. Disabled by default.
 
 Requires some `linkTypes` to be declared - otherwise this will have no effect.
 
@@ -212,7 +214,7 @@ atlas {
 }
 ```
 
-Use this to configure Gradle `Configuration`s to ignore when collating project diagrams. Gradle does have a load of configurations floating around (depending on your project) - most of which will be practically useless when generating a diagram like this.
+Use this to configure Gradle `Configuration`s to ignore when collating project diagrams. A configuration is ignored if its name contains any of these strings, ignoring case. Gradle does have a load of configurations floating around (depending on your project) - most of which will be practically useless when generating a diagram like this.
 
 Defaults to `setOf("debug", "kover", "ksp", "test")`.
 
@@ -225,13 +227,13 @@ Defaults to `setOf("debug", "kover", "ksp", "test")`.
 ``` kotlin
 atlas {
   ignoredProjects = setOf(
-    ":path:to:some:project",
-    ".*:test:.*", // uses regex patterns
+    ":path:to:some:project".toRegex(),
+    ".*:test:.*".toRegex(),
   )
 }
 ```
 
-Defaults to an empty set.
+Use this to leave projects out of your charts, based on their path. Each pattern has to match the whole path. Defaults to an empty set.
 
 ### printFilesToConsole
 
@@ -249,16 +251,16 @@ Disabled by default.
 
 ### projectTypes
 
-Use the `projectTypes` block to identify project categories, along with the styling to apply to each one in the output chart. These stylings will depend on your choice of plugin (see their docs for details), but at a minimum, each with support setting:
+Use the `projectTypes` block to identify project categories, along with the styling to apply to each one in the output chart. Every framework reads these, and each framework has its own extra styling options (see their docs for details):
 
-- **label** string
+- **name** string, shown on the legend
 - **color**, as a CSS color string (`"chartreuse"`) or hex string (`"#7FFF00"`)
 - **matcher**, used to decide whether a given project should match this type:
     - **pathContains** - checks whether the project path (`":projects:path:to:my:project"`) contains a given string. Case sensitive.
-    - **patchMatches** - same as `pathContains`, but uses Regex pattern matching. You can also pass a `regexOptions` parameter to configure this more specifically, if you need.
-    - **hasPluginId** - checks whether the project has applied the given plugin ID string, e.g. `com.android.application` or `org.jebtrains.kotlin.jvm`.
+    - **pathMatches** - same as `pathContains`, but uses Regex pattern matching against the whole path. You can also pass an `options` parameter to configure this more specifically, if you need.
+    - **hasPluginId** - checks whether the project has applied the given plugin ID string, e.g. `com.android.application` or `org.jetbrains.kotlin.jvm`.
 
-  Only one of these three project matchers should be specified.
+  Only one of these three project matchers should be specified. If none are set, Atlas warns you and ignores the type. If more than one is set, only the first of `pathContains`, `pathMatches` and `hasPluginId` is checked.
 
 Sample usage:
 
@@ -274,12 +276,12 @@ atlas {
     pathMatches(
       name = "Data",
       color = "#ABCDEF",
-      pathMatches = ".*data$".toRegex(),
+      pathMatches = ".*data$",
     )
 
     pathContains(name = "Domain", pathContains = "domain") {
       // some custom config can go as a trailing lambda
-      // the available options here depends on the plugin variant
+      // the available options here are the style properties described below
     }
   }
 }
@@ -291,7 +293,7 @@ A few project type quick-access functions are built into Atlas for use in the pr
 atlas {
   projectTypes {
     androidApp()
-    androidLib()
+    androidLibrary()
     java()
     kotlinJvm()
     kotlinMultiplatform()
@@ -355,7 +357,7 @@ atlas {
     implementation(color = "red")
 
     api(style = LinkStyle.Bold) {
-      // custom config here - plugin-specific
+      // custom style properties here
     }
   }
 }
@@ -469,4 +471,4 @@ atlas {
 }
 ```
 
-These examples are not exhaustive - you can do the same with many components in Mermand and Graphviz too. If you're using some API for customising styles - have a look at the API spec for that class to see what else is available.
+These examples are not exhaustive - you can do the same with many components in Mermaid and Graphviz too. If you're using some API for customising styles - have a look at the API spec for that class to see what else is available.

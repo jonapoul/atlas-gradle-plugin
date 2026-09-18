@@ -11,7 +11,7 @@ import atlas.core.AtlasDsl
 public interface ElkLayoutSpec : MermaidLayoutSpec {
   /**
    * Option to allow edges to share path where it's convenient. It can make for pretty diagrams but
-   * can also make it harder to read in some cases.
+   * can also make it harder to read in some cases. Implicit default of false.
    */
   public var mergeEdges: Boolean?
 
@@ -31,7 +31,7 @@ public interface ElkLayoutSpec : MermaidLayoutSpec {
    * The node order given by the model does not change to produce a better layout. E.g. if node A is
    * before node B in the model this is not changed during crossing minimization. This assumes that
    * the node model order is already respected before crossing minimization. This can be achieved by
-   * setting [considerModelOrder] to NODES_AND_EDGES. Implicit default of false.
+   * setting [considerModelOrder] to [ConsiderModelOrder.NodesAndEdges]. Implicit default of false.
    */
   public var forceNodeModelOrder: Boolean?
 

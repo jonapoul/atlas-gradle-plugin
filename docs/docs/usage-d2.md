@@ -1,6 +1,6 @@
 ---
 title: D2
-description: Configuration steps for the D2 Atlas Gradle plugin
+description: Configuring D2 diagrams in Atlas
 icon: lucide/columns-2
 ---
 
@@ -8,7 +8,7 @@ icon: lucide/columns-2
 
 ## Overview
 
-See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). Using and executing the D2 plugin requires an existing installation of the `d2` executable on the system PATH. If it's not on the PATH, you can use the [`pathToD2Command`](#pathtod2command) config option.
+See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). Generating D2 charts requires an existing installation of the `d2` executable on the system PATH. If it's not on the PATH, you can use the [`pathToD2Command`](#pathtod2command) config option.
 
 [See here for D2 installation steps](https://d2lang.com/tour/install/).
 
@@ -31,7 +31,6 @@ atlas {
     groupLabelLocation = Location.Inside
     groupLabelPosition = Position.TopCenter
     intermediateFilesInBuildDir = true
-    layoutEngine = LayoutEngine.Dagre
     pad = 5
     pathToD2Command = "/path/to/d2"
     scale = 0.5f
@@ -56,7 +55,7 @@ atlas {
 
 ## Generated files
 
-The D2 plugin will generate a `classes.d2` file in the root project's `build/atlas/d2` folder. This contains any shared styling, used between all child charts. It will also generate a `chart.d2` file in each subproject's `build/atlas/d2` folder, and a `chart.XXX` file in its `atlas/d2` folder, the latter's file extension depending on [fileFormat](#fileformat). Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.d2` files in `atlas/d2` instead.
+Atlas will generate a `classes.d2` file in the root project's `build/atlas/d2` folder. This contains any shared styling, used between all child charts. It will also generate a `chart.d2` file in each subproject's `build/atlas/d2` folder, and a `chart.XXX` file in its `atlas/d2` folder, the latter's file extension depending on [fileFormat](#fileformat). Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.d2` files in `atlas/d2` instead.
 
 ## Properties
 
@@ -82,7 +81,7 @@ atlas {
 }
 ```
 
-When enabled, links between all project nodes will be animated, as long as they aren't solidly-styled. Disabled by default.
+When enabled, dashed and dotted links between project nodes will be animated. Disabled by default.
 
 !!! warning
 

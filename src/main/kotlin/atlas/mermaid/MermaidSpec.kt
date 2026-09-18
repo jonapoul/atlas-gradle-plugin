@@ -5,6 +5,29 @@ import atlas.core.AtlasSpec
 import org.gradle.api.Action
 import org.gradle.api.provider.Property
 
+/**
+ * Used to configure Mermaid output from Atlas. For barebones output with the default config, call
+ * `mermaid()` in the `atlas` block. Or for a more fleshed-out config:
+ * ```kotlin
+ * atlas {
+ *   // other Atlas config
+ *
+ *   mermaid {
+ *     animateLinks = false
+ *     look = Look.HandDrawn
+ *     theme = Theme.Forest
+ *
+ *     elk {
+ *       ...
+ *     }
+ *
+ *     themeVariables {
+ *       ...
+ *     }
+ *   }
+ * }
+ * ```
+ */
 @AtlasDsl
 public interface MermaidSpec : AtlasSpec {
   /**
@@ -20,13 +43,17 @@ public interface MermaidSpec : AtlasSpec {
   public fun elk(action: Action<ElkLayoutSpec>? = null)
 
   /**
-   * Also controlled by the `atlas.mermaid.chart.look` Gradle property. Defaults to unset. See
+   * The visual style of the chart. Unset by default, so Mermaid uses [Look.Classic].
+   *
+   * Also controlled by the `atlas.mermaid.chart.look` Gradle property. See
    * [the Mermaid docs](https://mermaid.js.org/intro/syntax-reference.html#layout-and-look)
    */
   public val look: Property<Look>
 
   /**
-   * Also controlled by the `atlas.mermaid.chart.theme` Gradle property. Defaults to unset. See
+   * A built-in Mermaid color scheme. Unset by default, so Mermaid uses [Theme.Default].
+   *
+   * Also controlled by the `atlas.mermaid.chart.theme` Gradle property. See
    * [the Mermaid docs](https://mermaid.js.org/config/theming.html)
    */
   public val theme: Property<Theme>
@@ -40,9 +67,9 @@ public interface MermaidSpec : AtlasSpec {
    * When set to true, all links between projects will have a pretty animation applied to them.
    *
    * WARNING: this doesn't currently work on GitHub or in IntelliJ's Mermaid renderers, but it does
-   * work on [mermaid.live](mermaid.live). IntelliJ breaks rendering completely, while GitHub still
-   * renders the diagram but not the animation. Not really recommended for practical use, but it
-   * does look cool when it works.
+   * work on [mermaid.live](https://mermaid.live). IntelliJ breaks rendering completely, while
+   * GitHub still renders the diagram but not the animation. Not really recommended for practical
+   * use, but it does look cool when it works.
    *
    * Also controlled by the `atlas.mermaid.chart.animateLinks` Gradle property. Defaults to false.
    * See [the Mermaid docs](https://mermaid.js.org/syntax/flowchart.html#turning-an-animation-on)

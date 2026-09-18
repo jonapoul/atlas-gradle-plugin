@@ -1,6 +1,6 @@
 ---
 title: Mermaid
-description: Configuration steps for the Mermaid Atlas Gradle plugin
+description: Configuring Mermaid diagrams in Atlas
 icon: simple/mermaid
 ---
 
@@ -56,6 +56,10 @@ or a barebones config:
 plugins {
   id("dev.jonpoulton.atlas") version "x.y.z"
 }
+
+atlas {
+  mermaid()
+}
 ```
 
 The above barebones config will output a diagram like below:
@@ -80,7 +84,7 @@ graph TD
 
 ## Generated Files
 
-The Mermaid plugin will generate a `chart.mmd` file in each subproject's `atlas/mermaid` folder, containing the Mermaid flowchart diagram for that project's dependencies. In the root project, it will also generate a `legend.md` file containing a legend of any defined project types and link types.
+Atlas will generate a `chart.mmd` file in each subproject's `atlas/mermaid` folder, containing the Mermaid flowchart diagram for that project's dependencies. In the root project, it will also generate a `legend.md` file containing a legend of any defined project types and link types.
 
 These `.mmd` files can be embedded directly in Markdown files or rendered by compatible viewers (such as this page!). Many platforms (GitHub, GitLab, etc.) will automatically render Mermaid diagrams when viewing `.md` files containing mermaid code blocks.
 
@@ -281,6 +285,7 @@ Determines how to find and break cycles in the graph. Defaults to `CycleBreaking
 - DepthFirst
 - Interactive
 - ModelOrder
+- GreedyModelOrder
 
 These can't easily be demonstrated because they don't affect simple diagrams, but the option's here if you need it.
 

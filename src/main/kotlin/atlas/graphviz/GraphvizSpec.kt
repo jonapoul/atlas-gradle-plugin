@@ -6,8 +6,8 @@ import org.gradle.api.Action
 import org.gradle.api.provider.Property
 
 /**
- * Used to configure Graphviz output from Atlas. For barebones output to a `.dot` file, you can just
- * add the `"dev.jonpoulton.atlas.graphviz"` gradle plugin. Or for a more fleshed-out config:
+ * Used to configure Graphviz output from Atlas. For barebones output with the default config, call
+ * `graphviz()` in the `atlas` block. Or for a more fleshed-out config:
  * ```kotlin
  * atlas {
  *   // other Atlas config
@@ -41,7 +41,11 @@ public interface GraphvizSpec : AtlasSpec {
    */
   public val pathToDotCommand: Property<String>
 
-  /** Manually interact with output formats from Graphviz. Defaults to [FileFormat.Svg]. */
+  /**
+   * The format of the rendered chart file. Defaults to [FileFormat.Svg].
+   *
+   * Also controlled by the `atlas.graphviz.fileFormat` Gradle property.
+   */
   public val fileFormat: Property<FileFormat>
 
   /**
@@ -51,12 +55,16 @@ public interface GraphvizSpec : AtlasSpec {
    *
    * [atlas.core.AtlasExtension.checkOutputs] only verifies these files, so no Graphviz check tasks
    * are registered while this is enabled.
+   *
+   * Also controlled by the `atlas.graphviz.intermediateFilesInBuildDir` Gradle property.
    */
   public val intermediateFilesInBuildDir: Property<Boolean>
 
   /**
-   * Customise the layout engine used to organise your project nodes in the chart. Defaults to
-   * [LayoutEngine.Dot].
+   * Customise the layout engine used to organise your project nodes in the chart. Unset by default,
+   * so Graphviz uses [LayoutEngine.Dot].
+   *
+   * Also controlled by the `atlas.graphviz.layoutEngine` Gradle property.
    */
   public val layoutEngine: Property<LayoutEngine>
 
