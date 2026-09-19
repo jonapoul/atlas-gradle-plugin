@@ -193,3 +193,14 @@ public enum class ElkAlgorithm(override val string: String) : StringEnum {
 
   override fun toString(): String = string
 }
+
+/** Which characters D2 draws [FileFormat.Ascii] charts with. */
+public enum class AsciiMode(override val string: String) : StringEnum {
+  /** Basic ASCII characters only, e.g. `+`, `-` and `|`. */
+  Standard("standard"),
+
+  /** Unicode box-drawing characters. D2's default. */
+  Extended("extended");
+
+  override fun toString(): String = string
+}

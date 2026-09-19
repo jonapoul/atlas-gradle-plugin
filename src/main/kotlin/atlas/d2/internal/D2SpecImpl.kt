@@ -12,11 +12,13 @@ import atlas.core.internal.string
 import atlas.d2.ArrowType
 import atlas.d2.D2DagreSpec
 import atlas.d2.D2ElkSpec
+import atlas.d2.D2FontsSpec
 import atlas.d2.D2GlobalPropsSpec
 import atlas.d2.D2LayoutEngineSpec
 import atlas.d2.D2RootStyleSpec
 import atlas.d2.D2Spec
 import atlas.d2.D2TalaSpec
+import atlas.d2.D2ThemeOverridesSpec
 import atlas.d2.ElkAlgorithm
 import atlas.d2.FillPattern
 import atlas.d2.Font
@@ -39,18 +41,26 @@ internal class D2SpecImpl(
 
   override val animateLinks = objects.bool(properties.animateLinks)
   override val animateInterval = objects.int(properties.animateInterval)
+  override val asciiMode = objects.enum(properties.asciiMode)
   override val center = objects.bool(properties.center)
   override val direction = objects.enum(properties.direction)
   override val fileFormat = objects.enum(properties.fileFormat)
   override val groupLabelLocation = objects.enum(properties.groupLabelLocation)
   override val groupLabelPosition = objects.enum(properties.groupLabelPosition)
   override val intermediateFilesInBuildDir = objects.bool(properties.intermediateFilesInBuildDir)
+  override val noXmlTag = objects.bool(properties.noXmlTag)
+  override val omitVersion = objects.bool(properties.omitVersion)
   override val pad = objects.int(properties.pad)
   override val pathToD2Command = objects.string(properties.pathToD2Command)
   override val scale = objects.float(properties.scale)
   override val sketch = objects.bool(properties.sketch)
   override val theme = objects.intEnum(properties.theme)
   override val themeDark = objects.intEnum(properties.darkTheme)
+  override val timeout = objects.int(properties.timeout)
+
+  override val fonts: D2FontsSpec = objects.newInstance(D2FontsSpec::class.java)
+
+  override fun fonts(action: Action<D2FontsSpec>) = action.execute(fonts)
 
   override val layoutEngine = D2LayoutEngineSpecImpl(objects)
 
@@ -59,6 +69,15 @@ internal class D2SpecImpl(
   override val rootStyle = D2RootStyleSpecImpl(objects)
 
   override fun rootStyle(action: Action<D2RootStyleSpec>) = action.execute(rootStyle)
+
+  override val themeOverrides = D2ThemeOverridesSpecImpl(objects)
+
+  override fun themeOverrides(action: Action<D2ThemeOverridesSpec>) = action.execute(themeOverrides)
+
+  override val themeDarkOverrides = D2ThemeOverridesSpecImpl(objects)
+
+  override fun themeDarkOverrides(action: Action<D2ThemeOverridesSpec>) =
+    action.execute(themeDarkOverrides)
 
   override val globalProps = D2GlobalPropsSpecImpl(objects)
 
@@ -73,6 +92,28 @@ internal open class D2RootStyleSpecImpl(objects: ObjectFactory) :
   override var strokeWidth by int("stroke-width")
   override var strokeDash by int("stroke-dash")
   override var doubleBorder by bool("double-border")
+}
+
+internal open class D2ThemeOverridesSpecImpl(objects: ObjectFactory) :
+  D2ThemeOverridesSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
+  override var n1 by string("N1")
+  override var n2 by string("N2")
+  override var n3 by string("N3")
+  override var n4 by string("N4")
+  override var n5 by string("N5")
+  override var n6 by string("N6")
+  override var n7 by string("N7")
+  override var b1 by string("B1")
+  override var b2 by string("B2")
+  override var b3 by string("B3")
+  override var b4 by string("B4")
+  override var b5 by string("B5")
+  override var b6 by string("B6")
+  override var aa2 by string("AA2")
+  override var aa4 by string("AA4")
+  override var aa5 by string("AA5")
+  override var ab4 by string("AB4")
+  override var ab5 by string("AB5")
 }
 
 internal open class D2GlobalPropsSpecImpl(objects: ObjectFactory) :

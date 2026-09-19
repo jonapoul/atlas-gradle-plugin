@@ -8,6 +8,7 @@ import atlas.core.internal.outputFile
 import atlas.core.internal.singleFile
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.TaskWithOutputFile
+import atlas.d2.AsciiMode
 import atlas.d2.D2Spec
 import atlas.d2.FileFormat
 import java.io.ByteArrayOutputStream
@@ -46,7 +47,31 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   @get:[Input Optional]
   public abstract val animateInterval: Property<Int>
   @get:[Input Optional]
+  public abstract val asciiMode: Property<AsciiMode>
+  @get:[Input Optional]
+  public abstract val noXmlTag: Property<Boolean>
+  @get:[Input Optional]
+  public abstract val omitVersion: Property<Boolean>
+  @get:[Input Optional]
   public abstract val scale: Property<Float>
+  @get:[Input Optional]
+  public abstract val timeoutSeconds: Property<Int>
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontRegular: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontItalic: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontBold: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontSemibold: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontMono: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontMonoBold: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontMonoItalic: RegularFileProperty
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val fontMonoSemibold: RegularFileProperty
   @get:[Input Optional]
   public abstract val cliArguments: MapProperty<String, String>
   @get:[Input Optional]
@@ -74,7 +99,36 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
       animateInterval.orNull?.let { cliArguments += "animate-interval" to it.toString() }
     }
 
+    if (outputFormat.get() == Ascii) {
+      asciiMode.orNull?.let { cliArguments += "ascii-mode" to it.string }
+    }
+
+    if (outputFormat.get() == Svg && noXmlTag.getOrElse(false)) {
+      cliArguments += "no-xml-tag" to "true"
+    }
+
+    if (omitVersion.getOrElse(false)) {
+      cliArguments += "omit-version" to "true"
+    }
+
     scale.orNull?.let { cliArguments += "scale" to it.toString() }
+    timeoutSeconds.orNull?.let { cliArguments += "timeout" to it.toString() }
+
+    mapOf(
+        "font-regular" to fontRegular,
+        "font-italic" to fontItalic,
+        "font-bold" to fontBold,
+        "font-semibold" to fontSemibold,
+        "font-mono" to fontMono,
+        "font-mono-bold" to fontMonoBold,
+        "font-mono-italic" to fontMonoItalic,
+        "font-mono-semibold" to fontMonoSemibold,
+      )
+      .forEach { (key, font) ->
+        font.orNull?.let {
+          cliArguments += key to it.asFile.absolutePath
+        }
+      }
 
     val errorBuffer = ByteArrayOutputStream()
     val command = buildList {
@@ -130,7 +184,21 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
           task.outputFile.convention(layout.file(imageFile))
           task.cliArguments.convention(spec.layoutEngine.properties)
           task.animateInterval.convention(spec.animateInterval)
+          task.asciiMode.convention(spec.asciiMode)
+          task.noXmlTag.convention(spec.noXmlTag)
+          task.omitVersion.convention(spec.omitVersion)
           task.scale.convention(spec.scale)
+          task.timeoutSeconds.convention(spec.timeout)
+          with(spec.fonts) {
+            task.fontRegular.convention(regular)
+            task.fontItalic.convention(italic)
+            task.fontBold.convention(bold)
+            task.fontSemibold.convention(semibold)
+            task.fontMono.convention(mono)
+            task.fontMonoBold.convention(monoBold)
+            task.fontMonoItalic.convention(monoItalic)
+            task.fontMonoSemibold.convention(monoSemibold)
+          }
         }
 
         return execD2

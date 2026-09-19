@@ -4,6 +4,7 @@ import atlas.core.AtlasDsl
 import atlas.core.AtlasSpec
 import atlas.core.PropertiesSpec
 import org.gradle.api.Action
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 
 /**
@@ -15,20 +16,36 @@ import org.gradle.api.provider.Property
  *
  *   d2 {
  *     animateLinks = true
+ *     asciiMode = AsciiMode.Standard
  *     center = true
  *     direction = Direction.Down
  *     fileFormat = FileFormat.Svg
  *     groupLabelLocation = Location.Inside
  *     groupLabelPosition = Position.TopCenter
  *     intermediateFilesInBuildDir = false
+ *     noXmlTag = true
+ *     omitVersion = true
  *     pad = 5
  *     pathToD2Command = "/path/to/d2"
  *     scale = 0.5f
  *     sketch = true
  *     theme = Theme.ColorblindClear
  *     themeDark = Theme.DarkMauve
+ *     timeout = 300
+ *
+ *     fonts {
+ *       ...
+ *     }
  *
  *     rootStyle {
+ *       ...
+ *     }
+ *
+ *     themeOverrides {
+ *       ...
+ *     }
+ *
+ *     themeDarkOverrides {
  *       ...
  *     }
  *
@@ -60,6 +77,14 @@ public interface D2Spec : AtlasSpec {
    * Also controlled by the `atlas.d2.animateInterval` Gradle property.
    */
   public val animateInterval: Property<Int>
+
+  /**
+   * Which characters to draw the chart with. Only used when [fileFormat] is [FileFormat.Ascii].
+   * Unset by default, so D2 uses [AsciiMode.Extended]. Requires D2 0.7.1 or newer.
+   *
+   * Also controlled by the `atlas.d2.asciiMode` Gradle property.
+   */
+  public val asciiMode: Property<AsciiMode>
 
   /**
    * Centers the SVG within its containing viewbox. Defaults to false.
@@ -110,6 +135,22 @@ public interface D2Spec : AtlasSpec {
   public val intermediateFilesInBuildDir: Property<Boolean>
 
   /**
+   * Leaves the `<?xml ... ?>` tag out of SVG files, which helps when embedding them straight into
+   * HTML. Only used when [fileFormat] is [FileFormat.Svg]. Defaults to false.
+   *
+   * Also controlled by the `atlas.d2.noXmlTag` Gradle property.
+   */
+  public val noXmlTag: Property<Boolean>
+
+  /**
+   * Leaves the D2 version out of the rendered chart, so upgrading D2 doesn't change every chart
+   * file. Defaults to false.
+   *
+   * Also controlled by the `atlas.d2.omitVersion` Gradle property.
+   */
+  public val omitVersion: Property<Boolean>
+
+  /**
    * Padding around the chart, in pixels. Unset by default, so D2 uses its own default of 100.
    *
    * Also controlled by the `atlas.d2.pad` Gradle property.
@@ -155,6 +196,19 @@ public interface D2Spec : AtlasSpec {
    */
   public val themeDark: Property<Theme>
 
+  /**
+   * The maximum number of seconds D2 may run for before failing. Unset by default, so D2 uses its
+   * own default of 120. Worth raising for very large charts.
+   *
+   * Also controlled by the `atlas.d2.timeout` Gradle property.
+   */
+  public val timeout: Property<Int>
+
+  /** Custom `.ttf` files to render the chart's text with. */
+  public val fonts: D2FontsSpec
+
+  public fun fonts(action: Action<D2FontsSpec>)
+
   /** Configure the layout engine used to arrange the chart. */
   public val layoutEngine: D2LayoutEngineSpec
 
@@ -164,6 +218,16 @@ public interface D2Spec : AtlasSpec {
   public val rootStyle: D2RootStyleSpec
 
   public fun rootStyle(action: Action<D2RootStyleSpec>)
+
+  /** Replaces individual colors of [theme]. */
+  public val themeOverrides: D2ThemeOverridesSpec
+
+  public fun themeOverrides(action: Action<D2ThemeOverridesSpec>)
+
+  /** Replaces individual colors of [themeDark]. Only works for SVGs. */
+  public val themeDarkOverrides: D2ThemeOverridesSpec
+
+  public fun themeDarkOverrides(action: Action<D2ThemeOverridesSpec>)
 
   /**
    * Style properties applied to all nodes and links, unless overridden by a project or link type.
@@ -193,6 +257,59 @@ public interface D2RootStyleSpec : PropertiesSpec {
 
   /** Draws a second border around the chart. */
   public var doubleBorder: Boolean?
+}
+
+/**
+ * Custom `.ttf` files to render the chart's text with. Each one is optional, and any left unset
+ * falls back to D2's bundled font for that style: Source Sans Pro for the regular fonts, Source
+ * Code Pro for the mono ones. The mono fonts require D2 0.7.1 or newer.
+ *
+ * These can't be set through Gradle properties.
+ */
+@AtlasDsl
+public interface D2FontsSpec {
+  public val regular: RegularFileProperty
+  public val italic: RegularFileProperty
+  public val bold: RegularFileProperty
+  public val semibold: RegularFileProperty
+  public val mono: RegularFileProperty
+  public val monoBold: RegularFileProperty
+  public val monoItalic: RegularFileProperty
+  public val monoSemibold: RegularFileProperty
+}
+
+/**
+ * Replaces individual colors of a theme, each a named CSS color like "orange" or a hex code like
+ * "#f0ff3a". Any left unset keep the theme's own color. See
+ * [the D2 docs](https://d2lang.com/tour/themes/).
+ */
+@AtlasDsl
+public interface D2ThemeOverridesSpec : PropertiesSpec {
+  /** Neutral colors, from darkest ([n1]) to lightest ([n7]) in the light themes. */
+  public var n1: String?
+  public var n2: String?
+  public var n3: String?
+  public var n4: String?
+  public var n5: String?
+  public var n6: String?
+  public var n7: String?
+
+  /** Base colors, used for containers. */
+  public var b1: String?
+  public var b2: String?
+  public var b3: String?
+  public var b4: String?
+  public var b5: String?
+  public var b6: String?
+
+  /** Alternative colors A. */
+  public var aa2: String?
+  public var aa4: String?
+  public var aa5: String?
+
+  /** Alternative colors B. */
+  public var ab4: String?
+  public var ab5: String?
 }
 
 /**
