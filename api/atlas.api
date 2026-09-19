@@ -626,6 +626,16 @@ public final class atlas/d2/ArrowType : java/lang/Enum, atlas/core/StringEnum {
 	public static fun values ()[Latlas/d2/ArrowType;
 }
 
+public final class atlas/d2/AsciiMode : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Extended Latlas/d2/AsciiMode;
+	public static final field Standard Latlas/d2/AsciiMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getString ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/AsciiMode;
+	public static fun values ()[Latlas/d2/AsciiMode;
+}
+
 public abstract interface class atlas/d2/D2DagreSpec : atlas/core/PropertiesSpec {
 	public abstract fun getEdgeSep ()Ljava/lang/Integer;
 	public abstract fun getNodeSep ()Ljava/lang/Integer;
@@ -654,6 +664,17 @@ public abstract interface class atlas/d2/D2ElkSpec : atlas/core/PropertiesSpec {
 public final class atlas/d2/D2ElkSpec$DefaultImpls {
 	public static fun clear (Latlas/d2/D2ElkSpec;)V
 	public static fun put (Latlas/d2/D2ElkSpec;Ljava/lang/String;Ljava/lang/Object;)V
+}
+
+public abstract interface class atlas/d2/D2FontsSpec {
+	public abstract fun getBold ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getItalic ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getMono ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getMonoBold ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getMonoItalic ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getMonoSemibold ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getRegular ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getSemibold ()Lorg/gradle/api/file/RegularFileProperty;
 }
 
 public abstract interface class atlas/d2/D2GlobalPropsSpec : atlas/core/PropertiesSpec {
@@ -714,16 +735,21 @@ public final class atlas/d2/D2RootStyleSpec$DefaultImpls {
 }
 
 public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
+	public abstract fun fonts (Lorg/gradle/api/Action;)V
 	public abstract fun getAnimateInterval ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAnimateLinks ()Lorg/gradle/api/provider/Property;
+	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getCenter ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDirection ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFileFormat ()Lorg/gradle/api/provider/Property;
+	public abstract fun getFonts ()Latlas/d2/D2FontsSpec;
 	public abstract fun getGlobalProps ()Latlas/d2/D2GlobalPropsSpec;
 	public abstract fun getGroupLabelLocation ()Lorg/gradle/api/provider/Property;
 	public abstract fun getGroupLabelPosition ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIntermediateFilesInBuildDir ()Lorg/gradle/api/provider/Property;
 	public abstract fun getLayoutEngine ()Latlas/d2/D2LayoutEngineSpec;
+	public abstract fun getNoXmlTag ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOmitVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPad ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPathToD2Command ()Lorg/gradle/api/provider/Property;
 	public abstract fun getRootStyle ()Latlas/d2/D2RootStyleSpec;
@@ -731,9 +757,14 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getSketch ()Lorg/gradle/api/provider/Property;
 	public abstract fun getTheme ()Lorg/gradle/api/provider/Property;
 	public abstract fun getThemeDark ()Lorg/gradle/api/provider/Property;
+	public abstract fun getThemeDarkOverrides ()Latlas/d2/D2ThemeOverridesSpec;
+	public abstract fun getThemeOverrides ()Latlas/d2/D2ThemeOverridesSpec;
+	public abstract fun getTimeout ()Lorg/gradle/api/provider/Property;
 	public abstract fun globalProps (Lorg/gradle/api/Action;)V
 	public abstract fun layoutEngine (Lorg/gradle/api/Action;)V
 	public abstract fun rootStyle (Lorg/gradle/api/Action;)V
+	public abstract fun themeDarkOverrides (Lorg/gradle/api/Action;)V
+	public abstract fun themeOverrides (Lorg/gradle/api/Action;)V
 }
 
 public abstract interface class atlas/d2/D2TalaSpec : atlas/core/PropertiesSpec {
@@ -744,6 +775,50 @@ public abstract interface class atlas/d2/D2TalaSpec : atlas/core/PropertiesSpec 
 public final class atlas/d2/D2TalaSpec$DefaultImpls {
 	public static fun clear (Latlas/d2/D2TalaSpec;)V
 	public static fun put (Latlas/d2/D2TalaSpec;Ljava/lang/String;Ljava/lang/Object;)V
+}
+
+public abstract interface class atlas/d2/D2ThemeOverridesSpec : atlas/core/PropertiesSpec {
+	public abstract fun getAa2 ()Ljava/lang/String;
+	public abstract fun getAa4 ()Ljava/lang/String;
+	public abstract fun getAa5 ()Ljava/lang/String;
+	public abstract fun getAb4 ()Ljava/lang/String;
+	public abstract fun getAb5 ()Ljava/lang/String;
+	public abstract fun getB1 ()Ljava/lang/String;
+	public abstract fun getB2 ()Ljava/lang/String;
+	public abstract fun getB3 ()Ljava/lang/String;
+	public abstract fun getB4 ()Ljava/lang/String;
+	public abstract fun getB5 ()Ljava/lang/String;
+	public abstract fun getB6 ()Ljava/lang/String;
+	public abstract fun getN1 ()Ljava/lang/String;
+	public abstract fun getN2 ()Ljava/lang/String;
+	public abstract fun getN3 ()Ljava/lang/String;
+	public abstract fun getN4 ()Ljava/lang/String;
+	public abstract fun getN5 ()Ljava/lang/String;
+	public abstract fun getN6 ()Ljava/lang/String;
+	public abstract fun getN7 ()Ljava/lang/String;
+	public abstract fun setAa2 (Ljava/lang/String;)V
+	public abstract fun setAa4 (Ljava/lang/String;)V
+	public abstract fun setAa5 (Ljava/lang/String;)V
+	public abstract fun setAb4 (Ljava/lang/String;)V
+	public abstract fun setAb5 (Ljava/lang/String;)V
+	public abstract fun setB1 (Ljava/lang/String;)V
+	public abstract fun setB2 (Ljava/lang/String;)V
+	public abstract fun setB3 (Ljava/lang/String;)V
+	public abstract fun setB4 (Ljava/lang/String;)V
+	public abstract fun setB5 (Ljava/lang/String;)V
+	public abstract fun setB6 (Ljava/lang/String;)V
+	public abstract fun setN1 (Ljava/lang/String;)V
+	public abstract fun setN2 (Ljava/lang/String;)V
+	public abstract fun setN3 (Ljava/lang/String;)V
+	public abstract fun setN4 (Ljava/lang/String;)V
+	public abstract fun setN5 (Ljava/lang/String;)V
+	public abstract fun setN6 (Ljava/lang/String;)V
+	public abstract fun setN7 (Ljava/lang/String;)V
+}
+
+public final class atlas/d2/D2ThemeOverridesSpec$DefaultImpls {
+	public static fun clear (Latlas/d2/D2ThemeOverridesSpec;)V
+	public static fun put (Latlas/d2/D2ThemeOverridesSpec;Ljava/lang/String;Ljava/lang/Object;)V
 }
 
 public final class atlas/d2/Direction : java/lang/Enum, atlas/core/StringEnum {
@@ -915,11 +990,12 @@ public final class atlas/d2/Theme : java/lang/Enum, atlas/core/IntEnum {
 public final class atlas/d2/internal/D2ClassesConfig : java/io/Serializable {
 	public static final field Companion Latlas/d2/internal/D2ClassesConfig$Companion;
 	public fun <init> ()V
-	public fun <init> (Ljava/lang/Boolean;Ljava/lang/Boolean;Latlas/d2/Theme;Latlas/d2/Direction;Ljava/lang/Boolean;Ljava/util/Map;Latlas/d2/LayoutEngine;Ljava/util/List;Latlas/d2/Location;Ljava/util/List;Ljava/lang/Integer;Latlas/d2/Position;Ljava/util/Map;Ljava/lang/Boolean;Latlas/d2/Theme;)V
-	public synthetic fun <init> (Ljava/lang/Boolean;Ljava/lang/Boolean;Latlas/d2/Theme;Latlas/d2/Direction;Ljava/lang/Boolean;Ljava/util/Map;Latlas/d2/LayoutEngine;Ljava/util/List;Latlas/d2/Location;Ljava/util/List;Ljava/lang/Integer;Latlas/d2/Position;Ljava/util/Map;Ljava/lang/Boolean;Latlas/d2/Theme;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/Boolean;Ljava/lang/Boolean;Latlas/d2/Theme;Ljava/util/Map;Latlas/d2/Direction;Ljava/lang/Boolean;Ljava/util/Map;Latlas/d2/LayoutEngine;Ljava/util/List;Latlas/d2/Location;Ljava/util/List;Ljava/lang/Integer;Latlas/d2/Position;Ljava/util/Map;Ljava/lang/Boolean;Latlas/d2/Theme;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/Boolean;Ljava/lang/Boolean;Latlas/d2/Theme;Ljava/util/Map;Latlas/d2/Direction;Ljava/lang/Boolean;Ljava/util/Map;Latlas/d2/LayoutEngine;Ljava/util/List;Latlas/d2/Location;Ljava/util/List;Ljava/lang/Integer;Latlas/d2/Position;Ljava/util/Map;Ljava/lang/Boolean;Latlas/d2/Theme;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAnimateLinks ()Ljava/lang/Boolean;
 	public final fun getCenter ()Ljava/lang/Boolean;
 	public final fun getDarkTheme ()Latlas/d2/Theme;
+	public final fun getDarkThemeOverrides ()Ljava/util/Map;
 	public final fun getDirection ()Latlas/d2/Direction;
 	public final fun getDisplayLinkLabels ()Ljava/lang/Boolean;
 	public final fun getGlobalProps ()Ljava/util/Map;
@@ -932,6 +1008,7 @@ public final class atlas/d2/internal/D2ClassesConfig : java/io/Serializable {
 	public final fun getRootStyle ()Ljava/util/Map;
 	public final fun getSketch ()Ljava/lang/Boolean;
 	public final fun getTheme ()Latlas/d2/Theme;
+	public final fun getThemeOverrides ()Ljava/util/Map;
 }
 
 public final synthetic class atlas/d2/internal/D2ClassesConfig$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -953,15 +1030,27 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public fun <init> ()V
 	public final fun execute ()V
 	public abstract fun getAnimateInterval ()Lorg/gradle/api/provider/Property;
+	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getClassesFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getCliArguments ()Lorg/gradle/api/provider/MapProperty;
 	public fun getDescription ()Ljava/lang/String;
 	public abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
+	public abstract fun getFontBold ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontItalic ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontMono ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontMonoBold ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontMonoItalic ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontMonoSemibold ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontRegular ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getFontSemibold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getInputFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getNoXmlTag ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOmitVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getOutputFormat ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPathToD2Command ()Lorg/gradle/api/provider/Property;
 	public abstract fun getScale ()Lorg/gradle/api/provider/Property;
+	public abstract fun getTimeoutSeconds ()Lorg/gradle/api/provider/Property;
 }
 
 public abstract class atlas/d2/tasks/WriteD2Chart : org/gradle/api/DefaultTask, atlas/core/tasks/AtlasGenerationTask, atlas/core/tasks/TaskWithOutputFile {

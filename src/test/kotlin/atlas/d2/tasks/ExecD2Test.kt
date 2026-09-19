@@ -1,9 +1,13 @@
 package atlas.d2.tasks
 
 import assertk.assertThat
+import assertk.assertions.doesNotContain
 import atlas.d2.RequiresD2
 import atlas.test.ScenarioTest
+import atlas.test.contains
+import atlas.test.resolve
 import atlas.test.scenarios.D2Basic
+import atlas.test.scenarios.D2CliFlags
 import atlas.test.scenarios.D2CustomLayoutEngine
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
@@ -95,5 +99,27 @@ internal class ExecD2Test : ScenarioTest() {
         .taskHadResult(":writeD2Classes", SUCCESS)
         .taskHadResult(":a:writeD2Chart", UP_TO_DATE)
         .taskHadResult(":a:execD2Chart", SUCCESS)
+    }
+
+  @Test
+  fun `Pass extra CLI flags to D2`() =
+    runScenario(D2CliFlags) {
+      rootDir.resolve("font.ttf").writeText("")
+
+      // when
+      assertThatTask(":a:execD2Chart").buildsSuccessfully().taskHadResult(":a:execD2Chart", SUCCESS)
+
+      // then the flags reached the command, which is echo'd here
+      val args = resolve("a/atlas/d2/chart.txt").readText()
+      val font = rootDir.resolve("font.ttf").absolutePath
+      assertThat(args)
+        .contains("--ascii-mode=standard")
+        .contains("--omit-version=true")
+        .contains("--timeout=300")
+        .contains("--font-regular=$font")
+        .contains("--font-mono-bold=$font")
+        .contains("--elk-nodeSelfLoop=50")
+        // only used for SVGs
+        .doesNotContain("--no-xml-tag")
     }
 }

@@ -25,20 +25,36 @@ atlas {
   d2 {
     animateInterval = 10
     animateLinks = true
+    asciiMode = AsciiMode.Standard
     center = true
     direction = Direction.Down
     fileFormat = FileFormat.Svg
     groupLabelLocation = Location.Inside
     groupLabelPosition = Position.TopCenter
     intermediateFilesInBuildDir = true
+    noXmlTag = true
+    omitVersion = true
     pad = 5
     pathToD2Command = "/path/to/d2"
     scale = 0.5f
     sketch = true
     theme = Theme.ColorblindClear
     themeDark = Theme.DarkMauve
+    timeout = 300
+
+    fonts {
+      // ...
+    }
 
     rootStyle {
+      // ...
+    }
+
+    themeOverrides {
+      // ...
+    }
+
+    themeDarkOverrides {
       // ...
     }
 
@@ -98,6 +114,18 @@ When enabled, dashed and dotted links between project nodes will be animated. Di
     <figcaption>Enabled</figcaption>
   </figure>
 </div>
+
+### asciiMode
+
+``` kotlin
+atlas {
+  d2 {
+    asciiMode = AsciiMode.Standard
+  }
+}
+```
+
+Only used if [fileFormat](#fileformat) is set to `FileFormat.Ascii`. `AsciiMode.Extended` draws the chart with Unicode box-drawing characters, like the example under [fileFormat](#fileformat). `AsciiMode.Standard` sticks to basic ASCII characters like `+`, `-` and `|`. Optional - leave it unset and D2 uses `Extended`. Requires D2 0.7.1 or newer.
 
 ### center
 
@@ -257,6 +285,30 @@ When enabled, the `chart.d2` and `classes.d2` files go in `build/atlas/d2/` inst
 
 Enabled by default.
 
+### noXmlTag
+
+``` kotlin
+atlas {
+  d2 {
+    noXmlTag = true
+  }
+}
+```
+
+Leaves the `<?xml ... ?>` tag out of the generated SVG, which helps if you embed it straight into HTML. Only used if [fileFormat](#fileformat) is `FileFormat.Svg`. Defaults to false.
+
+### omitVersion
+
+``` kotlin
+atlas {
+  d2 {
+    omitVersion = true
+  }
+}
+```
+
+Leaves the D2 version out of the generated chart. Handy if you commit your charts, since otherwise upgrading D2 changes every one of them. Defaults to false.
+
 ### pad
 
 ``` kotlin
@@ -366,6 +418,18 @@ D2 comes with a suite of lovely built-in color schemes which you can apply to yo
   </figure>
 </div>
 
+### timeout
+
+``` kotlin
+atlas {
+  d2 {
+    timeout = 300
+  }
+}
+```
+
+The maximum number of seconds D2 can run for before the task fails. Optional - leave it unset and D2 uses its own default of 120. Worth raising if you have a very large chart. Set it to 0 to turn the limit off.
+
 ## Functions
 
 ### layoutEngine
@@ -441,6 +505,53 @@ atlas {
 A set of style properties to be applied to the chart itself. The most common one in my experience is `fill`, which you can set to `transparent` or any other CSS color or hex string.
 
 [Check the D2 docs for the possible values of these properties](https://d2lang.com/tour/style/#root). All are optional.
+
+### fonts
+
+``` kotlin
+atlas {
+  d2 {
+    fonts {
+      regular = file("fonts/Inter-Regular.ttf")
+      italic = file("fonts/Inter-Italic.ttf")
+      bold = file("fonts/Inter-Bold.ttf")
+      semibold = file("fonts/Inter-SemiBold.ttf")
+      mono = file("fonts/JetBrainsMono-Regular.ttf")
+      monoBold = file("fonts/JetBrainsMono-Bold.ttf")
+      monoItalic = file("fonts/JetBrainsMono-Italic.ttf")
+      monoSemibold = file("fonts/JetBrainsMono-SemiBold.ttf")
+    }
+  }
+}
+```
+
+Custom `.ttf` files to draw the chart's text with. All are optional, and any you leave unset keep D2's bundled font: Source Sans Pro for the regular ones and Source Code Pro for the mono ones. The mono fonts are used when [globalProps](#globalprops) sets `font = Font.Mono`, and need D2 0.7.1 or newer.
+
+Unlike most properties, these can't be set through Gradle properties.
+
+### themeOverrides & themeDarkOverrides
+
+``` kotlin
+atlas {
+  d2 {
+    theme = Theme.Aubergine
+    themeDark = Theme.DarkMauve
+
+    themeOverrides {
+      n1 = "#123456"
+      b2 = "orange"
+    }
+
+    themeDarkOverrides {
+      aa4 = "#abcdef"
+    }
+  }
+}
+```
+
+Replaces individual colors of [theme and themeDark](#theme-themedark) without restyling each node yourself. Each value is a CSS color name or a hex code. The available codes are `n1` to `n7` (neutrals), `b1` to `b6` (base colors, used for containers), `aa2`, `aa4`, `aa5`, `ab4` and `ab5` (alternative colors). [See the D2 docs](https://d2lang.com/tour/themes/) for more.
+
+`themeDarkOverrides` only works for SVGs, same as `themeDark`.
 
 ### globalProps
 

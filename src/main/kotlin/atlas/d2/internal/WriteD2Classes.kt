@@ -38,6 +38,7 @@ public class D2ClassesConfig(
   public val animateLinks: Boolean? = null,
   public val center: Boolean? = null,
   public val darkTheme: Theme? = null,
+  public val darkThemeOverrides: Map<String, String> = emptyMap(),
   public val direction: Direction? = null,
   public val displayLinkLabels: Boolean? = null,
   public val globalProps: Map<String, String>? = null,
@@ -50,6 +51,7 @@ public class D2ClassesConfig(
   public val rootStyle: Map<String, String> = emptyMap(),
   public val sketch: Boolean? = null,
   public val theme: Theme? = null,
+  public val themeOverrides: Map<String, String> = emptyMap(),
 ) : JSerializable
 
 internal fun AtlasContext.toConfig() =
@@ -57,6 +59,7 @@ internal fun AtlasContext.toConfig() =
     animateLinks = d2.animateLinks.orNull,
     center = d2.center.orNull,
     darkTheme = d2.themeDark.orNull,
+    darkThemeOverrides = d2.themeDarkOverrides.properties.getOrElse(mutableMapOf()),
     direction = d2.direction.orNull,
     displayLinkLabels = config.displayLinkLabels,
     globalProps = d2.globalProps.properties.orNull,
@@ -69,6 +72,7 @@ internal fun AtlasContext.toConfig() =
     rootStyle = d2.rootStyle.properties.getOrElse(mutableMapOf()),
     sketch = d2.sketch.orNull,
     theme = d2.theme.orNull,
+    themeOverrides = d2.themeOverrides.properties.getOrElse(mutableMapOf()),
   )
 
 internal const val CONTAINER_CLASS = "container"
@@ -198,7 +202,10 @@ private fun IndentedStringBuilder.appendVars(config: D2ClassesConfig) =
         "sketch" to sketch,
         "center" to center,
       )
-    if (attrs.count { it.value != null } == 0) {
+    val overrides =
+      mapOf("theme-overrides" to themeOverrides, "dark-theme-overrides" to darkThemeOverrides)
+        .filterValues { it.isNotEmpty() }
+    if (attrs.count { it.value != null } == 0 && overrides.isEmpty()) {
       return@with
     }
 
@@ -210,6 +217,14 @@ private fun IndentedStringBuilder.appendVars(config: D2ClassesConfig) =
           if (value != null) {
             appendLine("$key: $value")
           }
+        }
+        overrides.forEach { (key, colors) ->
+          appendLine("$key: {")
+          indent {
+            // quoted, since an unquoted hex code would start a comment
+            colors.sortedByKeys().forEach { (code, color) -> appendLine("$code: \"$color\"") }
+          }
+          appendLine("}")
         }
       }
       appendLine("}")
