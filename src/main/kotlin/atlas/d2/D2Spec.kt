@@ -18,6 +18,7 @@ import org.gradle.api.provider.Property
  *     animateLinks = true
  *     asciiMode = AsciiMode.Standard
  *     center = true
+ *     d2Executable = file("/path/to/d2")
  *     direction = Direction.Down
  *     fileFormat = FileFormat.Svg
  *     groupLabelLocation = Location.Inside
@@ -26,7 +27,6 @@ import org.gradle.api.provider.Property
  *     noXmlTag = true
  *     omitVersion = true
  *     pad = 5
- *     pathToD2Command = "/path/to/d2"
  *     scale = 0.5f
  *     sketch = true
  *     theme = Theme.ColorblindClear
@@ -94,6 +94,15 @@ public interface D2Spec : AtlasSpec {
   public val center: Property<Boolean>
 
   /**
+   * The `d2` executable to run. Defaults to the first `d2` found on the system PATH, so only set
+   * this if yours isn't on there.
+   *
+   * Also controlled by the `atlas.d2.d2Executable` Gradle property, which should be an absolute
+   * path.
+   */
+  public val d2Executable: RegularFileProperty
+
+  /**
    * The flow direction of the chart. Unset by default, so D2 uses [Direction.Down].
    *
    * Also controlled by the `atlas.d2.direction` Gradle property.
@@ -156,14 +165,6 @@ public interface D2Spec : AtlasSpec {
    * Also controlled by the `atlas.d2.pad` Gradle property.
    */
   public val pad: Property<Int>
-
-  /**
-   * Use this if you want to specify a "d2" command which isn't on the system path. This should be
-   * an absolute path.
-   *
-   * Also controlled by the `atlas.d2.pathToD2Command` Gradle property.
-   */
-  public val pathToD2Command: Property<String>
 
   /**
    * Scales the rendered chart, passed to D2's `--scale`. Unset by default, so D2 fits SVGs to the

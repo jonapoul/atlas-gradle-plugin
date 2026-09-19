@@ -27,6 +27,7 @@ import atlas.d2.LayoutEngine.Dagre
 import atlas.d2.LayoutEngine.Elk
 import atlas.d2.LayoutEngine.Tala
 import org.gradle.api.Action
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ProviderFactory
 
@@ -43,6 +44,7 @@ internal class D2SpecImpl(
   override val animateInterval = objects.int(properties.animateInterval)
   override val asciiMode = objects.enum(properties.asciiMode)
   override val center = objects.bool(properties.center)
+  override val d2Executable: RegularFileProperty = objects.fileProperty()
   override val direction = objects.enum(properties.direction)
   override val fileFormat = objects.enum(properties.fileFormat)
   override val groupLabelLocation = objects.enum(properties.groupLabelLocation)
@@ -51,7 +53,6 @@ internal class D2SpecImpl(
   override val noXmlTag = objects.bool(properties.noXmlTag)
   override val omitVersion = objects.bool(properties.omitVersion)
   override val pad = objects.int(properties.pad)
-  override val pathToD2Command = objects.string(properties.pathToD2Command)
   override val scale = objects.float(properties.scale)
   override val sketch = objects.bool(properties.sketch)
   override val theme = objects.intEnum(properties.theme)
