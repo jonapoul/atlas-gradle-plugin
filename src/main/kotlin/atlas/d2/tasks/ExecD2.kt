@@ -90,6 +90,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     "Uses D2 to convert a text diagram into a ${outputFormat.get()} file"
 
   @TaskAction
+  @Suppress("CyclomaticComplexMethod")
   public fun execute() {
     val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
