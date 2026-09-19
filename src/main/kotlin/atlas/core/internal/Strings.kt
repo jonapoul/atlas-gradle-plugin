@@ -83,4 +83,4 @@ internal class IndentedStringBuilder(private val indentSize: Int) {
 internal fun buildIndentedString(
   size: Int = 2,
   block: IndentedStringBuilder.() -> Unit,
-): String = IndentedStringBuilder(size).also { it.block() }.toString()
+): String = IndentedStringBuilder(size).apply(block).toString()
