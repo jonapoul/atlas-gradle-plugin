@@ -9,9 +9,10 @@ import atlas.core.internal.singleFile
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.TaskWithOutputFile
 import atlas.d2.AsciiMode
-import atlas.d2.D2Spec
 import atlas.d2.FileFormat
+import atlas.d2.internal.D2SpecImpl
 import java.io.ByteArrayOutputStream
+import java.io.File
 import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
@@ -20,6 +21,7 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -74,8 +76,8 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   public abstract val fontMonoSemibold: RegularFileProperty
   @get:[Input Optional]
   public abstract val cliArguments: MapProperty<String, String>
-  @get:[Input Optional]
-  public abstract val pathToD2Command: Property<String>
+  @get:[PathSensitive(NONE) InputFile Optional]
+  public abstract val d2Executable: RegularFileProperty
   @get:OutputFile abstract override val outputFile: RegularFileProperty
   @get:Inject public abstract val execOperations: ExecOperations
 
@@ -91,7 +93,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   public fun execute() {
     val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
-    val d2Executable = pathToD2Command.getOrElse("d2")
+    val executable = d2Executable.orNull?.asFile?.absolutePath ?: "d2"
     val cliArguments = cliArguments.getOrElse(emptyMap()).toMutableMap()
 
     // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
@@ -132,7 +134,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
 
     val errorBuffer = ByteArrayOutputStream()
     val command = buildList {
-      add(d2Executable)
+      add(executable)
       add(inputFile)
       add(outputFile)
       cliArguments.forEach { (key, value) -> add("--$key=$value") }
@@ -161,7 +163,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     internal fun <T : TaskWithOutputFile> register(
       target: Project,
       config: AtlasConfig,
-      spec: D2Spec,
+      spec: D2SpecImpl,
       variant: Variant,
       d2FileTask: TaskProvider<T>,
       classesFile: FileCollection,
@@ -179,7 +181,11 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
           task.classesFile.fileProvider(classesFile.singleFile(D2Classes))
           task.dependsOn(classesFile)
           task.inputFile.convention(d2File)
-          task.pathToD2Command.convention(spec.pathToD2Command)
+          task.d2Executable.convention(
+            spec.d2Executable.orElse(
+              layout.file(spec.properties.d2Executable.map(::File).orElse(d2OnPath()))
+            )
+          )
           task.outputFormat.convention(spec.fileFormat)
           task.outputFile.convention(layout.file(imageFile))
           task.cliArguments.convention(spec.layoutEngine.properties)
@@ -202,6 +208,18 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
         }
 
         return execD2
+      }
+
+    // Resolved up front rather than leaving it to exec, so the binary is a task input and a
+    // different d2 version invalidates the cached chart.
+    private fun Project.d2OnPath(): Provider<File> =
+      providers.environmentVariable("PATH").flatMap { path ->
+        providers.provider {
+          path
+            .split(File.pathSeparator)
+            .flatMap { dir -> listOf(File(dir, "d2"), File(dir, "d2.exe")) }
+            .firstOrNull { it.isFile && it.canExecute() }
+        }
       }
   }
 }

@@ -8,7 +8,7 @@ icon: lucide/columns-2
 
 ## Overview
 
-See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). Generating D2 charts requires an existing installation of the `d2` executable on the system PATH. If it's not on the PATH, you can use the [`pathToD2Command`](#pathtod2command) config option.
+See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). Generating D2 charts requires an existing installation of the `d2` executable on the system PATH. If it's not on the PATH, you can use the [`d2Executable`](#d2executable) config option.
 
 [See here for D2 installation steps](https://d2lang.com/tour/install/).
 
@@ -27,6 +27,7 @@ atlas {
     animateLinks = true
     asciiMode = AsciiMode.Standard
     center = true
+    d2Executable = file("/path/to/d2")
     direction = Direction.Down
     fileFormat = FileFormat.Svg
     groupLabelLocation = Location.Inside
@@ -35,7 +36,6 @@ atlas {
     noXmlTag = true
     omitVersion = true
     pad = 5
-    pathToD2Command = "/path/to/d2"
     scale = 0.5f
     sketch = true
     theme = Theme.ColorblindClear
@@ -138,6 +138,18 @@ atlas {
 ```
 
 This flag centers the SVG within the containing viewbox. Doesn't really give an obvious change in me experience, but ¯\_(ツ)_/¯. [See here](https://d2lang.com/tour/vars/#configuration-variables).
+
+### d2Executable
+
+``` kotlin
+atlas {
+  d2 {
+    d2Executable = file("/custom/path/to/d2")
+  }
+}
+```
+
+By default, Atlas will try to call `d2` from the system path. Use this to call from a custom installation directory instead.
 
 ### direction
 
@@ -332,18 +344,6 @@ Should probably be called `padding` for clarity, but kept as `pad` for consisten
     <figcaption>200 padding</figcaption>
   </figure>
 </div>
-
-### pathToD2Command
-
-``` kotlin
-atlas {
-  d2 {
-    pathToD2Command = "/custom/path/to/d2"
-  }
-}
-```
-
-By default, Atlas will try to call `d2` from the system path. Use this to call from a custom installation directory instead.
 
 ### scale
 
