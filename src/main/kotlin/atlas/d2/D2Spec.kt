@@ -198,7 +198,7 @@ public interface D2Spec : AtlasSpec {
 
   /**
    * The maximum number of seconds D2 may run for before failing. Unset by default, so D2 uses its
-   * own default of 120. Worth raising for very large charts.
+   * own default of 120. Worth raising for very large charts, and 0 turns the limit off.
    *
    * Also controlled by the `atlas.d2.timeout` Gradle property.
    */

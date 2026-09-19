@@ -92,7 +92,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
     val d2Executable = pathToD2Command.getOrElse("d2")
-    val cliArguments = cliArguments.getOrElse(mutableMapOf())
+    val cliArguments = cliArguments.getOrElse(emptyMap()).toMutableMap()
 
     // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
     if (outputFormat.get() == Gif) {

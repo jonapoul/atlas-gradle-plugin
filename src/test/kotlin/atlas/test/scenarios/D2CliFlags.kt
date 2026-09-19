@@ -16,6 +16,9 @@ internal object D2CliFlags : D2Scenario by D2Basic {
       omitVersion = true
       timeout = 300
 
+      // layout engine options arrive as a read-only map, which the flags above get added to
+      layoutEngine.elk { nodeSelfLoop = 50 }
+
       fonts {
         regular = file("font.ttf")
         monoBold = file("font.ttf")

@@ -428,7 +428,7 @@ atlas {
 }
 ```
 
-The maximum number of seconds D2 can run for before the task fails. Optional - leave it unset and D2 uses its own default of 120. Worth raising if you have a very large chart.
+The maximum number of seconds D2 can run for before the task fails. Optional - leave it unset and D2 uses its own default of 120. Worth raising if you have a very large chart. Set it to 0 to turn the limit off.
 
 ## Functions
 

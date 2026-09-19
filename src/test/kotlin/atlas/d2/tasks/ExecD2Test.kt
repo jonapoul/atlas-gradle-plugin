@@ -118,6 +118,7 @@ internal class ExecD2Test : ScenarioTest() {
         .contains("--timeout=300")
         .contains("--font-regular=$font")
         .contains("--font-mono-bold=$font")
+        .contains("--elk-nodeSelfLoop=50")
         // only used for SVGs
         .doesNotContain("--no-xml-tag")
     }
