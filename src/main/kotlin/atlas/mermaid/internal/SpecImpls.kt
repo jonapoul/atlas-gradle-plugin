@@ -1,6 +1,6 @@
 package atlas.mermaid.internal
 
-import atlas.core.PropertiesSpec
+import atlas.core.internal.InternalPropertiesSpec
 import atlas.core.internal.PropertiesSpecImpl
 import atlas.core.internal.bool
 import atlas.core.internal.enum
@@ -19,10 +19,10 @@ import org.gradle.api.provider.ProviderFactory
 
 internal class MermaidSpecImpl(
   private val objects: ObjectFactory,
-  providers: ProviderFactory,
+  private val providers: ProviderFactory,
 ) : MermaidSpec {
   private val properties = MermaidGradleProperties(providers)
-  private var mutableLayout = MermaidLayoutSpecImpl(objects)
+  private var mutableLayout = MermaidLayoutSpecImpl(objects, providers, "atlas.mermaid.layout")
 
   override val name = "Mermaid"
   override val fileExtension = objects.string(convention = "mmd")
@@ -32,13 +32,13 @@ internal class MermaidSpecImpl(
 
   override fun layout(action: Action<MermaidLayoutSpec>) = action.execute(mutableLayout)
 
-  override val themeVariables = MermaidThemeVariablesSpecImpl(objects)
+  override val themeVariables = MermaidThemeVariablesSpecImpl(objects, providers)
 
   override fun themeVariables(action: Action<MermaidThemeVariablesSpec>) =
     action.execute(themeVariables)
 
   override fun elk(action: Action<ElkLayoutSpec>?) {
-    mutableLayout = ElkLayoutSpecImpl(objects).also { action?.execute(it) }
+    mutableLayout = ElkLayoutSpecImpl(objects, providers).also { action?.execute(it) }
   }
 
   override val animateLinks = objects.bool(properties.animateLinks)
@@ -46,13 +46,16 @@ internal class MermaidSpecImpl(
   override val theme = objects.enum(properties.theme)
 }
 
-internal open class MermaidLayoutSpecImpl(objects: ObjectFactory) :
-  MermaidLayoutSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal open class MermaidLayoutSpecImpl(
+  objects: ObjectFactory,
+  providers: ProviderFactory,
+  prefix: String,
+) : MermaidLayoutSpec, InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, prefix) {
   override val name = objects.property(String::class.java).unsetConvention()
 }
 
-internal class ElkLayoutSpecImpl(objects: ObjectFactory) :
-  MermaidLayoutSpecImpl(objects), ElkLayoutSpec {
+internal class ElkLayoutSpecImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  MermaidLayoutSpecImpl(objects, providers, "atlas.mermaid.elk"), ElkLayoutSpec {
   init {
     name.set("elk")
     name.finalizeValue()
@@ -65,8 +68,9 @@ internal class ElkLayoutSpecImpl(objects: ObjectFactory) :
   override var nodePlacementStrategy by enum<NodePlacementStrategy>("nodePlacementStrategy")
 }
 
-internal class MermaidThemeVariablesSpecImpl(objects: ObjectFactory) :
-  MermaidThemeVariablesSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal class MermaidThemeVariablesSpecImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  MermaidThemeVariablesSpec,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.mermaid.themeVariables") {
   override var background by string(key = "background")
   override var darkMode by bool(key = "darkMode")
   override var fontFamily by string(key = "fontFamily")

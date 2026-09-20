@@ -12,18 +12,24 @@ public interface ElkLayoutSpec : MermaidLayoutSpec {
   /**
    * Option to allow edges to share path where it's convenient. It can make for pretty diagrams but
    * can also make it harder to read in some cases. Implicit default of false.
+   *
+   * Also controlled by the `atlas.mermaid.elk.mergeEdges` Gradle property.
    */
   public var mergeEdges: Boolean?
 
   /**
    * Elk specific option affecting how nodes are placed. Implicit default is
    * [NodePlacementStrategy.BrandesKoepf].
+   *
+   * Also controlled by the `atlas.mermaid.elk.nodePlacementStrategy` Gradle property.
    */
   public var nodePlacementStrategy: NodePlacementStrategy?
 
   /**
    * This strategy decides how to find cycles in the graph and deciding which edges need adjustment
    * to break loops. Implicit default is [CycleBreakingStrategy.GreedyModelOrder].
+   *
+   * Also controlled by the `atlas.mermaid.elk.cycleBreakingStrategy` Gradle property.
    */
   public var cycleBreakingStrategy: CycleBreakingStrategy?
 
@@ -32,6 +38,8 @@ public interface ElkLayoutSpec : MermaidLayoutSpec {
    * before node B in the model this is not changed during crossing minimization. This assumes that
    * the node model order is already respected before crossing minimization. This can be achieved by
    * setting [considerModelOrder] to [ConsiderModelOrder.NodesAndEdges]. Implicit default of false.
+   *
+   * Also controlled by the `atlas.mermaid.elk.forceNodeModelOrder` Gradle property.
    */
   public var forceNodeModelOrder: Boolean?
 
@@ -39,6 +47,8 @@ public interface ElkLayoutSpec : MermaidLayoutSpec {
    * Preserves the order of nodes and edges in the model file if this does not lead to additional
    * edge crossings. Depending on the strategy this is not always possible since the node and edge
    * order might be conflicting. Implicit default is [ConsiderModelOrder.NodesAndEdges].
+   *
+   * Also controlled by the `atlas.mermaid.elk.considerModelOrder` Gradle property.
    */
   public var considerModelOrder: ConsiderModelOrder?
 }

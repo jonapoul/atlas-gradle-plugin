@@ -12,6 +12,9 @@ internal object D2ConfiguredByProperties : Scenario by D2Basic {
     atlas.d2.groupLabelPosition=bottom-center
     atlas.d2.pad=5
     atlas.d2.theme=DarkFlagshipTerrastruct
+    atlas.d2.globalProps.fontSize=24
+    atlas.d2.rootStyle.fill=transparent
+    atlas.d2.themeOverrides.n1=orange
     """
       .trimIndent()
 }

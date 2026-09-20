@@ -3,6 +3,7 @@ package atlas.mermaid
 import assertk.assertThat
 import atlas.test.ScenarioTest
 import atlas.test.resolve
+import atlas.test.scenarios.MermaidConfiguredByProperties
 import atlas.test.scenarios.MermaidWithGroupsNested
 import atlas.test.scenarios.MermaidWithGroupsNotNested
 import atlas.test.scenarios.MermaidWithoutGroups
@@ -88,6 +89,37 @@ internal class WriteMermaidChartTest : ScenarioTest() {
             _b_b1 --> _c_inner_c2
             _b_b2 --> _c_c3
             _b_b2 --> _c_inner_c2
+          """
+            .trimIndent()
+        )
+    }
+
+  @Test
+  fun `Write chart configured by gradle properties`() =
+    runScenario(MermaidConfiguredByProperties) {
+      // when
+      assertThatTask(":a:writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
+
+      // then
+      assertThat(resolve("a/chart-mermaid.mmd"))
+        .exists()
+        .contentEquals(
+          """
+          ---
+          config:
+            layout: elk
+            elk:
+              cycleBreakingStrategy: DEPTH_FIRST
+              mergeEdges: true
+            themeVariables:
+              primaryColor: orange
+          ---
+          graph TD
+            _a[":a"]
+            _b[":b"]
+            _c[":c"]
+            _a --> _b
+            _a --> _c
           """
             .trimIndent()
         )

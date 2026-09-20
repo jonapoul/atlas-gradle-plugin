@@ -242,22 +242,46 @@ public interface D2Spec : AtlasSpec {
 /** https://d2lang.com/tour/style/#root */
 @AtlasDsl
 public interface D2RootStyleSpec : PropertiesSpec {
-  /** The chart's background color, e.g. "transparent" or any CSS color or hex string. */
+  /**
+   * The chart's background color, e.g. "transparent" or any CSS color or hex string.
+   *
+   * Also controlled by the `atlas.d2.rootStyle.fill` Gradle property.
+   */
   public var fill: String?
 
-  /** A texture drawn over the chart's background. */
+  /**
+   * A texture drawn over the chart's background.
+   *
+   * Also controlled by the `atlas.d2.rootStyle.fillPattern` Gradle property.
+   */
   public var fillPattern: FillPattern?
 
-  /** The color of the chart's border. */
+  /**
+   * The color of the chart's border.
+   *
+   * Also controlled by the `atlas.d2.rootStyle.stroke` Gradle property.
+   */
   public var stroke: String?
 
-  /** The width of the chart's border. */
+  /**
+   * The width of the chart's border.
+   *
+   * Also controlled by the `atlas.d2.rootStyle.strokeWidth` Gradle property.
+   */
   public var strokeWidth: Int?
 
-  /** Draws the chart's border as a dashed line, with this as the gap between dashes. */
+  /**
+   * Draws the chart's border as a dashed line, with this as the gap between dashes.
+   *
+   * Also controlled by the `atlas.d2.rootStyle.strokeDash` Gradle property.
+   */
   public var strokeDash: Int?
 
-  /** Draws a second border around the chart. */
+  /**
+   * Draws a second border around the chart.
+   *
+   * Also controlled by the `atlas.d2.rootStyle.doubleBorder` Gradle property.
+   */
   public var doubleBorder: Boolean?
 }
 
@@ -287,30 +311,120 @@ public interface D2FontsSpec {
  */
 @AtlasDsl
 public interface D2ThemeOverridesSpec : PropertiesSpec {
-  /** Neutral colors, from darkest ([n1]) to lightest ([n7]) in the light themes. */
+  /**
+   * Neutral colors, from darkest ([n1]) to lightest ([n7]) in the light themes.
+   *
+   * Also controlled by the `atlas.d2.themeOverrides.n1` and `atlas.d2.themeDarkOverrides.n1` Gradle
+   * properties.
+   */
   public var n1: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.n2` and `atlas.d2.themeDarkOverrides.n2` Gradle
+   * properties.
+   */
   public var n2: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.n3` and `atlas.d2.themeDarkOverrides.n3` Gradle
+   * properties.
+   */
   public var n3: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.n4` and `atlas.d2.themeDarkOverrides.n4` Gradle
+   * properties.
+   */
   public var n4: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.n5` and `atlas.d2.themeDarkOverrides.n5` Gradle
+   * properties.
+   */
   public var n5: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.n6` and `atlas.d2.themeDarkOverrides.n6` Gradle
+   * properties.
+   */
   public var n6: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.n7` and `atlas.d2.themeDarkOverrides.n7` Gradle
+   * properties.
+   */
   public var n7: String?
 
-  /** Base colors, used for containers. */
+  /**
+   * Base colors, used for containers.
+   *
+   * Also controlled by the `atlas.d2.themeOverrides.b1` and `atlas.d2.themeDarkOverrides.b1` Gradle
+   * properties.
+   */
   public var b1: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.b2` and `atlas.d2.themeDarkOverrides.b2` Gradle
+   * properties.
+   */
   public var b2: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.b3` and `atlas.d2.themeDarkOverrides.b3` Gradle
+   * properties.
+   */
   public var b3: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.b4` and `atlas.d2.themeDarkOverrides.b4` Gradle
+   * properties.
+   */
   public var b4: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.b5` and `atlas.d2.themeDarkOverrides.b5` Gradle
+   * properties.
+   */
   public var b5: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.b6` and `atlas.d2.themeDarkOverrides.b6` Gradle
+   * properties.
+   */
   public var b6: String?
 
-  /** Alternative colors A. */
+  /**
+   * Alternative colors A.
+   *
+   * Also controlled by the `atlas.d2.themeOverrides.aa2` and `atlas.d2.themeDarkOverrides.aa2`
+   * Gradle properties.
+   */
   public var aa2: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.aa4` and `atlas.d2.themeDarkOverrides.aa4`
+   * Gradle properties.
+   */
   public var aa4: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.aa5` and `atlas.d2.themeDarkOverrides.aa5`
+   * Gradle properties.
+   */
   public var aa5: String?
 
-  /** Alternative colors B. */
+  /**
+   * Alternative colors B.
+   *
+   * Also controlled by the `atlas.d2.themeOverrides.ab4` and `atlas.d2.themeDarkOverrides.ab4`
+   * Gradle properties.
+   */
   public var ab4: String?
+
+  /**
+   * Also controlled by the `atlas.d2.themeOverrides.ab5` and `atlas.d2.themeDarkOverrides.ab5`
+   * Gradle properties.
+   */
   public var ab5: String?
 }
 
@@ -321,18 +435,32 @@ public interface D2ThemeOverridesSpec : PropertiesSpec {
  */
 @AtlasDsl
 public interface D2GlobalPropsSpec : PropertiesSpec {
-  /** The shape of the arrowhead on every link. */
+  /**
+   * The shape of the arrowhead on every link.
+   *
+   * Also controlled by the `atlas.d2.globalProps.arrowType` Gradle property.
+   */
   public var arrowType: ArrowType?
 
-  /** Whether arrowheads on every link are filled in. */
+  /**
+   * Whether arrowheads on every link are filled in.
+   *
+   * Also controlled by the `atlas.d2.globalProps.fillArrowHeads` Gradle property.
+   */
   public var fillArrowHeads: Boolean?
 
   /**
    * The font of all text in the chart. [Font.Mono] is the only option, so leave this unset for D2's
    * default font.
+   *
+   * Also controlled by the `atlas.d2.globalProps.font` Gradle property.
    */
   public var font: Font?
 
-  /** The size of all text in the chart. */
+  /**
+   * The size of all text in the chart.
+   *
+   * Also controlled by the `atlas.d2.globalProps.fontSize` Gradle property.
+   */
   public var fontSize: Int?
 }

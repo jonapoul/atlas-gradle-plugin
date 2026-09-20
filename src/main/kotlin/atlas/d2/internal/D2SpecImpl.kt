@@ -1,8 +1,9 @@
 package atlas.d2.internal
 
-import atlas.core.PropertiesSpec
+import atlas.core.internal.InternalPropertiesSpec
 import atlas.core.internal.PropertiesSpecImpl
 import atlas.core.internal.bool
+import atlas.core.internal.child
 import atlas.core.internal.enum
 import atlas.core.internal.float
 import atlas.core.internal.int
@@ -22,7 +23,6 @@ import atlas.d2.D2ThemeOverridesSpec
 import atlas.d2.ElkAlgorithm
 import atlas.d2.FillPattern
 import atlas.d2.Font
-import atlas.d2.LayoutEngine
 import atlas.d2.LayoutEngine.Dagre
 import atlas.d2.LayoutEngine.Elk
 import atlas.d2.LayoutEngine.Tala
@@ -63,30 +63,33 @@ internal class D2SpecImpl(
 
   override fun fonts(action: Action<D2FontsSpec>) = action.execute(fonts)
 
-  override val layoutEngine = D2LayoutEngineSpecImpl(objects)
+  override val layoutEngine = D2LayoutEngineSpecImpl(objects, providers, properties)
 
   override fun layoutEngine(action: Action<D2LayoutEngineSpec>) = action.execute(layoutEngine)
 
-  override val rootStyle = D2RootStyleSpecImpl(objects)
+  override val rootStyle = D2RootStyleSpecImpl(objects, providers)
 
   override fun rootStyle(action: Action<D2RootStyleSpec>) = action.execute(rootStyle)
 
-  override val themeOverrides = D2ThemeOverridesSpecImpl(objects)
+  override val themeOverrides =
+    D2ThemeOverridesSpecImpl(objects, providers, "atlas.d2.themeOverrides")
 
   override fun themeOverrides(action: Action<D2ThemeOverridesSpec>) = action.execute(themeOverrides)
 
-  override val themeDarkOverrides = D2ThemeOverridesSpecImpl(objects)
+  override val themeDarkOverrides =
+    D2ThemeOverridesSpecImpl(objects, providers, "atlas.d2.themeDarkOverrides")
 
   override fun themeDarkOverrides(action: Action<D2ThemeOverridesSpec>) =
     action.execute(themeDarkOverrides)
 
-  override val globalProps = D2GlobalPropsSpecImpl(objects)
+  override val globalProps = D2GlobalPropsSpecImpl(objects, providers)
 
   override fun globalProps(action: Action<D2GlobalPropsSpec>) = action.execute(globalProps)
 }
 
-internal open class D2RootStyleSpecImpl(objects: ObjectFactory) :
-  D2RootStyleSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal open class D2RootStyleSpecImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  D2RootStyleSpec,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.d2.rootStyle") {
   override var fill by string("fill")
   override var fillPattern by enum<FillPattern>("fill-pattern")
   override var stroke by string("stroke")
@@ -95,8 +98,11 @@ internal open class D2RootStyleSpecImpl(objects: ObjectFactory) :
   override var doubleBorder by bool("double-border")
 }
 
-internal open class D2ThemeOverridesSpecImpl(objects: ObjectFactory) :
-  D2ThemeOverridesSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal open class D2ThemeOverridesSpecImpl(
+  objects: ObjectFactory,
+  providers: ProviderFactory,
+  prefix: String,
+) : D2ThemeOverridesSpec, InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, prefix) {
   override var n1 by string("N1")
   override var n2 by string("N2")
   override var n3 by string("N3")
@@ -117,17 +123,23 @@ internal open class D2ThemeOverridesSpecImpl(objects: ObjectFactory) :
   override var ab5 by string("AB5")
 }
 
-internal open class D2GlobalPropsSpecImpl(objects: ObjectFactory) :
-  D2GlobalPropsSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal open class D2GlobalPropsSpecImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  D2GlobalPropsSpec,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.d2.globalProps") {
   override var arrowType by enum<ArrowType>("(** -> **)[*].target-arrowhead.shape")
   override var fillArrowHeads by bool("(** -> **)[*].target-arrowhead.style.filled")
   override var font by enum<Font>("***.style.font")
   override var fontSize by int("***.style.font-size")
 }
 
-internal class D2LayoutEngineSpecImpl(objects: ObjectFactory) :
-  D2LayoutEngineSpec, PropertiesSpec by PropertiesSpecImpl(objects) {
-  override val layoutEngine = objects.enum<LayoutEngine>(convention = null)
+internal class D2LayoutEngineSpecImpl(
+  objects: ObjectFactory,
+  providers: ProviderFactory,
+  gradleProperties: D2GradleProperties,
+) :
+  D2LayoutEngineSpec,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.d2.layoutEngine") {
+  override val layoutEngine = objects.enum(gradleProperties.layoutEngine)
   override val dagre = D2DagreSpecImpl(this)
   override val elk = D2ElkSpecImpl(this)
   override val tala = D2TalaSpecImpl(this)
@@ -148,7 +160,8 @@ internal class D2LayoutEngineSpecImpl(objects: ObjectFactory) :
   }
 }
 
-internal class D2ElkSpecImpl(parent: PropertiesSpec) : D2ElkSpec, PropertiesSpec by parent {
+internal class D2ElkSpecImpl(parent: InternalPropertiesSpec) :
+  D2ElkSpec, InternalPropertiesSpec by parent.child("elk") {
   override var algorithm by enum<ElkAlgorithm>("elk-algorithm")
   override var edgeNodeBetweenLayers by int("elk-edgeNodeBetweenLayers")
   override var nodeNodeBetweenLayers by int("elk-nodeNodeBetweenLayers")
@@ -165,11 +178,13 @@ internal class D2ElkSpecImpl(parent: PropertiesSpec) : D2ElkSpec, PropertiesSpec
   }
 }
 
-internal class D2DagreSpecImpl(parent: PropertiesSpec) : D2DagreSpec, PropertiesSpec by parent {
+internal class D2DagreSpecImpl(parent: InternalPropertiesSpec) :
+  D2DagreSpec, InternalPropertiesSpec by parent.child("dagre") {
   override var nodeSep by int("dagre-nodesep")
   override var edgeSep by int("dagre-edgesep")
 }
 
-internal class D2TalaSpecImpl(parent: PropertiesSpec) : D2TalaSpec, PropertiesSpec by parent {
+internal class D2TalaSpecImpl(parent: InternalPropertiesSpec) :
+  D2TalaSpec, InternalPropertiesSpec by parent.child("tala") {
   override var seeds by longList("tala-seeds")
 }

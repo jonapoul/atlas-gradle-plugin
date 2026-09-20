@@ -2,7 +2,7 @@
 
 package atlas.graphviz.internal
 
-import atlas.core.PropertiesSpec
+import atlas.core.internal.InternalPropertiesSpec
 import atlas.core.internal.PropertiesSpecImpl
 import atlas.core.internal.bool
 import atlas.core.internal.enum
@@ -24,9 +24,11 @@ import atlas.graphviz.RankDir
 import atlas.graphviz.Shape
 import atlas.graphviz.SmoothType
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ProviderFactory
 
-internal class NodeAttributesImpl(objects: ObjectFactory) :
-  NodeAttributes, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal class NodeAttributesImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  NodeAttributes,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.graphviz.node") {
   override var lineColor by string("color")
   override var colorScheme by string("colorscheme")
   override var comment by string("comment")
@@ -76,8 +78,9 @@ internal class NodeAttributesImpl(objects: ObjectFactory) :
   override var z by number("z")
 }
 
-internal class EdgeAttributesImpl(objects: ObjectFactory) :
-  EdgeAttributes, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal class EdgeAttributesImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  EdgeAttributes,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.graphviz.edge") {
   override var arrowHead by enum<ArrowType>("arrowhead")
   override var arrowSize by number("arrowsize")
   override var arrowTail by enum<ArrowType>("arrowtail")
@@ -145,8 +148,9 @@ internal class EdgeAttributesImpl(objects: ObjectFactory) :
   override var xlp by string("xlp")
 }
 
-internal class GraphAttributesImpl(objects: ObjectFactory) :
-  GraphAttributes, PropertiesSpec by PropertiesSpecImpl(objects) {
+internal class GraphAttributesImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  GraphAttributes,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.graphviz.graph") {
   override var background by string("_background")
   override var bb by string("bb")
   override var beautify by bool("beautify")

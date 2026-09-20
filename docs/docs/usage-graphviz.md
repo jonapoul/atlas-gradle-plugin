@@ -135,6 +135,8 @@ though some of them (*cough* neato *cough*) will probably need tweaking of prope
 
 As mentioned in [the Extra Properties section on the previous page](usage-common.md#extra-properties), the following three config sections all implement PropertiesSpec. As such, you can call `put("key", value)` within each of these lambda blocks to pass in your own config options - in case you want to set a property which hasn't been exposed by Atlas yet.
 
+Every attribute in the three sections is also a [Gradle property](usage-common.md#gradle-properties), named after the Kotlin property rather than the Graphviz attribute: `atlas.graphviz.node.shape=box`, `atlas.graphviz.edge.arrowHead=box`, `atlas.graphviz.graph.rankDir=LR`.
+
 ### node
 
 Set a bunch of properties to be applied to all project nodes - unless overridden by [`projectTypes` config](usage-common.md#projecttypes). Some examples below, though you'll want to [go through the Graphviz docs](https://graphviz.org/docs/nodes/) for all restrictions/requirements:
