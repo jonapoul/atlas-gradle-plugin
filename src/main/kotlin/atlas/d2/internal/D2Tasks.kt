@@ -14,7 +14,10 @@ import atlas.d2.FileFormat
 import atlas.d2.tasks.ExecD2
 import atlas.d2.tasks.WriteD2Chart
 import atlas.d2.tasks.WriteD2Classes
+import java.io.File
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
+import org.gradle.api.provider.Provider
 
 internal object D2Tasks : FrameworkTasks {
   override val framework: Framework = D2
@@ -71,8 +74,6 @@ internal object D2Tasks : FrameworkTasks {
     with(context.project) {
       val d2Spec = context.d2
 
-      // need to use the same pathToClassesFile string for real and dummy tasks, otherwise the check
-      // operation might fail if the project and the build directory have different relative paths.
       val classesFile = context.fromRoot(D2Classes)
       val d2File =
         intermediateFile(
@@ -82,17 +83,19 @@ internal object D2Tasks : FrameworkTasks {
           fileExtension = d2Spec.fileExtension.get(),
           inBuildDir = d2Spec.intermediateFilesInBuildDir.get(),
         )
-      val pathToClassesFile =
-        classesFile.singleFile(D2Classes).map {
-          it.relativeTo(d2File.parentFile).path
-        }
+      val chartTask = WriteD2Chart.real(context = context, outputFile = d2File)
 
-      val chartTask =
-        WriteD2Chart.real(
-          context = context,
-          outputFile = d2File,
-          pathToClassesFile = pathToClassesFile,
-        )
+      // The `...@` import is relative to wherever the chart lands, and that isn't necessarily
+      // [d2File] - outputFile is public, so a build can move it. Reading it back off the task only
+      // gives the moved location if this action is registered after the build script has run,
+      // hence afterEvaluate. It has to be read eagerly here too: a provider built from the task's
+      // own output property makes the task depend on itself.
+      afterEvaluate {
+        chartTask.configure { task ->
+          val chartDirectory = task.outputFile.get().asFile.parentFile
+          task.pathToClassesFile.convention(importPath(classesFile, chartDirectory))
+        }
+      }
 
       // Nothing to check when the chart file lives in the build directory
       if (!d2Spec.intermediateFilesInBuildDir.get()) {
@@ -100,8 +103,16 @@ internal object D2Tasks : FrameworkTasks {
           WriteD2Chart.dummy(
             context = context,
             outputFile = atlasBuildDirectory.get().file("chart-temp.d2").asFile,
-            pathToClassesFile = pathToClassesFile,
           )
+
+        dummyChartTask.configure { task ->
+          // The dummy writes to the build directory, so working the import out from its own output
+          // would give a different path to the real chart's and the check would report a diff that
+          // isn't there. Borrow the real chart's directory instead, read eagerly - as CheckFileDiff
+          // does - to break the task dependency on the real task.
+          val chartDirectory = chartTask.map { it.outputFile }.get().get().asFile.parentFile
+          task.pathToClassesFile.convention(importPath(classesFile, chartDirectory))
+        }
 
         CheckFileDiff.register(
           target = this,
@@ -129,6 +140,10 @@ internal object D2Tasks : FrameworkTasks {
         legend = null,
       )
     }
+
+  /** The `...@` import d2 resolves against a chart sitting in [chartDirectory]. */
+  private fun importPath(classesFile: FileCollection, chartDirectory: File): Provider<String> =
+    classesFile.singleFile(D2Classes).map { it.relativeTo(chartDirectory).path }
 
   private fun Project.warnIfLabelLocationSpecifiedButNotPosition(context: AtlasContext) {
     val d2 = context.d2

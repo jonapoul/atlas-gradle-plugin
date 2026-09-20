@@ -1,10 +1,12 @@
 package atlas.d2.tasks
 
 import assertk.assertThat
+import assertk.assertions.isEqualTo
 import atlas.d2.RequiresD2
 import atlas.test.ScenarioTest
 import atlas.test.resolve
 import atlas.test.scenarios.D2Basic
+import atlas.test.scenarios.D2MovedOutputs
 import atlas.test.scenarios.D2NestedProjects
 import atlas.test.withIntermediatesInProjectDir
 import blueprint.test.allTasksSuccessful
@@ -96,6 +98,21 @@ internal class WriteD2ChartTest : ScenarioTest() {
           """
             .trimIndent()
         )
+    }
+
+  @Test
+  fun `Write correct classes file path when outputs are moved`() =
+    runScenario(D2MovedOutputs) {
+      // when
+      assertThatTask("writeD2Chart").buildsSuccessfully().allTasksSuccessful()
+
+      // then the import points at wherever the classes file was moved to, not where Atlas would
+      // have put it
+      assertThat(rootDir).childExists("build/atlas/classes.d2")
+      assertThat(resolve("a/build/atlas/chart.d2").readText().trimEnd().lines().last())
+        .isEqualTo("...@../../../build/atlas/classes.d2")
+      assertThat(resolve("nested/b/build/atlas/chart.d2").readText().trimEnd().lines().last())
+        .isEqualTo("...@../../../../build/atlas/classes.d2")
     }
 
   @Test
