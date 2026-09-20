@@ -29,6 +29,6 @@ include(
 // out with Atlas's default styling.
 atlas {
   d2()
-  // mermaid()
-  // graphviz()
+  mermaid()
+  graphviz()
 }
