@@ -28,15 +28,15 @@ internal class GraphvizSpecImpl(
     objects.bool(properties.intermediateFilesInBuildDir)
   override val layoutEngine: Property<LayoutEngine> = objects.enum(properties.layoutEngine)
 
-  override val node = NodeAttributesImpl(objects)
+  override val node = NodeAttributesImpl(objects, providers)
 
   override fun node(action: Action<NodeAttributes>) = action.execute(node)
 
-  override val edge = EdgeAttributesImpl(objects)
+  override val edge = EdgeAttributesImpl(objects, providers)
 
   override fun edge(action: Action<EdgeAttributes>) = action.execute(edge)
 
-  override val graph = GraphAttributesImpl(objects)
+  override val graph = GraphAttributesImpl(objects, providers)
 
   override fun graph(action: Action<GraphAttributes>) = action.execute(graph)
 }

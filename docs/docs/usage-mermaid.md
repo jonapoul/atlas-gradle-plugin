@@ -259,6 +259,8 @@ atlas {
 
 Configures the [ELK (Eclipse Layout Kernel)](https://www.eclipse.org/elk/) layout engine for Mermaid diagrams. [See the Mermaid ELK configuration docs](https://mermaid.js.org/config/schema-docs/config-properties-elk.html) for detailed information. Basic output for the default configuration:
 
+The settings below are also [Gradle properties](usage-common.md#gradle-properties), e.g. `atlas.mermaid.elk.mergeEdges=true`. You still need to call `elk()` in the DSL to pick the engine.
+
 ![](img/mermaid-elk-basic.png)
 
 #### mergeEdges
@@ -372,6 +374,8 @@ Available typed properties:
 | **primaryTextColor** | String | Text color for primary elements |
 | **secondaryColor** | String | Secondary fill color |
 | **tertiaryColor** | String | Tertiary fill color |
+
+Each of them is also a [Gradle property](usage-common.md#gradle-properties), e.g. `atlas.mermaid.themeVariables.primaryColor=#ABC123`.
 
 !!! tip
 

@@ -413,6 +413,37 @@ atlas {
 
 Remember the declarations inside `pathTransforms` are called in descending order. It does not support regex group replacement (yet?) - regex is only used for pattern matching.
 
+## Gradle properties
+
+Most config can also be set from `gradle.properties`, which is handy for changing something in CI without touching the build scripts. The property name follows the path through the DSL:
+
+``` properties
+atlas.groupProjects=true
+atlas.d2.theme=DarkMauve
+atlas.d2.layoutEngine=elk
+atlas.d2.layoutEngine.elk.nodeSelfLoop=50
+atlas.d2.rootStyle.fill=transparent
+atlas.d2.themeOverrides.n1=orange
+atlas.graphviz.node.shape=box
+atlas.graphviz.graph.rankDir=LR
+atlas.mermaid.elk.mergeEdges=true
+atlas.mermaid.themeVariables.primaryColor=orange
+```
+
+The last part is the name you'd write in Kotlin, not the framework's own attribute name. So it's `atlas.graphviz.node.lineColor`, even though the attribute Graphviz ends up seeing is `color`.
+
+Values are parsed and validated the same way as the DSL, so a typo like `atlas.d2.layoutEngine.elk.algorithm=layred` fails the build and tells you the valid options. Lists are comma-separated, e.g. `atlas.d2.layoutEngine.tala.seeds=1,2,3`.
+
+If you set the same thing both ways, the DSL wins. A Gradle property is a default you can override in the build, not the other way round.
+
+A few things have no Gradle property:
+
+- `put("key", value)`, since the key is arbitrary. See [Extra properties](#extra-properties).
+- [`d2.fonts`](usage-d2.md#fonts), which takes file paths.
+- Styles on [projectTypes](#projecttypes) and [linkTypes](#linktypes).
+
+Each property's KDoc names its Gradle property, so [check the API docs](api/index.html) if you're unsure about one.
+
 ## Extra properties
 
 Several components in Atlas make use of the [`PropertiesSpec`](api/atlas/atlas.core/-properties-spec/index.html?query=interface%20PropertiesSpec) interface, which allows you to apply arbitrary key-value pair properties to the interfaces that make use of it. Specifically, you can call `put("key", value)`.

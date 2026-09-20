@@ -136,7 +136,9 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
         .contentEquals(
           """
           digraph {
-            graph [layout="neato"]
+            edge [arrowhead="halfopen"]
+            graph [layout="neato",dpi="150"]
+            node [shape="box"]
             ":a" [fillcolor="mediumorchid"]
             ":b" [fillcolor="orange"]
             ":c" [fillcolor="orange"]

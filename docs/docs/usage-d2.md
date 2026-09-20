@@ -474,6 +474,8 @@ Defines the underlying engine used by D2 to organise the project nodes in each c
 
 Screenshots below are with all default settings.
 
+The engine and each of its settings can also come from [Gradle properties](usage-common.md#gradle-properties): `atlas.d2.layoutEngine=elk`, then `atlas.d2.layoutEngine.elk.nodeSelfLoop=50` and so on for the rest.
+
 <div class="side-by-side">
   <figure>
     <figcaption>Dagre</figcaption>
@@ -511,6 +513,8 @@ atlas {
 A set of style properties to be applied to the chart itself. The most common one in my experience is `fill`, which you can set to `transparent` or any other CSS color or hex string.
 
 [Check the D2 docs for the possible values of these properties](https://d2lang.com/tour/style/#root). All are optional.
+
+Each one is also a [Gradle property](usage-common.md#gradle-properties), e.g. `atlas.d2.rootStyle.fill=transparent`.
 
 ### fonts
 
@@ -559,6 +563,8 @@ Replaces individual colors of [theme and themeDark](#theme-themedark) without re
 
 `themeDarkOverrides` only works for SVGs, same as `themeDark`.
 
+Each color is also a [Gradle property](usage-common.md#gradle-properties), e.g. `atlas.d2.themeOverrides.n1=orange` or `atlas.d2.themeDarkOverrides.aa4=#abcdef`.
+
 ### globalProps
 
 ``` kotlin
@@ -575,6 +581,8 @@ atlas {
 ```
 
 Style properties to be applied to all nodes (project shapes) and links by default, unless overridden by `linkTypes` or `projectTypes` config.
+
+Each one is also a [Gradle property](usage-common.md#gradle-properties), e.g. `atlas.d2.globalProps.fontSize=15`. The globs below aren't, since `put` takes an arbitrary key.
 
 !!! note
 

@@ -14,6 +14,8 @@ public interface D2LayoutEngineSpec : PropertiesSpec {
   /**
    * The engine picked by calling [elk], [dagre] or [tala]. Unset by default, so D2 uses
    * [LayoutEngine.Dagre].
+   *
+   * Also controlled by the `atlas.d2.layoutEngine` Gradle property.
    */
   public val layoutEngine: Property<LayoutEngine>
 
@@ -40,24 +42,40 @@ public interface D2LayoutEngineSpec : PropertiesSpec {
 /** CLI configuration options, found from running `d2 layout elk` in the CLI. */
 @AtlasDsl
 public interface D2ElkSpec : PropertiesSpec {
-  /** Layout algorithm (default [ElkAlgorithm.Layered]) */
+  /**
+   * Layout algorithm (default [ElkAlgorithm.Layered])
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.elk.algorithm` Gradle property.
+   */
   public var algorithm: ElkAlgorithm?
 
   /**
    * The spacing to be preserved between nodes and edges that are routed next to the node’s layer
    * (default 40)
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.elk.edgeNodeBetweenLayers` Gradle property.
    */
   public var edgeNodeBetweenLayers: Int?
 
-  /** The spacing to be preserved between any pair of nodes of two adjacent layers (default 70) */
+  /**
+   * The spacing to be preserved between any pair of nodes of two adjacent layers (default 70)
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.elk.nodeNodeBetweenLayers` Gradle property.
+   */
   public var nodeNodeBetweenLayers: Int?
 
-  /** Spacing to be preserved between a node and its self loops (default 50) */
+  /**
+   * Spacing to be preserved between a node and its self loops (default 50)
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.elk.nodeSelfLoop` Gradle property.
+   */
   public var nodeSelfLoop: Int?
 
   /**
    * The padding to be left to a parent element’s border when placing child elements (default
    * "[top=50,left=50,bottom=50,right=50]")
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.elk.padding` Gradle property.
    */
   public var padding: String?
 
@@ -71,13 +89,21 @@ public interface D2ElkSpec : PropertiesSpec {
   public fun padding(top: Int, left: Int, bottom: Int, right: Int)
 }
 
-/** From running `d2 layout dagre` in the CLI */
+/** From running `d2 layout dagre` in the CLI. */
 @AtlasDsl
 public interface D2DagreSpec : PropertiesSpec {
-  /** Number of pixels that separate nodes horizontally. (default 60) */
+  /**
+   * Number of pixels that separate nodes horizontally. (default 60)
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.dagre.nodeSep` Gradle property.
+   */
   public var nodeSep: Int?
 
-  /** Number of pixels that separate edges horizontally. (default 20) */
+  /**
+   * Number of pixels that separate edges horizontally. (default 20)
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.dagre.edgeSep` Gradle property.
+   */
   public var edgeSep: Int?
 }
 
@@ -94,6 +120,9 @@ public interface D2TalaSpec : PropertiesSpec {
    *
    * D2 takes at most 16 unique seeds and fails the build past that. Duplicates are dropped rather
    * than rejected, and an empty list is ignored, leaving D2's default in place. (default [1, 2, 3])
+   *
+   * Also controlled by the `atlas.d2.layoutEngine.tala.seeds` Gradle property, which takes a
+   * comma-separated list.
    */
   public var seeds: List<Long>?
 }

@@ -10,6 +10,7 @@ import atlas.core.internal.string
 import atlas.d2.AsciiMode
 import atlas.d2.Direction
 import atlas.d2.FileFormat
+import atlas.d2.LayoutEngine
 import atlas.d2.Location
 import atlas.d2.Position
 import atlas.d2.Theme
@@ -28,6 +29,7 @@ internal class D2GradleProperties(override val providers: ProviderFactory) : IGr
   val fileFormat: Provider<FileFormat> = enum("atlas.d2.fileFormat", default = Svg)
   val groupLabelLocation: Provider<Location> = enum("atlas.d2.groupLabelLocation", default = null)
   val groupLabelPosition: Provider<Position> = enum("atlas.d2.groupLabelPosition", default = null)
+  val layoutEngine: Provider<LayoutEngine> = enum("atlas.d2.layoutEngine", default = null)
   val intermediateFilesInBuildDir: Provider<Boolean> =
     bool("atlas.d2.intermediateFilesInBuildDir", default = true)
   val noXmlTag: Provider<Boolean> = bool("atlas.d2.noXmlTag", default = null)

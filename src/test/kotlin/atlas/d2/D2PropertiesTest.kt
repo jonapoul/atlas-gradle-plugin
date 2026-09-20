@@ -27,5 +27,9 @@ internal class D2PropertiesTest : ScenarioTest() {
         .contentContains("center: true")
         .contentContains("pad: 5")
         .contentContains("direction: down")
+        // sub-configs take their gradle property name from their path in the DSL
+        .contentContains("fill: \"transparent\"")
+        .contentContains("N1: \"orange\"")
+        .contentContains("***.style.font-size: 24")
     }
 }
