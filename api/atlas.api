@@ -654,6 +654,9 @@ public abstract interface class atlas/d2/D2ElkSpec : atlas/core/PropertiesSpec {
 	public abstract fun getNodeNodeBetweenLayers ()Ljava/lang/Integer;
 	public abstract fun getNodeSelfLoop ()Ljava/lang/Integer;
 	public abstract fun getPadding ()Ljava/lang/String;
+	public abstract fun padding (I)V
+	public abstract fun padding (II)V
+	public abstract fun padding (IIII)V
 	public abstract fun setAlgorithm (Latlas/d2/ElkAlgorithm;)V
 	public abstract fun setEdgeNodeBetweenLayers (Ljava/lang/Integer;)V
 	public abstract fun setNodeNodeBetweenLayers (Ljava/lang/Integer;)V

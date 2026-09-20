@@ -154,6 +154,15 @@ internal class D2ElkSpecImpl(parent: PropertiesSpec) : D2ElkSpec, PropertiesSpec
   override var nodeNodeBetweenLayers by int("elk-nodeNodeBetweenLayers")
   override var nodeSelfLoop by int("elk-nodeSelfLoop")
   override var padding by string("elk-padding")
+
+  override fun padding(all: Int): Unit = padding(top = all, left = all, bottom = all, right = all)
+
+  override fun padding(horizontal: Int, vertical: Int): Unit =
+    padding(top = vertical, left = horizontal, bottom = vertical, right = horizontal)
+
+  override fun padding(top: Int, left: Int, bottom: Int, right: Int) {
+    padding = "[top=$top,left=$left,bottom=$bottom,right=$right]"
+  }
 }
 
 internal class D2DagreSpecImpl(parent: PropertiesSpec) : D2DagreSpec, PropertiesSpec by parent {

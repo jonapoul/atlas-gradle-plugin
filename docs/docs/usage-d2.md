@@ -450,6 +450,12 @@ atlas {
         edgeNodeBetweenLayers = 40
         nodeNodeBetweenLayers = 70
         nodeSelfLoop = 50
+
+        // padding is either a raw D2 string, or set with one of the helpers
+        padding = "[top=50,left=50,bottom=50,right=50]"
+        padding(all = 50)
+        padding(horizontal = 50, vertical = 50)
+        padding(top = 50, left = 50, bottom = 50, right = 50)
       }
 
       tala {
