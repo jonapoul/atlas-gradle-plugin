@@ -95,6 +95,7 @@ atlas {
     fileFormat = FileFormat.Svg
     groupLabelLocation = Location.Border
     groupLabelPosition = Position.BottomCenter
+    intermediateFilesInBuildDir = false
     pad = 100
     sketch = true
     theme = Theme.ShirleyTemple
