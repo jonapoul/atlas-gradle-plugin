@@ -1,10 +1,8 @@
 @file:Suppress("AvoidDuplicateDependencies")
 
 import app.cash.licensee.UnusedAction.IGNORE
-import blueprint.core.getOptional
 import blueprint.core.javaVersion
 import blueprint.core.jvmTarget
-import blueprint.core.localProperties
 import dev.detekt.gradle.Detekt
 import org.gradle.api.attributes.plugin.GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -193,30 +191,7 @@ buildConfig {
     buildConfigField("AGP_VERSION", libs.versions.agp)
     buildConfigField("KOTLIN_VERSION", libs.versions.kotlin)
     buildConfigField("GRADLE_VERSION", GradleVersion.current().version)
-    buildConfigField<File?>("ANDROID_HOME", androidHome())
   }
-}
-
-fun androidHome(): File? {
-  val fromEnv =
-    providers
-      .environmentVariable("ANDROID_HOME")
-      .orElse(providers.environmentVariable("ANDROID_SDK_ROOT"))
-      .orNull
-      ?.let(::File)
-  if (fromEnv?.exists() == true) {
-    logger.info("Using system environment variable $fromEnv as ANDROID_HOME")
-    return fromEnv
-  }
-
-  val sdkHome = localProperties().getOptional("sdk.dir")?.let(::File)
-  if (sdkHome?.exists() == true) {
-    logger.info("Using local.properties sdk.dir $sdkHome as ANDROID_HOME")
-    return sdkHome
-  }
-
-  logger.warn("No Android SDK found - Android unit tests will be skipped")
-  return null
 }
 
 tasks.withType<Test>().configureEach {
