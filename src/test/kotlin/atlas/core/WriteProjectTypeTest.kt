@@ -66,7 +66,7 @@ internal class WriteProjectTypeTest : ScenarioTest() {
 
   @Test
   fun `Write files if custom types match`() =
-    runScenario(ThreeProjectWithCustomTypes, runner = androidRunner()) {
+    runScenario(ThreeProjectWithCustomTypes) {
       assertThatTask("writeProjectType")
         .buildsSuccessfully()
         .taskSucceeded(":test-data:writeProjectType")
@@ -83,7 +83,7 @@ internal class WriteProjectTypeTest : ScenarioTest() {
 
   @Test
   fun `Fall back to other if no types match`() =
-    runScenario(ThreeProjectsOnlyMatchingOther, runner = androidRunner()) {
+    runScenario(ThreeProjectsOnlyMatchingOther) {
       assertThatTask("writeProjectType").buildsSuccessfully()
 
       assertThat(projectType("a"))
@@ -96,7 +96,7 @@ internal class WriteProjectTypeTest : ScenarioTest() {
 
   @Test
   fun `No types match`() =
-    runScenario(ThreeProjectsNoMatchingType, runner = androidRunner()) {
+    runScenario(ThreeProjectsNoMatchingType) {
       assertThatTask("a:writeProjectType")
         .buildsSuccessfully()
         .taskHadResult(":a:writeProjectType", SUCCESS)

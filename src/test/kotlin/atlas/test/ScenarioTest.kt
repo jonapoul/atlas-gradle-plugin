@@ -4,9 +4,7 @@ import blueprint.test.FileTree
 import blueprint.test.Scenario as RunningScenario
 import blueprint.test.ScenarioTest as BlueprintScenarioTest
 import java.io.File
-import kotlin.test.fail
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.jupiter.api.Assumptions.assumeFalse
 
 @Suppress("AbstractClassCanBeConcreteClass")
 internal abstract class ScenarioTest : BlueprintScenarioTest() {
@@ -29,18 +27,6 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
   ) {
     current = scenario.toFileTree()
     super.runScenario(runner, test)
-  }
-
-  protected fun androidRunner(): GradleRunner {
-    val home = ANDROID_HOME
-    val reason = "No ANDROID_HOME supplied for an android test"
-    if (isRunningOnCi()) {
-      if (home == null) fail(reason)
-    } else {
-      assumeFalse(home == null) { "No ANDROID_HOME supplied for an android test" }
-    }
-
-    return defaultRunner().withEnvironment(mapOf("ANDROID_HOME" to checkNotNull(home).absolutePath))
   }
 
   private fun Scenario.toFileTree(): FileTree =

@@ -11,6 +11,11 @@ x-atlas: &atlas
     - ..:/atlas
   working_dir: /atlas
 
+  # Tests that need a tool the image might not have fail loudly on CI and skip locally, so the
+  # flag has to reach the container - otherwise a missing tool silently skips on CI too.
+  environment:
+    CI: ${CI:-false}
+
 services:
   check:
     <<: *atlas
