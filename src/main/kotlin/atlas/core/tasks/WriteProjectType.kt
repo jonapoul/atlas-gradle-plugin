@@ -67,6 +67,7 @@ public abstract class WriteProjectType : DefaultTask(), TaskWithOutputFile {
 
         // hasPluginId can only be answered once this project's own plugins have been applied, which
         // is still its own project's afterEvaluate and so stays within isolated projects' rules.
+        @Suppress("AvoidAfterEvaluate")
         afterEvaluate {
           val matching = config.projectTypes.firstOrNull { type -> type.matches(target) }?.type
           writeProject.configure { task ->

@@ -29,6 +29,7 @@ internal class LinkTypeContainer(objects: ObjectFactory) :
   ),
   NamedLinkTypeContainer
 
+@Suppress("PreferRegisterOverCreate") // passthrough overrides
 internal open class OrderedNamedContainer<T : Any>(
   private val container: NamedDomainObjectContainer<T>
 ) : NamedDomainObjectContainer<T> by container {
