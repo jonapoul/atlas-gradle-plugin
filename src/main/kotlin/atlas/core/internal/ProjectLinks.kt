@@ -53,6 +53,10 @@ internal fun writeProjectLinks(
   return filteredLinks
 }
 
+// Building the graph means reading every configuration and every dependency, so there's nothing to
+// defer. The whole thing is already wrapped in a provider, and the lazy equivalents (matching,
+// withType) would only move the realization to the forEach that consumes them.
+@Suppress("LazyCollectionOperators")
 internal fun createProjectLinks(
   project: Project,
   ignoredConfigs: Iterable<String>,
@@ -84,6 +88,7 @@ internal operator fun Iterable<ProjectLink>.contains(p: TypedProject): Boolean =
     from == p.projectPath || to == p.projectPath
   }
 
+@Suppress("LazyCollectionOperators") // see createProjectLinks
 private fun ConfigurationContainer.filterUseful(ignoredConfigs: Iterable<String>) = filter { c ->
   // Atlas's own aggregation configurations declare project dependencies purely to move files
   // around, so they'd otherwise draw a link from every project to the root

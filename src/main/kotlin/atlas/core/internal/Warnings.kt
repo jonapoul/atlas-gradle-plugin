@@ -1,3 +1,8 @@
+// warnAboutConfig runs once from settingsEvaluated, at the same moment AtlasConfig snapshots these
+// same containers. Walking every declared type is the whole point, so the eager operators here
+// realize nothing that wasn't already being realized.
+@file:Suppress("LazyCollectionOperators")
+
 package atlas.core.internal
 
 import atlas.core.Framework

@@ -86,15 +86,15 @@ internal object D2Tasks : FrameworkTasks {
       val chartTask = WriteD2Chart.real(context = context, outputFile = d2File)
 
       // The `...@` import is relative to wherever the chart lands, and that isn't necessarily
-      // [d2File] - outputFile is public, so a build can move it. Reading it back off the task only
-      // gives the moved location if this action is registered after the build script has run,
-      // hence afterEvaluate. It has to be read eagerly here too: a provider built from the task's
-      // own output property makes the task depend on itself.
-      afterEvaluate {
-        chartTask.configure { task ->
-          val chartDirectory = task.outputFile.get().asFile.parentFile
-          task.pathToClassesFile.convention(importPath(classesFile, chartDirectory))
-        }
+      // [d2File] - outputFile is public, so a build can move it. locationOnly reads back whatever
+      // the build script settled on, without the dependency info that would otherwise make the task
+      // an input of itself.
+      chartTask.configure { task ->
+        task.pathToClassesFile.convention(
+          task.outputFile.locationOnly.flatMap { chart ->
+            importPath(classesFile, chart.asFile.parentFile)
+          }
+        )
       }
 
       // Nothing to check when the chart file lives in the build directory

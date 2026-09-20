@@ -128,10 +128,7 @@ private fun Project.registerGenerationTaskOnSync(
   atlasGenerate: TaskProvider<*>,
   config: AtlasConfig,
 ) {
-  if (!config.generateOnSync) return
-  afterEvaluate {
-    if (providers.isIntellijSyncing.getOrElse(false)) {
-      tasks.maybeCreate("prepareKotlinIdeaImport").dependsOn(atlasGenerate)
-    }
+  if (config.generateOnSync && providers.isIntellijSyncing.getOrElse(false)) {
+    tasks.register("prepareKotlinIdeaImport") { task -> task.dependsOn(atlasGenerate) }
   }
 }
