@@ -17,7 +17,6 @@ import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.Provider
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
@@ -73,22 +72,15 @@ public abstract class WriteD2Chart : DefaultTask(), TaskWithOutputFile, AtlasGen
   internal abstract class WriteD2ChartDummy : WriteD2Chart(), DummyAtlasGenerationTask
 
   internal companion object {
-    internal fun real(
-      context: AtlasContext,
-      outputFile: File,
-      pathToClassesFile: Provider<String>,
-    ) = register<WriteD2Chart>(context, outputFile, pathToClassesFile)
+    internal fun real(context: AtlasContext, outputFile: File) =
+      register<WriteD2Chart>(context, outputFile)
 
-    internal fun dummy(
-      context: AtlasContext,
-      outputFile: File,
-      pathToClassesFile: Provider<String>,
-    ) = register<WriteD2ChartDummy>(context, outputFile, pathToClassesFile)
+    internal fun dummy(context: AtlasContext, outputFile: File) =
+      register<WriteD2ChartDummy>(context, outputFile)
 
     private inline fun <reified T : WriteD2Chart> register(
       context: AtlasContext,
       outputFile: File,
-      pathToClassesFile: Provider<String>,
     ): TaskProvider<T> =
       with(context.project) {
         val collatedTypes = context.fromRoot(CollatedTypes)
@@ -98,7 +90,6 @@ public abstract class WriteD2Chart : DefaultTask(), TaskWithOutputFile, AtlasGen
           tasks.register(name, T::class.java) { task ->
             task.linksFile.convention(writeProjectTree.flatMap { it.outputFile })
             task.outputFile.set(outputFile)
-            task.pathToClassesFile.convention(pathToClassesFile)
             task.thisPath.convention(path)
           }
 
