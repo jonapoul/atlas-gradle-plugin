@@ -113,7 +113,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
         .taskHadResult(":checkGraphvizLegend", SUCCESS)
 
       // given we manually adjust the generated file
-      val legendFile = resolve("atlas/graphviz/legend.dot")
+      val legendFile = resolve("atlas/legend-graphviz.dot")
       val editedLegend = legendFile.readText().replace("CELLBORDER=\"1\"", "CELLBORDER=\"100\"")
       legendFile.writeText(editedLegend)
 

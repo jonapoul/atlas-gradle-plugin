@@ -51,7 +51,7 @@ settings.extensions.configure<AtlasExtension> {
 
 ## Frameworks
 
-Everything above applies to every diagram Atlas generates. Which diagrams those are is decided by the framework blocks you configure - use one, or all three. Each writes into its own `atlas/<framework>/` directory, so they never overwrite each other, and every framework you enable adds its own block to each project's README.
+Everything above applies to every diagram Atlas generates. Which diagrams those are is decided by the framework blocks you configure - use one, or all three. Each project's chart is written into that project's directory as `chart-<framework>.<ext>`, so they never overwrite each other, and every framework you enable adds its own block to each project's README. Legends belong to the whole build, so they go in the root project's `atlas/` directory as `legend-<framework>.<ext>`.
 
 ``` kotlin
 atlas {

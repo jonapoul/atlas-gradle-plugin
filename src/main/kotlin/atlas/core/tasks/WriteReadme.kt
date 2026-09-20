@@ -44,8 +44,8 @@ import org.gradle.api.tasks.TaskProvider
  * # :path:to:my:project
  *
  * <!--region chart-->
- * ![](atlas/d2/chart.png)
- * ![](../atlas/d2/legend.png)
+ * ![](chart-d2.png)
+ * ![](../atlas/legend-d2.png)
  * <!--endregion-->
  * ```
  *

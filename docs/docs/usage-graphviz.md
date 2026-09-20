@@ -54,7 +54,7 @@ atlas {
 
 ## Generated Files
 
-Atlas Graphviz will generate a `chart.dot` file in each project's `build/atlas/graphviz` directory, plus an image file in `atlas/graphviz` based on your choice of [`fileFormat`](#fileformat). In the root project it'll also generate a `legend.dot` and an accompanying image. Both of these will be auto-added to the project readme when either `gradle atlasGenerate` or `gradle writeReadme` is run. Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.dot` files in `atlas/graphviz` instead.
+Atlas Graphviz will generate a `chart-graphviz.dot` file in each project's `build/atlas` directory, plus an image file in the project's own directory based on your choice of [`fileFormat`](#fileformat). In the root project it'll also generate a `legend-graphviz.dot` and an accompanying image, both under `atlas/`. Both will be auto-added to the project readme when either `gradle atlasGenerate` or `gradle writeReadme` is run. Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.dot` files next to the rendered images instead.
 
 ## Properties
 
@@ -92,7 +92,7 @@ atlas {
 }
 ```
 
-When enabled, the `chart.dot` and `legend.dot` files go in `build/atlas/graphviz/` instead of the project's `atlas/graphviz/` folder, so you don't need to commit them. The rendered images stay in `atlas/graphviz/`.
+When enabled, the `chart-graphviz.dot` and `legend-graphviz.dot` files go in `build/atlas/` instead of the project directory and the root project's `atlas/` folder, so you don't need to commit them. The rendered images stay where they are.
 
 [checkOutputs](usage-common.md#checkoutputs) only compares the `.dot` files, so no Graphviz check tasks are registered while this is enabled.
 

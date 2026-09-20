@@ -133,8 +133,9 @@ public interface D2Spec : AtlasSpec {
   public val groupLabelPosition: Property<Position>
 
   /**
-   * Set to true to write the `chart.d2` and `classes.d2` files to `build/atlas/d2/` instead of the
-   * project's `atlas/d2/` directory. Only the rendered image goes in `atlas/d2/`. Defaults to true.
+   * Set to true to write the `chart-d2.d2` and `classes-d2.d2` files to `build/atlas/` instead of
+   * the project directory and the root project's `atlas/` directory. Only the rendered image goes
+   * alongside the project. Defaults to true.
    *
    * [atlas.core.AtlasExtension.checkOutputs] only verifies these files, so no D2 check tasks are
    * registered while this is enabled.

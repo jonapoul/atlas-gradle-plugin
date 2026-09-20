@@ -1,4 +1,3 @@
-java: :java { class: project-Java }
 other: :other { class: project-Other }
 android: :android {
   class: container
@@ -7,26 +6,17 @@ android: :android {
 kotlin: :kotlin {
   class: container
   jvm: :jvm { class: project-KotlinJVM }
-  kmp: :kmp { class: project-KotlinMultiplatform }
 }
 android.lib -> kotlin.jvm { class: link-implementation }
 android.lib -> other { class: link-implementation }
-java -> other { class: link-implementation }
-kotlin.kmp -> android.lib { class: link-api }
-kotlin.kmp -> java { class: link-jvmMainImplementation }
-kotlin.kmp -> kotlin.jvm { class: link-api }
 vars: {
   d2-legend: {
     project-AndroidLibrary: Android Library { class: project-AndroidLibrary }
-    project-Java: Java { class: project-Java }
     project-KotlinJVM: Kotlin JVM { class: project-KotlinJVM }
-    project-KotlinMultiplatform: Kotlin Multiplatform { class: project-KotlinMultiplatform }
     project-Other: Other { class: project-Other }
     project-dummy1.class: hidden
     project-dummy2.class: hidden
     project-dummy1 -> project-dummy2: implementation { class: link-implementation }
-    project-dummy1 -> project-dummy2: api { class: link-api }
-    project-dummy1 -> project-dummy2: jvmMainImplementation { class: link-jvmMainImplementation }
   }
 }
-...@../../../../atlas/d2/classes.d2
+...@../../atlas/classes-d2.d2

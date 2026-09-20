@@ -1,11 +1,11 @@
 # other
 
 <!--region chart-->
-![chart](atlas/d2/chart.svg)
+![chart](chart-d2.svg)
 
-![chart](atlas/graphviz/chart.svg)
+![chart](chart-graphviz.svg)
 
-![legend](../atlas/graphviz/legend.svg)
+![legend](../atlas/legend-graphviz.svg)
 
 ```mermaid
 graph TD

@@ -83,9 +83,13 @@ internal fun Project.fileInBuildDirectory(path: String): Provider<RegularFile> =
 private const val DIR_NAME = "atlas"
 
 /**
- * Generated files live in a per-framework directory, e.g. `atlas/d2/chart.svg`, so that enabling
- * several frameworks at once never has two of them writing the same file. Charts are written
- * alongside the project they describe, legends only in the root project.
+ * A project's chart sits in the project directory it describes, next to its README, e.g.
+ * `chart-d2.svg`. Legends belong to the whole build rather than to any one project, so they go in
+ * the root project's `atlas/` directory instead of cluttering the root alongside the user's own
+ * files.
+ *
+ * The framework is part of the filename rather than a directory of its own, so enabling several at
+ * once still never has two of them writing the same file.
  */
 internal fun Project.outputFile(
   config: AtlasConfig,
@@ -96,10 +100,10 @@ internal fun Project.outputFile(
 ): File {
   val directory =
     when (variant) {
-      Chart -> layout.projectDirectory.asFile.resolve(DIR_NAME)
+      Chart -> layout.projectDirectory.asFile
       Legend -> config.rootDir.resolve(DIR_NAME)
     }
-  return directory.resolve(framework.string).resolve("$filename.$fileExtension")
+  return directory.resolve(frameworkFilename(filename, framework, fileExtension))
 }
 
 /**
@@ -116,7 +120,7 @@ internal fun Project.intermediateFile(
   filename: String = defaultFilename(variant),
 ): File =
   if (inBuildDir) {
-    atlasBuildDirectory.get().asFile.resolve(framework.string).resolve("$filename.$fileExtension")
+    atlasBuildDirectory.get().asFile.resolve(frameworkFilename(filename, framework, fileExtension))
   } else {
     outputFile(config, framework, variant, fileExtension, filename)
   }
@@ -126,3 +130,7 @@ private fun defaultFilename(variant: Variant) =
     Chart -> "chart"
     Legend -> "legend"
   }
+
+/** e.g. `chart-d2.svg`, `legend-graphviz.dot`, `classes-d2.d2`. */
+private fun frameworkFilename(filename: String, framework: Framework, fileExtension: String) =
+  "$filename-${framework.string}.$fileExtension"

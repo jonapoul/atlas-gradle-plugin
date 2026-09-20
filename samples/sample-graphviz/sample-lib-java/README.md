@@ -1,7 +1,7 @@
 # sample-lib-java
 
 <!--region chart-->
-![chart](atlas/graphviz/chart.svg)
+![chart](chart-graphviz.svg)
 
-![legend](../atlas/graphviz/legend.svg)
+![legend](../atlas/legend-graphviz.svg)
 <!--endregion-->

@@ -21,7 +21,7 @@ internal class WriteMermaidChartTest : ScenarioTest() {
       assertThatTask(":a:writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("a/atlas/mermaid/chart.mmd"))
+      assertThat(resolve("a/chart-mermaid.mmd"))
         .exists()
         .contentEquals(
           """
@@ -43,7 +43,7 @@ internal class WriteMermaidChartTest : ScenarioTest() {
       assertThatTask(":a:writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("a/atlas/mermaid/chart.mmd"))
+      assertThat(resolve("a/chart-mermaid.mmd"))
         .exists()
         .contentEquals(
           """
@@ -65,7 +65,7 @@ internal class WriteMermaidChartTest : ScenarioTest() {
       assertThatTask(":a:writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("a/atlas/mermaid/chart.mmd"))
+      assertThat(resolve("a/chart-mermaid.mmd"))
         .exists()
         .contentEquals(
           """

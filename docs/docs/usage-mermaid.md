@@ -84,7 +84,7 @@ graph TD
 
 ## Generated Files
 
-Atlas will generate a `chart.mmd` file in each subproject's `atlas/mermaid` folder, containing the Mermaid flowchart diagram for that project's dependencies. In the root project, it will also generate a `legend.md` file containing a legend of any defined project types and link types.
+Atlas will generate a `chart-mermaid.mmd` file in each subproject's own directory, containing the Mermaid flowchart diagram for that project's dependencies. In the root project, it will also generate an `atlas/legend-mermaid.md` file containing a legend of any defined project types and link types.
 
 These `.mmd` files can be embedded directly in Markdown files or rendered by compatible viewers (such as this page!). Many platforms (GitHub, GitLab, etc.) will automatically render Mermaid diagrams when viewing `.md` files containing mermaid code blocks.
 

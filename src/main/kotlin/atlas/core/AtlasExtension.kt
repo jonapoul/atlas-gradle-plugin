@@ -11,7 +11,8 @@ import org.gradle.api.provider.SetProperty
  * Main entry point for configuring the plugin from your Gradle script.
  *
  * Configure one block per diagram framework you want generated - each one you touch registers that
- * framework's tasks, and writes its files to `atlas/<framework>/`:
+ * framework's tasks, and writes each project's chart to `chart-<framework>.<ext>` in that project's
+ * directory:
  * ```kotlin
  * atlas {
  *   projectTypes { useDefaults() }
@@ -107,7 +108,7 @@ public interface AtlasExtension {
 
   /**
    * Configuration for D2 charts. Touching this block - even an empty one - registers the D2
-   * generation tasks, which write to `atlas/d2/`.
+   * generation tasks, which write `chart-d2.<ext>` into each project.
    */
   public val d2: D2Spec
 
@@ -119,7 +120,7 @@ public interface AtlasExtension {
 
   /**
    * Configuration for Graphviz charts. Touching this block - even an empty one - registers the
-   * Graphviz generation tasks, which write to `atlas/graphviz/`.
+   * Graphviz generation tasks, which write `chart-graphviz.<ext>` into each project.
    */
   public val graphviz: GraphvizSpec
 
@@ -131,7 +132,7 @@ public interface AtlasExtension {
 
   /**
    * Configuration for Mermaid charts. Touching this block - even an empty one - registers the
-   * Mermaid generation tasks, which write to `atlas/mermaid/`.
+   * Mermaid generation tasks, which write `chart-mermaid.mmd` into each project.
    */
   public val mermaid: MermaidSpec
 

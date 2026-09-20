@@ -8,6 +8,6 @@ Remember `sample-lib-java` isn't a direct downstream dependent of `sample-lib-ko
 
 | sample-app-android                       | sample-lib-kotlin-jvm                       | sample-lib-android                       | sample-lib-kotlin-mp                       | sample-lib-java                       |
 |------------------------------------------|---------------------------------------------|------------------------------------------|--------------------------------------------|---------------------------------------|
-| ![](sample-app-android/charts/chart.svg) | ![](sample-lib-kotlin-jvm/charts/chart.svg) | ![](sample-lib-android/charts/chart.svg) | ![](sample-lib-kotlin-mp/charts/chart.svg) | ![](sample-lib-java/charts/chart.svg) |
+| ![](sample-app-android/chart-graphviz.svg) | ![](sample-lib-kotlin-jvm/chart-graphviz.svg) | ![](sample-lib-android/chart-graphviz.svg) | ![](sample-lib-kotlin-mp/chart-graphviz.svg) | ![](sample-lib-java/chart-graphviz.svg) |
 
-![](legend/legend.svg)
+![](atlas/legend-graphviz.svg)
