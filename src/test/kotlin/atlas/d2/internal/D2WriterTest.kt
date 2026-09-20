@@ -27,7 +27,6 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         app: :app
         data_a: :data:a
         data_b: :data:b
@@ -53,6 +52,7 @@ internal class D2WriterTest {
             project-dummy1 -> project-dummy2: implementation { class: link-implementation }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -70,8 +70,8 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         ui_c: :ui:c
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -88,7 +88,6 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         app: :app
         data: :data {
           class: container
@@ -123,6 +122,7 @@ internal class D2WriterTest {
             project-dummy1 -> project-dummy2: implementation { class: link-implementation }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -140,7 +140,6 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         app: :app
         data: :data {
           class: container
@@ -175,6 +174,7 @@ internal class D2WriterTest {
             project-dummy1 -> project-dummy2: implementation { class: link-implementation }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -191,7 +191,6 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         app: :app
         data: :data {
           class: container
@@ -233,6 +232,7 @@ internal class D2WriterTest {
             project-dummy1 -> project-dummy2: implementation { class: link-implementation }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -245,13 +245,13 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         app: :app { class: project-red }
         vars: {
           d2-legend: {
             project-red: red { class: project-red }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -269,7 +269,6 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         a: :a {
           class: container
           b: :b { class: project-red }
@@ -279,6 +278,7 @@ internal class D2WriterTest {
             project-red: red { class: project-red }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )
@@ -295,7 +295,6 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ...@../classes.d2
         a: :a
         b: :b
         c: :c
@@ -309,6 +308,7 @@ internal class D2WriterTest {
             project-dummy1 -> project-dummy2: implementation { class: link-implementation }
           }
         }
+        ...@../classes.d2
         """
           .trimIndent()
       )

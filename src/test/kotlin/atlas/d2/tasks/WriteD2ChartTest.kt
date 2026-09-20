@@ -33,7 +33,6 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThat(d2FileA)
         .contentEquals(
           """
-          ...@../../../../build/atlas/d2/classes.d2
           a: :a { class: project-KotlinJVM }
           b: :b { class: project-Java }
           c: :c { class: project-Java }
@@ -45,6 +44,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
               project-Java: Java { class: project-Java }
             }
           }
+          ...@../../../../build/atlas/d2/classes.d2
           """
             .trimIndent()
         )
@@ -52,13 +52,13 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThat(d2FileB)
         .contentEquals(
           """
-          ...@../../../../build/atlas/d2/classes.d2
           b: :b { class: project-Java }
           vars: {
             d2-legend: {
               project-Java: Java { class: project-Java }
             }
           }
+          ...@../../../../build/atlas/d2/classes.d2
           """
             .trimIndent()
         )
@@ -66,13 +66,13 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThat(d2FileC)
         .contentEquals(
           """
-          ...@../../../../build/atlas/d2/classes.d2
           c: :c { class: project-Java }
           vars: {
             d2-legend: {
               project-Java: Java { class: project-Java }
             }
           }
+          ...@../../../../build/atlas/d2/classes.d2
           """
             .trimIndent()
         )
@@ -91,8 +91,8 @@ internal class WriteD2ChartTest : ScenarioTest() {
         .exists()
         .contentEquals(
           """
-          ...@../../../../../../../build/atlas/d2/classes.d2
           path_to_my_project: :path:to:my:project
+          ...@../../../../../../../build/atlas/d2/classes.d2
           """
             .trimIndent()
         )
@@ -108,8 +108,8 @@ internal class WriteD2ChartTest : ScenarioTest() {
         .exists()
         .contentEquals(
           """
-          ...@../../../../../../atlas/d2/classes.d2
           path_to_my_project: :path:to:my:project
+          ...@../../../../../../atlas/d2/classes.d2
           """
             .trimIndent()
         )
