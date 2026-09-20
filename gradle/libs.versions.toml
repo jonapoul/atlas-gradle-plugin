@@ -8,6 +8,7 @@ kotlin = "2.4.20"
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version = "0.28.1" }
 blueprint = { module = "dev.jonpoulton.blueprint:core", version.ref = "blueprint" }
+blueprint-detektRules = { module = "dev.jonpoulton.blueprint:detekt-rules", version.ref = "blueprint" }
 blueprint-testAssertk = { module = "dev.jonpoulton.blueprint:test-assertk", version.ref = "blueprint" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }

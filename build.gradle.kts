@@ -31,6 +31,8 @@ plugins {
 }
 
 dependencies {
+  detektPlugins(libs.blueprint.detektRules)
+
   compileOnly(gradleApi())
   compileOnly(kotlin("stdlib"))
   compileOnly(libs.kotlin.gradle)
