@@ -45,7 +45,7 @@ public final class atlas/core/Framework : java/lang/Enum, atlas/core/StringEnum 
 	public static final field Mermaid Latlas/core/Framework;
 	public final fun getDisplayName ()Ljava/lang/String;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/core/Framework;
 	public static fun values ()[Latlas/core/Framework;
@@ -63,8 +63,8 @@ public final class atlas/core/LinkStyle : java/lang/Enum, atlas/core/StringEnum 
 	public static final field Solid Latlas/core/LinkStyle;
 	public static final field Tapered Latlas/core/LinkStyle;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
 	public final fun getSupportedBy ()Ljava/util/Set;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/core/LinkStyle;
 	public static fun values ()[Latlas/core/LinkStyle;
@@ -520,7 +520,7 @@ public final class atlas/core/Replacement$Companion {
 }
 
 public abstract interface class atlas/core/StringEnum {
-	public abstract fun getString ()Ljava/lang/String;
+	public abstract fun getValue ()Ljava/lang/String;
 }
 
 public abstract interface class atlas/core/StyleSpec {
@@ -620,7 +620,7 @@ public final class atlas/d2/ArrowType : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Diamond Latlas/d2/ArrowType;
 	public static final field Triangle Latlas/d2/ArrowType;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ArrowType;
 	public static fun values ()[Latlas/d2/ArrowType;
@@ -630,7 +630,7 @@ public final class atlas/d2/AsciiMode : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Extended Latlas/d2/AsciiMode;
 	public static final field Standard Latlas/d2/AsciiMode;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/AsciiMode;
 	public static fun values ()[Latlas/d2/AsciiMode;
@@ -830,7 +830,7 @@ public final class atlas/d2/Direction : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Right Latlas/d2/Direction;
 	public static final field Up Latlas/d2/Direction;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/Direction;
 	public static fun values ()[Latlas/d2/Direction;
@@ -846,7 +846,7 @@ public final class atlas/d2/ElkAlgorithm : java/lang/Enum, atlas/core/StringEnum
 	public static final field SporeOverlap Latlas/d2/ElkAlgorithm;
 	public static final field Stress Latlas/d2/ElkAlgorithm;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkAlgorithm;
 	public static fun values ()[Latlas/d2/ElkAlgorithm;
@@ -860,7 +860,7 @@ public final class atlas/d2/FileFormat : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Pptx Latlas/d2/FileFormat;
 	public static final field Svg Latlas/d2/FileFormat;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/FileFormat;
 	public static fun values ()[Latlas/d2/FileFormat;
@@ -872,7 +872,7 @@ public final class atlas/d2/FillPattern : java/lang/Enum, atlas/core/StringEnum 
 	public static final field Lines Latlas/d2/FillPattern;
 	public static final field None Latlas/d2/FillPattern;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/FillPattern;
 	public static fun values ()[Latlas/d2/FillPattern;
@@ -881,7 +881,7 @@ public final class atlas/d2/FillPattern : java/lang/Enum, atlas/core/StringEnum 
 public final class atlas/d2/Font : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Mono Latlas/d2/Font;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/Font;
 	public static fun values ()[Latlas/d2/Font;
@@ -892,7 +892,7 @@ public final class atlas/d2/LayoutEngine : java/lang/Enum, atlas/core/StringEnum
 	public static final field Elk Latlas/d2/LayoutEngine;
 	public static final field Tala Latlas/d2/LayoutEngine;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/LayoutEngine;
 	public static fun values ()[Latlas/d2/LayoutEngine;
@@ -903,7 +903,7 @@ public final class atlas/d2/Location : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Inside Latlas/d2/Location;
 	public static final field Outside Latlas/d2/Location;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/Location;
 	public static fun values ()[Latlas/d2/Location;
@@ -919,7 +919,7 @@ public final class atlas/d2/Position : java/lang/Enum, atlas/core/StringEnum {
 	public static final field TopLeft Latlas/d2/Position;
 	public static final field TopRight Latlas/d2/Position;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/Position;
 	public static fun values ()[Latlas/d2/Position;
@@ -945,7 +945,7 @@ public final class atlas/d2/Shape : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Step Latlas/d2/Shape;
 	public static final field StoredData Latlas/d2/Shape;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/Shape;
 	public static fun values ()[Latlas/d2/Shape;
@@ -957,7 +957,7 @@ public final class atlas/d2/TextTransform : java/lang/Enum, atlas/core/StringEnu
 	public static final field Title Latlas/d2/TextTransform;
 	public static final field Uppercase Latlas/d2/TextTransform;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/TextTransform;
 	public static fun values ()[Latlas/d2/TextTransform;
@@ -1096,7 +1096,7 @@ public final class atlas/graphviz/ArrowType : java/lang/Enum, atlas/core/StringE
 	public static final field Tee Latlas/graphviz/ArrowType;
 	public static final field Vee Latlas/graphviz/ArrowType;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/ArrowType;
 	public static fun values ()[Latlas/graphviz/ArrowType;
@@ -1107,7 +1107,7 @@ public final class atlas/graphviz/ClusterMode : java/lang/Enum, atlas/core/Strin
 	public static final field Local Latlas/graphviz/ClusterMode;
 	public static final field None Latlas/graphviz/ClusterMode;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/ClusterMode;
 	public static fun values ()[Latlas/graphviz/ClusterMode;
@@ -1119,7 +1119,7 @@ public final class atlas/graphviz/Dir : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Forward Latlas/graphviz/Dir;
 	public static final field None Latlas/graphviz/Dir;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/Dir;
 	public static fun values ()[Latlas/graphviz/Dir;
@@ -1298,7 +1298,7 @@ public final class atlas/graphviz/EdgeStyle : java/lang/Enum, atlas/core/StringE
 	public static final field Solid Latlas/graphviz/EdgeStyle;
 	public static final field Tapered Latlas/graphviz/EdgeStyle;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/EdgeStyle;
 	public static fun values ()[Latlas/graphviz/EdgeStyle;
@@ -1350,7 +1350,7 @@ public final class atlas/graphviz/FileFormat : java/lang/Enum, atlas/core/String
 	public static final field XdotJson Latlas/graphviz/FileFormat;
 	public static final field Xlib Latlas/graphviz/FileFormat;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/FileFormat;
 	public static fun values ()[Latlas/graphviz/FileFormat;
@@ -1592,7 +1592,7 @@ public final class atlas/graphviz/ImagePos : java/lang/Enum, atlas/core/StringEn
 	public static final field TopLeft Latlas/graphviz/ImagePos;
 	public static final field TopRight Latlas/graphviz/ImagePos;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/ImagePos;
 	public static fun values ()[Latlas/graphviz/ImagePos;
@@ -1610,7 +1610,7 @@ public final class atlas/graphviz/LayoutEngine : java/lang/Enum, atlas/core/Stri
 	public static final field Sfdp Latlas/graphviz/LayoutEngine;
 	public static final field TwoPi Latlas/graphviz/LayoutEngine;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/LayoutEngine;
 	public static fun values ()[Latlas/graphviz/LayoutEngine;
@@ -1731,7 +1731,7 @@ public final class atlas/graphviz/NodeStyle : java/lang/Enum, atlas/core/StringE
 	public static final field Striped Latlas/graphviz/NodeStyle;
 	public static final field Wedged Latlas/graphviz/NodeStyle;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/NodeStyle;
 	public static fun values ()[Latlas/graphviz/NodeStyle;
@@ -1743,7 +1743,7 @@ public final class atlas/graphviz/RankDir : java/lang/Enum, atlas/core/StringEnu
 	public static final field RightToLeft Latlas/graphviz/RankDir;
 	public static final field TopToBottom Latlas/graphviz/RankDir;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/RankDir;
 	public static fun values ()[Latlas/graphviz/RankDir;
@@ -1810,7 +1810,7 @@ public final class atlas/graphviz/Shape : java/lang/Enum, atlas/core/StringEnum 
 	public static final field Underline Latlas/graphviz/Shape;
 	public static final field Utr Latlas/graphviz/Shape;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/Shape;
 	public static fun values ()[Latlas/graphviz/Shape;
@@ -1825,7 +1825,7 @@ public final class atlas/graphviz/SmoothType : java/lang/Enum, atlas/core/String
 	public static final field Spring Latlas/graphviz/SmoothType;
 	public static final field Triangle Latlas/graphviz/SmoothType;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/graphviz/SmoothType;
 	public static fun values ()[Latlas/graphviz/SmoothType;
@@ -1870,7 +1870,7 @@ public final class atlas/mermaid/ConsiderModelOrder : java/lang/Enum, atlas/core
 	public static final field PreferEdges Latlas/mermaid/ConsiderModelOrder;
 	public static final field PreferNodes Latlas/mermaid/ConsiderModelOrder;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/mermaid/ConsiderModelOrder;
 	public static fun values ()[Latlas/mermaid/ConsiderModelOrder;
@@ -1883,7 +1883,7 @@ public final class atlas/mermaid/CycleBreakingStrategy : java/lang/Enum, atlas/c
 	public static final field Interactive Latlas/mermaid/CycleBreakingStrategy;
 	public static final field ModelOrder Latlas/mermaid/CycleBreakingStrategy;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/mermaid/CycleBreakingStrategy;
 	public static fun values ()[Latlas/mermaid/CycleBreakingStrategy;
@@ -1911,7 +1911,7 @@ public final class atlas/mermaid/Look : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Classic Latlas/mermaid/Look;
 	public static final field HandDrawn Latlas/mermaid/Look;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/mermaid/Look;
 	public static fun values ()[Latlas/mermaid/Look;
@@ -2005,7 +2005,7 @@ public final class atlas/mermaid/NodePlacementStrategy : java/lang/Enum, atlas/c
 	public static final field NetworkSimplex Latlas/mermaid/NodePlacementStrategy;
 	public static final field Simple Latlas/mermaid/NodePlacementStrategy;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/mermaid/NodePlacementStrategy;
 	public static fun values ()[Latlas/mermaid/NodePlacementStrategy;
@@ -2018,7 +2018,7 @@ public final class atlas/mermaid/Theme : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Forest Latlas/mermaid/Theme;
 	public static final field Neutral Latlas/mermaid/Theme;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getString ()Ljava/lang/String;
+	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/mermaid/Theme;
 	public static fun values ()[Latlas/mermaid/Theme;
