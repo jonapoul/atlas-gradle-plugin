@@ -1,7 +1,7 @@
 package atlas.core
 
 public interface StringEnum {
-  public val string: String
+  public val value: String
 }
 
 public interface IntEnum {
@@ -14,7 +14,7 @@ public interface IntEnum {
  * - [Dotted] is drawn as [Dashed] by Mermaid.
  * - [Tapered] is only supported by Graphviz, and is drawn as [Solid] elsewhere.
  */
-public enum class LinkStyle(override val string: String) : StringEnum {
+public enum class LinkStyle(override val value: String) : StringEnum {
   Solid("solid"),
   Bold("bold"),
   Dashed("dashed"),
@@ -34,5 +34,5 @@ public enum class LinkStyle(override val string: String) : StringEnum {
         Tapered -> setOf(Graphviz)
       }
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }

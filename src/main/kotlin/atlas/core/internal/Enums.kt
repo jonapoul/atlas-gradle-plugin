@@ -4,7 +4,7 @@ import atlas.core.IntEnum
 import atlas.core.StringEnum
 
 internal inline fun <reified E> parseEnum(string: String): E where E : StringEnum, E : Enum<E> =
-  enumValues<E>().firstOrNull { it.string == string }
+  enumValues<E>().firstOrNull { it.value == string }
     ?: error(
       "No ${E::class.simpleName} matching '$string'. Expected one of ${stringOptionsOf<E>()}."
     )
@@ -27,7 +27,7 @@ internal inline fun <reified E> parseIntEnum(string: String): E where E : IntEnu
 }
 
 internal inline fun <reified E> stringOptionsOf(): String where E : StringEnum, E : Enum<E> =
-  enumValues<E>().joinToString { it.string }
+  enumValues<E>().joinToString { it.value }
 
 internal inline fun <reified E> intOptionsOf(): String where E : IntEnum, E : Enum<E> =
   enumValues<E>().joinToString { "${it.name} (${it.value})" }

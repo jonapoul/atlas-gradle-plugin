@@ -100,6 +100,6 @@ internal inline fun <reified E> StyleProperties.enum(
   StyleDelegate(
     properties = this,
     keys = keys.toMap(),
-    fromString = { string -> enumValues<E>().first { it.string == string } },
-    toString = { it?.string },
+    fromString = { string -> enumValues<E>().first { it.value == string } },
+    toString = { it?.value },
   )

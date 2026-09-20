@@ -11,5 +11,5 @@ public data class ProjectType(
 ) : JSerializable {
   /** The attributes which [framework] should apply to nodes of this type. */
   public fun properties(framework: Framework): Map<String, String> =
-    properties[framework.string].orEmpty()
+    properties[framework.value].orEmpty()
 }

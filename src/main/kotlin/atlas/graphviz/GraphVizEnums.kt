@@ -10,7 +10,7 @@ import atlas.core.StringEnum
  *
  * See [https://graphviz.org/docs/attr-types/style/](https://graphviz.org/docs/attr-types/style/)
  */
-public enum class EdgeStyle(override val string: String) : StringEnum {
+public enum class EdgeStyle(override val value: String) : StringEnum {
   Bold("bold"),
   Dashed("dashed"),
   Dotted("dotted"),
@@ -18,13 +18,13 @@ public enum class EdgeStyle(override val string: String) : StringEnum {
   Solid("solid"),
   Tapered("tapered");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * See [https://graphviz.org/docs/attr-types/style/](https://graphviz.org/docs/attr-types/style/)
  */
-public enum class NodeStyle(override val string: String) : StringEnum {
+public enum class NodeStyle(override val value: String) : StringEnum {
   Dashed("dashed"),
   Dotted("dotted"),
   Solid("solid"),
@@ -37,27 +37,27 @@ public enum class NodeStyle(override val string: String) : StringEnum {
   Rounded("rounded"),
   Radial("radial");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * See
  * [https://graphviz.org/docs/attr-types/rankdir/](https://graphviz.org/docs/attr-types/rankdir/)
  */
-public enum class RankDir(override val string: String) : StringEnum {
+public enum class RankDir(override val value: String) : StringEnum {
   TopToBottom("TB"),
   BottomToTop("BT"),
   LeftToRight("LR"),
   RightToLeft("RL");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * See
  * [https://graphviz.org/docs/attr-types/arrowType/](https://graphviz.org/docs/attr-types/arrowType/)
  */
-public enum class ArrowType(override val string: String) : StringEnum {
+public enum class ArrowType(override val value: String) : StringEnum {
   Box("box"),
   Crow("crow"),
   Diamond("diamond"),
@@ -78,7 +78,7 @@ public enum class ArrowType(override val string: String) : StringEnum {
   Tee("tee"),
   Vee("vee");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
@@ -87,7 +87,7 @@ public enum class ArrowType(override val string: String) : StringEnum {
  * [Dot] is the implicit default. Run `dot -v` and check under "layout" to see which of these you
  * have locally.
  */
-public enum class LayoutEngine(override val string: String) : StringEnum {
+public enum class LayoutEngine(override val value: String) : StringEnum {
   Dot("dot"),
   Neato("neato"),
   Fdp("fdp"),
@@ -99,21 +99,21 @@ public enum class LayoutEngine(override val string: String) : StringEnum {
   Osage("osage"),
   Patchwork("patchwork");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** See [https://graphviz.org/docs/attrs/dir/](https://graphviz.org/docs/attrs/dir/) */
-public enum class Dir(override val string: String) : StringEnum {
+public enum class Dir(override val value: String) : StringEnum {
   Forward("forward"),
   Back("back"),
   Both("both"),
   None("none");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** See [https://graphviz.org/docs/attrs/imagepos/](https://graphviz.org/docs/attrs/imagepos/) */
-public enum class ImagePos(override val string: String) : StringEnum {
+public enum class ImagePos(override val value: String) : StringEnum {
   TopLeft("tl"),
   TopCenter("tc"),
   TopRight("tr"),
@@ -124,26 +124,26 @@ public enum class ImagePos(override val string: String) : StringEnum {
   BottomCenter("bc"),
   BottomRight("br");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * See
  * [https://graphviz.org/docs/attr-types/clusterMode/](https://graphviz.org/docs/attr-types/clusterMode/)
  */
-public enum class ClusterMode(override val string: String) : StringEnum {
+public enum class ClusterMode(override val value: String) : StringEnum {
   Local("local"),
   Global("global"),
   None("none");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * See
  * [https://graphviz.org/docs/attr-types/smoothType/](https://graphviz.org/docs/attr-types/smoothType/)
  */
-public enum class SmoothType(override val string: String) : StringEnum {
+public enum class SmoothType(override val value: String) : StringEnum {
   None("none"),
   AvgDist("avg_dist"),
   GraphDist("graph_dist"),
@@ -152,14 +152,14 @@ public enum class SmoothType(override val string: String) : StringEnum {
   Spring("spring"),
   Triangle("triangle");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * The formats supported on your machine will depend on the version of Graphviz you use. See
  * [https://graphviz.org/docs/outputs/](https://graphviz.org/docs/outputs/)
  */
-public enum class FileFormat(override val string: String) : StringEnum {
+public enum class FileFormat(override val value: String) : StringEnum {
   Canon("canon"),
   Cmap("cmap"),
   Cmapx("cmapx"),
@@ -205,11 +205,11 @@ public enum class FileFormat(override val string: String) : StringEnum {
   XdotJson("xdot_json"),
   Xlib("xlib");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** See [https://graphviz.org/doc/info/shapes.html](https://graphviz.org/doc/info/shapes.html) */
-public enum class Shape(override val string: String) : StringEnum {
+public enum class Shape(override val value: String) : StringEnum {
   Box("box"),
   Polygon("polygon"),
   Ellipse("ellipse"),
@@ -270,5 +270,5 @@ public enum class Shape(override val string: String) : StringEnum {
   Larrow("larrow"),
   Lpromoter("lpromoter");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }

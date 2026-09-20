@@ -50,7 +50,7 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
     // share several type names (FileFormat, LayoutEngine, Shape, ArrowType).
     val imports =
       frameworks.flatMap { f ->
-        listOf("atlas.${f.string}.*", "atlas.${f.string}.tasks.*")
+        listOf("atlas.$f.*", "atlas.$f.tasks.*")
       } + "atlas.core.*"
     imports.forEach { appendLine("import $it") }
     appendLine()
@@ -79,7 +79,7 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
 
   private fun Scenario.atlasBlock(): String {
     val body =
-      frameworks.map { framework -> "  ${framework.string}()" } +
+      frameworks.map { framework -> "  $framework()" } +
         atlasConfig.trimIndent().lines().filter(String::isNotBlank).map { "  $it" }
     return if (body.isEmpty()) "" else body.joinToString("\n", "atlas {\n", "\n}\n")
   }

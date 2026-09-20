@@ -96,7 +96,7 @@ public abstract class ExecGraphviz : DefaultTask(), AtlasGenerationTask, TaskWit
         execGraphviz.configure { task ->
           val dotFile = dotFileTask.flatMap { it.outputFile }
           val imageFile = provider {
-            outputFile(config, Graphviz, variant, fileExtension = spec.fileFormat.get().string)
+            outputFile(config, Graphviz, variant, fileExtension = spec.fileFormat.get().value)
           }
 
           task.dotFile.convention(dotFile)

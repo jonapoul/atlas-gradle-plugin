@@ -396,5 +396,5 @@ public data class LinkType(
 ) : JSerializable {
   /** The attributes which [framework] should apply to this link. */
   public fun properties(framework: Framework): Map<String, String> =
-    properties[framework.string].orEmpty()
+    properties[framework.value].orEmpty()
 }

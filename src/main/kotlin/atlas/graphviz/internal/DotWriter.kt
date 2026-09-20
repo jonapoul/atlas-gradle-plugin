@@ -51,7 +51,7 @@ internal data class DotWriter(
       .forEach { (fromPath, toPath, _, type) ->
         val attrs =
           Attrs(
-            "style" to type?.style?.string,
+            "style" to type?.style?.value,
             "color" to type?.color,
             "label" to if (displayLinkLabels) type?.displayName else null,
           ) + type?.properties(Graphviz)

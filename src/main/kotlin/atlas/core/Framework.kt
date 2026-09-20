@@ -16,7 +16,7 @@ package atlas.core
  * directory as `legend-d2.svg` and so on. The framework is in the filename, so enabling several at
  * once never causes them to overwrite each other.
  */
-public enum class Framework(override val string: String) : StringEnum {
+public enum class Framework(override val value: String) : StringEnum {
   D2("d2"),
   Graphviz("graphviz"),
   Mermaid("mermaid");
@@ -30,5 +30,5 @@ public enum class Framework(override val string: String) : StringEnum {
         Mermaid -> "Mermaid"
       }
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }

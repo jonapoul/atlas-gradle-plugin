@@ -39,10 +39,10 @@ internal fun linkType(type: LinkTypeSpec): LinkType =
     properties = type.propertiesByFramework(),
   )
 
-/** Attributes for every framework which has at least one set, keyed by [Framework.string]. */
+/** Attributes for every framework which has at least one set, keyed by [Framework.value]. */
 private fun StyleSpec.propertiesByFramework(): Map<String, Map<String, String>> =
   Framework.entries
-    .associate { framework -> framework.string to properties(framework).getOrElse(emptyMap()) }
+    .associate { framework -> framework.value to properties(framework).getOrElse(emptyMap()) }
     .filterValues { it.isNotEmpty() }
 
 internal fun ObjectFactory.bool(convention: Provider<Boolean>): Property<Boolean> =
@@ -133,4 +133,4 @@ private fun defaultFilename(variant: Variant) =
 
 /** e.g. `chart-d2.svg`, `legend-graphviz.dot`, `classes-d2.d2`. */
 private fun frameworkFilename(filename: String, framework: Framework, fileExtension: String) =
-  "$filename-${framework.string}.$fileExtension"
+  "$filename-$framework.$fileExtension"
