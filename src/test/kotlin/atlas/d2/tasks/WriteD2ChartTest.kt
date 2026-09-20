@@ -28,9 +28,9 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThatTask("writeD2Chart").buildsSuccessfully().allTasksSuccessful()
 
       // and the files were generated
-      val d2FileA = resolve("a/build/atlas/d2/chart.d2")
-      val d2FileB = resolve("b/build/atlas/d2/chart.d2")
-      val d2FileC = resolve("c/build/atlas/d2/chart.d2")
+      val d2FileA = resolve("a/build/atlas/chart-d2.d2")
+      val d2FileB = resolve("b/build/atlas/chart-d2.d2")
+      val d2FileC = resolve("c/build/atlas/chart-d2.d2")
 
       // and contain expected contents, with projects in declaration order
       assertThat(d2FileA)
@@ -47,7 +47,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
               project-Java: Java { class: project-Java }
             }
           }
-          ...@../../../../build/atlas/d2/classes.d2
+          ...@../../../build/atlas/classes-d2.d2
           """
             .trimIndent()
         )
@@ -61,7 +61,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
               project-Java: Java { class: project-Java }
             }
           }
-          ...@../../../../build/atlas/d2/classes.d2
+          ...@../../../build/atlas/classes-d2.d2
           """
             .trimIndent()
         )
@@ -75,7 +75,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
               project-Java: Java { class: project-Java }
             }
           }
-          ...@../../../../build/atlas/d2/classes.d2
+          ...@../../../build/atlas/classes-d2.d2
           """
             .trimIndent()
         )
@@ -89,13 +89,13 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
 
       // and the files were generated
-      assertThat(rootDir).childExists("build/atlas/d2/classes.d2")
-      assertThat(resolve("path/to/my/project/build/atlas/d2/chart.d2"))
+      assertThat(rootDir).childExists("build/atlas/classes-d2.d2")
+      assertThat(resolve("path/to/my/project/build/atlas/chart-d2.d2"))
         .exists()
         .contentEquals(
           """
           path_to_my_project: :path:to:my:project
-          ...@../../../../../../../build/atlas/d2/classes.d2
+          ...@../../../../../../build/atlas/classes-d2.d2
           """
             .trimIndent()
         )
@@ -134,12 +134,12 @@ internal class WriteD2ChartTest : ScenarioTest() {
     runScenario(D2NestedProjects.withIntermediatesInProjectDir()) {
       // given
       assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
-      assertThat(resolve("path/to/my/project/atlas/d2/chart.d2"))
+      assertThat(resolve("path/to/my/project/chart-d2.d2"))
         .exists()
         .contentEquals(
           """
           path_to_my_project: :path:to:my:project
-          ...@../../../../../../atlas/d2/classes.d2
+          ...@../../../../atlas/classes-d2.d2
           """
             .trimIndent()
         )

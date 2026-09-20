@@ -1,5 +1,5 @@
 # sample-lib-kotlin-mp
 
 <!--region chart-->
-![chart](atlas/d2/chart.svg)
+![chart](chart-d2.svg)
 <!--endregion-->

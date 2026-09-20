@@ -21,12 +21,12 @@ internal class MultipleFrameworksTest : ScenarioTest() {
       // then each framework wrote to its own directory, so nothing was overwritten, and the shared
       // legends live in the root project
       assertThat(rootDir)
-        .childExists("a/build/atlas/d2/chart.d2")
-        .childExists("a/build/atlas/graphviz/chart.dot")
-        .childExists("a/atlas/mermaid/chart.mmd")
-        .childExists("build/atlas/d2/classes.d2")
-        .childExists("build/atlas/graphviz/legend.dot")
-        .childExists("atlas/mermaid/legend.md")
+        .childExists("a/build/atlas/chart-d2.d2")
+        .childExists("a/build/atlas/chart-graphviz.dot")
+        .childExists("a/chart-mermaid.mmd")
+        .childExists("build/atlas/classes-d2.d2")
+        .childExists("build/atlas/legend-graphviz.dot")
+        .childExists("atlas/legend-mermaid.md")
     }
 
   @Test
@@ -37,8 +37,8 @@ internal class MultipleFrameworksTest : ScenarioTest() {
 
       // then
       assertThat(resolve("a/README.md"))
-        .contentContains("![chart](atlas/d2/chart.svg)")
-        .contentContains("![chart](atlas/graphviz/chart.svg)")
+        .contentContains("![chart](chart-d2.svg)")
+        .contentContains("![chart](chart-graphviz.svg)")
         .contentContains("```mermaid")
     }
 }

@@ -71,7 +71,7 @@ atlas {
 
 ## Generated files
 
-Atlas will generate a `classes.d2` file in the root project's `build/atlas/d2` folder. This contains any shared styling, used between all child charts. It will also generate a `chart.d2` file in each subproject's `build/atlas/d2` folder, and a `chart.XXX` file in its `atlas/d2` folder, the latter's file extension depending on [fileFormat](#fileformat). Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.d2` files in `atlas/d2` instead.
+Atlas will generate a `classes-d2.d2` file in the root project's `build/atlas` folder. This contains any shared styling, used between all child charts. It will also generate a `chart-d2.d2` file in each subproject's `build/atlas` folder, and a `chart-d2.XXX` file in the subproject's own directory, the latter's file extension depending on [fileFormat](#fileformat). Set [intermediateFilesInBuildDir](#intermediatefilesinbuilddir) to false to keep the `.d2` files next to the rendered image instead.
 
 ## Properties
 
@@ -291,7 +291,7 @@ atlas {
 }
 ```
 
-When enabled, the `chart.d2` and `classes.d2` files go in `build/atlas/d2/` instead of the project's `atlas/d2/` folder, so you don't need to commit them. The rendered image stays in `atlas/d2/`.
+When enabled, the `chart-d2.d2` and `classes-d2.d2` files go in `build/atlas/` instead of the project directory and the root project's `atlas/` folder, so you don't need to commit them. The rendered image stays alongside the project.
 
 [checkOutputs](usage-common.md#checkoutputs) only compares the `.d2` files, so no D2 check tasks are registered while this is enabled.
 

@@ -49,9 +49,9 @@ public interface GraphvizSpec : AtlasSpec {
   public val fileFormat: Property<FileFormat>
 
   /**
-   * Set to true to write the `chart.dot` and `legend.dot` files to `build/atlas/graphviz/` instead
-   * of the project's `atlas/graphviz/` directory. Only the rendered image goes in
-   * `atlas/graphviz/`. Defaults to true.
+   * Set to true to write the `chart-graphviz.dot` and `legend-graphviz.dot` files to `build/atlas/`
+   * instead of the project directory and the root project's `atlas/` directory. Only the rendered
+   * image goes alongside the project. Defaults to true.
    *
    * [atlas.core.AtlasExtension.checkOutputs] only verifies these files, so no Graphviz check tasks
    * are registered while this is enabled.

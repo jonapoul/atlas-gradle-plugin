@@ -18,7 +18,7 @@ internal class D2PropertiesTest : ScenarioTest() {
       assertThatTask("writeD2Classes").buildsSuccessfully().taskSucceeded(":writeD2Classes")
 
       // then
-      val classes = resolve("build/atlas/d2/classes.d2")
+      val classes = resolve("build/atlas/classes-d2.d2")
       assertThat(classes)
         // the theme is an int enum, but the DSL names it, so the property takes the name too
         .contentContains("theme-id: 201")

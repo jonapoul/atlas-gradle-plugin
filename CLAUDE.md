@@ -220,8 +220,10 @@ The `PathTransformSpec` allows regex-based transformations of project paths in g
 
 ## File Locations
 
-- Generated diagrams: `atlas/<framework>/` in each project, e.g. `atlas/d2/chart.svg`. Legends only in the root project, resolved from `AtlasConfig.rootDir`
-- Intermediate files (D2 `.d2`, Graphviz `.dot`): `build/atlas/<framework>/`, unless `intermediateFilesInBuildDir` is disabled in that framework's block
+- Generated charts: in the project directory itself, next to its README, named for the framework, e.g. `chart-d2.svg`. No `atlas/` directory per project
+- Generated legends: `atlas/` in the root project only, e.g. `atlas/legend-graphviz.svg`, resolved from `AtlasConfig.rootDir`. D2's shared `classes-d2.d2` goes here too. The root keeps a directory because these belong to the whole build, and its own root dir is the user's
+- The framework is a filename suffix rather than a directory, which is what stops two frameworks overwriting each other. See `frameworkFilename` in `internal/Extensions.kt`
+- Intermediate files (D2 `.d2`, Graphviz `.dot`): `build/atlas/` with the same naming, unless `intermediateFilesInBuildDir` is disabled in that framework's block
 - Per-project data: `build/atlas/*.json` in each subproject
 - Test fixtures: `src/test/kotlin/atlas/test/scenarios/`
 - Documentation: `docs/` (MkDocs-based, deployed to GitHub Pages)

@@ -21,7 +21,7 @@ internal class WriteMarkdownLegendTest : ScenarioTest() {
       assertThatTask(":writeMermaidLegend").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("atlas/mermaid/legend.md"))
+      assertThat(resolve("atlas/legend-mermaid.md"))
         .exists()
         .contentContains(
           """
@@ -41,7 +41,7 @@ internal class WriteMarkdownLegendTest : ScenarioTest() {
       assertThatTask(":writeMermaidLegend").buildsSuccessfully().allTasksSuccessful()
 
       // then
-      assertThat(resolve("atlas/mermaid/legend.md"))
+      assertThat(resolve("atlas/legend-mermaid.md"))
         .exists()
         .contentEquals(
           """

@@ -20,7 +20,7 @@ internal class WriteD2ClassesTest : ScenarioTest() {
       assertThatTask("writeD2Classes").buildsSuccessfully().taskSucceeded(":writeD2Classes")
 
       // and the file was generated
-      assertThat(resolve("build/atlas/d2/classes.d2"))
+      assertThat(resolve("build/atlas/classes-d2.d2"))
         .contentEquals(
           """
           classes: {
@@ -60,7 +60,7 @@ internal class WriteD2ClassesTest : ScenarioTest() {
       assertThatTask("writeD2Classes").buildsSuccessfully().taskSucceeded(":writeD2Classes")
 
       // then
-      assertThat(resolve("build/atlas/d2/classes.d2").readText())
+      assertThat(resolve("build/atlas/classes-d2.d2").readText())
         .contains("theme-id: 7")
         .contains(
           """

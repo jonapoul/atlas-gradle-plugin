@@ -68,9 +68,9 @@ internal class ExecD2Test : ScenarioTest() {
 
       // then
       assertThat(rootDir)
-        .childExists("a/atlas/d2/chart.svg")
-        .childExists("b/atlas/d2/chart.svg")
-        .childExists("c/atlas/d2/chart.svg")
+        .childExists("a/chart-d2.svg")
+        .childExists("b/chart-d2.svg")
+        .childExists("c/chart-d2.svg")
     }
 
   @Test
@@ -110,7 +110,7 @@ internal class ExecD2Test : ScenarioTest() {
       assertThatTask(":a:execD2Chart").buildsSuccessfully().taskHadResult(":a:execD2Chart", SUCCESS)
 
       // then the flags reached the command, which is echo'd here
-      val args = resolve("a/atlas/d2/chart.txt").readText()
+      val args = resolve("a/chart-d2.txt").readText()
       val font = rootDir.resolve("font.ttf").absolutePath
       assertThat(args)
         .contains("--ascii-mode=standard")

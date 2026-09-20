@@ -82,9 +82,9 @@ internal class ExecGraphvizTest : ScenarioTest() {
 
       // and the relevant files exist
       assertThat(rootDir)
-        .childExists("a/atlas/graphviz/chart.png")
-        .childExists("b/atlas/graphviz/chart.png")
-        .childExists("c/atlas/graphviz/chart.png")
+        .childExists("a/chart-graphviz.png")
+        .childExists("b/chart-graphviz.png")
+        .childExists("c/chart-graphviz.png")
     }
 
   @Test
