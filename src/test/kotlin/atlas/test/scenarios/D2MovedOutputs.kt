@@ -17,8 +17,8 @@ internal object D2MovedOutputs : D2Scenario {
       kotlin("jvm") apply false
     }
 
-    tasks.named("writeD2Classes", atlas.d2.tasks.WriteD2Classes::class.java) { task ->
-      task.outputFile.set(layout.projectDirectory.file("charts/classes.d2"))
+    tasks.named("writeD2Classes", atlas.d2.tasks.WriteD2Classes::class.java) {
+      outputFile.set(layout.projectDirectory.file("charts/classes.d2"))
     }
     """
       .trimIndent()
@@ -39,8 +39,8 @@ internal object D2MovedOutputs : D2Scenario {
           kotlin("jvm")
         }
 
-        tasks.named("writeD2Chart", atlas.d2.tasks.WriteD2Chart::class.java) { task ->
-          task.outputFile.set(layout.projectDirectory.file("charts/chart.d2"))
+        tasks.named("writeD2Chart", atlas.d2.tasks.WriteD2Chart::class.java) {
+          outputFile.set(layout.projectDirectory.file("charts/chart.d2"))
         }
 
         dependencies {
@@ -54,8 +54,8 @@ internal object D2MovedOutputs : D2Scenario {
           kotlin("jvm")
         }
 
-        tasks.named("writeD2Chart", atlas.d2.tasks.WriteD2Chart::class.java) { task ->
-          task.outputFile.set(layout.projectDirectory.file("charts/chart.d2"))
+        tasks.named("writeD2Chart", atlas.d2.tasks.WriteD2Chart::class.java) {
+          outputFile.set(layout.projectDirectory.file("charts/chart.d2"))
         }
         """
           .trimIndent(),
