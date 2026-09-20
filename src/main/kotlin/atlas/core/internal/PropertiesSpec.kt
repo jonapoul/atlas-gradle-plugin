@@ -32,8 +32,8 @@ internal inline fun <reified E> PropertiesSpec.enum(key: String): Delegate<E>
   Delegate(
     mapProperty = properties,
     key = key,
-    fromString = { str -> enumValues<E>().first { it.string == str } },
-    toString = { it?.string },
+    fromString = { str -> enumValues<E>().first { it.value == str } },
+    toString = { it?.value },
   )
 
 internal fun PropertiesSpec.int(key: String): Delegate<Int> =

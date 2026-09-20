@@ -197,7 +197,7 @@ private fun IndentedStringBuilder.appendVars(config: D2ClassesConfig) =
       mapOf<String, Any?>(
         "theme-id" to theme?.value,
         "dark-theme-id" to darkTheme?.value,
-        "layout-engine" to layoutEngine?.string,
+        "layout-engine" to layoutEngine?.value,
         "pad" to pad,
         "sketch" to sketch,
         "center" to center,

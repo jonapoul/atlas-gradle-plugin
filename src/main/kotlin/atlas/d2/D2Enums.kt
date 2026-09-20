@@ -6,7 +6,7 @@ import atlas.core.IntEnum
 import atlas.core.StringEnum
 
 /** See [https://d2lang.com/tour/shapes/](https://d2lang.com/tour/shapes/) */
-public enum class Shape(override val string: String) : StringEnum {
+public enum class Shape(override val value: String) : StringEnum {
   Rectangle("rectangle"),
   Square("square"),
   Page("page"),
@@ -26,11 +26,11 @@ public enum class Shape(override val string: String) : StringEnum {
   Cloud("cloud"),
   C4Person("c4-person");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** See [https://d2lang.com/tour/layouts/](https://d2lang.com/tour/layouts/) */
-public enum class LayoutEngine(override val string: String) : StringEnum {
+public enum class LayoutEngine(override val value: String) : StringEnum {
   /**
    * See [the D2 docs](https://d2lang.com/tour/dagre/) for official documentation, and [D2DagreSpec]
    * for Atlas configuration of it.
@@ -49,7 +49,7 @@ public enum class LayoutEngine(override val string: String) : StringEnum {
    */
   Tala("tala");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** [https://d2lang.com/tour/themes/](https://d2lang.com/tour/themes/) */
@@ -79,7 +79,7 @@ public enum class Theme(override val value: Int) : IntEnum {
 }
 
 /** [https://d2lang.com/tour/exports/](https://d2lang.com/tour/exports/) */
-public enum class FileFormat(override val string: String) : StringEnum {
+public enum class FileFormat(override val value: String) : StringEnum {
   Svg("svg"),
   Png("png"),
   Pdf("pdf"),
@@ -87,33 +87,33 @@ public enum class FileFormat(override val string: String) : StringEnum {
   Gif("gif"),
   Ascii("txt");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** [https://d2lang.com/tour/layouts/#direction](https://d2lang.com/tour/layouts/#direction) */
-public enum class Direction(override val string: String) : StringEnum {
+public enum class Direction(override val value: String) : StringEnum {
   Up("up"),
   Down("down"),
   Right("right"),
   Left("left");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** [https://d2lang.com/tour/style/#fill-pattern](https://d2lang.com/tour/style/#fill-pattern) */
-public enum class FillPattern(override val string: String) : StringEnum {
+public enum class FillPattern(override val value: String) : StringEnum {
   Dots("dots"),
   Lines("lines"),
   Grain("grain"),
   None("none");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * [https://d2lang.com/tour/connections/#arrowheads](https://d2lang.com/tour/connections/#arrowheads)
  */
-public enum class ArrowType(override val string: String) : StringEnum {
+public enum class ArrowType(override val value: String) : StringEnum {
   Triangle("triangle"),
   Arrow("arrow"),
   Diamond("diamond"),
@@ -125,11 +125,11 @@ public enum class ArrowType(override val string: String) : StringEnum {
   CrowsFootManyRequired("cf-many-required"),
   Cross("cross");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** [https://d2lang.com/tour/positions/](https://d2lang.com/tour/positions/) */
-public enum class Position(override val string: String) : StringEnum {
+public enum class Position(override val value: String) : StringEnum {
   TopLeft("top-left"),
   TopCenter("top-center"),
   TopRight("top-right"),
@@ -139,37 +139,37 @@ public enum class Position(override val string: String) : StringEnum {
   BottomCenter("bottom-center"),
   BottomRight("bottom-right");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * [https://d2lang.com/tour/positions/#outside-and-border](https://d2lang.com/tour/positions/#outside-and-border)
  */
-public enum class Location(override val string: String) : StringEnum {
+public enum class Location(override val value: String) : StringEnum {
   Border("border"),
   Inside("inside"),
   Outside("outside");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** [https://d2lang.com/tour/style/#font](https://d2lang.com/tour/style/#font) */
-public enum class Font(override val string: String) : StringEnum {
+public enum class Font(override val value: String) : StringEnum {
   Mono("mono");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
  * [https://d2lang.com/tour/style/#text-transform](https://d2lang.com/tour/style/#text-transform)
  */
-public enum class TextTransform(override val string: String) : StringEnum {
+public enum class TextTransform(override val value: String) : StringEnum {
   Uppercase("uppercase"),
   Lowercase("lowercase"),
   Title("title"),
   None("none");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /**
@@ -181,7 +181,7 @@ public enum class TextTransform(override val string: String) : StringEnum {
  * `graphviz.*` family have never been bundled, and the packing algorithms (`box`, `fixed`,
  * `rectpacking`) crash on any graph containing connections.
  */
-public enum class ElkAlgorithm(override val string: String) : StringEnum {
+public enum class ElkAlgorithm(override val value: String) : StringEnum {
   Force("force"),
   Layered("layered"),
   MrTree("mrtree"),
@@ -191,16 +191,16 @@ public enum class ElkAlgorithm(override val string: String) : StringEnum {
   SporeOverlap("sporeOverlap"),
   Stress("stress");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }
 
 /** Which characters D2 draws [FileFormat.Ascii] charts with. */
-public enum class AsciiMode(override val string: String) : StringEnum {
+public enum class AsciiMode(override val value: String) : StringEnum {
   /** Basic ASCII characters only, e.g. `+`, `-` and `|`. */
   Standard("standard"),
 
   /** Unicode box-drawing characters. D2's default. */
   Extended("extended");
 
-  override fun toString(): String = string
+  override fun toString(): String = value
 }

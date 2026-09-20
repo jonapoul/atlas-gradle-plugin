@@ -84,7 +84,7 @@ public abstract class WriteGraphvizLegend : DefaultTask(), TaskWithOutputFile, A
           appendLine("  <TR><TD COLSPAN=\"2\"><B>Link Types</B></TD></TR>")
           linkTypes.forEach { type ->
             val bgColor = if (type.color == null) "" else " BGCOLOR=\"${type.color}\""
-            val text = type.style?.string?.capitalized() ?: "Solid"
+            val text = type.style?.value?.capitalized() ?: "Solid"
             val style = withFontColor(text, type.properties(Graphviz))
             appendLine("  <TR><TD>${type.displayName}</TD><TD$bgColor>$style</TD></TR>")
           }

@@ -54,7 +54,7 @@ internal value class AtlasArtifact(private val id: String) {
     val D2Classes = AtlasArtifact("d2-classes")
 
     // The shared legend a framework draws once on the root, and every README links to
-    fun legend(framework: Framework) = AtlasArtifact("legend-${framework.string}")
+    fun legend(framework: Framework) = AtlasArtifact("legend-$framework")
   }
 }
 

@@ -103,7 +103,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     }
 
     if (outputFormat.get() == Ascii) {
-      asciiMode.orNull?.let { cliArguments += "ascii-mode" to it.string }
+      asciiMode.orNull?.let { cliArguments += "ascii-mode" to it.value }
     }
 
     if (outputFormat.get() == Svg && noXmlTag.getOrElse(false)) {
@@ -176,7 +176,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
         execD2.configure { task ->
           val d2File = d2FileTask.flatMap { it.outputFile }
           val imageFile = provider {
-            outputFile(config, D2, variant, fileExtension = spec.fileFormat.get().string)
+            outputFile(config, D2, variant, fileExtension = spec.fileFormat.get().value)
           }
 
           task.classesFile.fileProvider(classesFile.singleFile(D2Classes))

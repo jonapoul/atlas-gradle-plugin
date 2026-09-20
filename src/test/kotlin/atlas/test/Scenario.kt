@@ -53,8 +53,8 @@ internal fun Scenario.withIntermediatesInProjectDir(): Scenario {
       (frameworks - Framework.Mermaid).joinToString(
         separator = "\n",
         prefix = base.atlasConfig + "\n",
-      ) {
-        "${it.string} { intermediateFilesInBuildDir = false }"
+      ) { framework ->
+        "$framework { intermediateFilesInBuildDir = false }"
       }
   }
 }
@@ -92,7 +92,7 @@ internal val Scenario.androidBuildScript
   }
 
   android {
-    namespace = "dev.jonpoulton.dummy.${framework.string}"
+    namespace = "dev.jonpoulton.dummy.$framework"
     compileSdk = 36
   }
   """

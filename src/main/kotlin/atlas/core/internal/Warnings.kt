@@ -75,7 +75,7 @@ private fun warnAboutUnusedProperties(
     .groupBy({ it.frameworks.sorted() }, { it.name })
     .forEach { (frameworks, names) ->
       val unused = names.distinct()
-      val blocks = frameworks.joinToString(separator = " or ") { "${it.string} { }" }
+      val blocks = frameworks.joinToString(separator = " or ") { f -> "$f { }" }
       logger.warn(
         "Warning: $description sets ${unused.joinAnd()}, which only " +
           "${frameworks.map { it.displayName }.joinAnd()} " +

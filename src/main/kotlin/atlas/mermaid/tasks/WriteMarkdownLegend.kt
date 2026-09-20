@@ -82,7 +82,7 @@ public abstract class WriteMarkdownLegend : DefaultTask(), TaskWithOutputFile, A
 
     for (type in linkTypes) {
       val style =
-        listOfNotNull(type.color, type.style?.string).joinToString(separator = " ") {
+        listOfNotNull(type.color, type.style?.value).joinToString(separator = " ") {
           it.capitalized()
         }
       appendLine("| ${type.displayName} | $style |")
