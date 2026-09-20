@@ -89,6 +89,7 @@ atlas {
 
   graphviz {
     fileFormat = Svg
+    intermediateFilesInBuildDir = false
     layoutEngine = Dot
 
     node {

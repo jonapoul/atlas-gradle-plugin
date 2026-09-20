@@ -17,8 +17,9 @@ done
 
 # The layout engine comparison in docs/docs/usage-d2.md is one chart drawn by each engine.
 # sample-basic configures no layout engine, so its chart source is engine-agnostic and d2 can
-# render an image per engine straight from it.
-CHART="samples/sample-basic/android/app/atlas/d2/chart.d2"
+# render an image per engine straight from it. It lives in the build directory because the sample
+# leaves intermediateFilesInBuildDir at its default.
+CHART="samples/sample-basic/android/app/build/atlas/d2/chart.d2"
 for engine in dagre elk tala; do
   d2 "$CHART" "docs/docs/img/d2-layoutEngine-$engine.svg" --layout="$engine"
 done
