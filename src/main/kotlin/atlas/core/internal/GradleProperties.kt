@@ -35,8 +35,7 @@ internal fun IGradleProperties.string(key: String, default: String? = null): Pro
 internal inline fun <reified E> IGradleProperties.enum(
   key: String,
   default: E? = null,
-): Provider<E> where E : StringEnum, E : Enum<E> =
-  string(key, default?.value).map { parseEnum(it) }
+): Provider<E> where E : StringEnum, E : Enum<E> = string(key, default?.value).map { parseEnum(it) }
 
 internal inline fun <reified E> IGradleProperties.intEnum(
   key: String,
