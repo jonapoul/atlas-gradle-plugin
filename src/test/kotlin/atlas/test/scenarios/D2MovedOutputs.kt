@@ -3,8 +3,12 @@ package atlas.test.scenarios
 import atlas.test.D2Scenario
 
 /**
- * Both intermediate files are moved out of the per-framework directory Atlas picked, so the `...@`
- * import in each chart has to be worked out from where the files actually landed.
+ * Both intermediate files are moved out of the directory Atlas picked, so the `...@` import in each
+ * chart has to be worked out from where they actually landed.
+ *
+ * Tasks are moved by name rather than with `withType`, so that the dummy tasks Atlas registers for
+ * `check` keep their own locations - pointing a real task and its dummy at one file would have them
+ * overwrite each other.
  */
 internal object D2MovedOutputs : D2Scenario {
   override val rootBuildFile =
@@ -13,8 +17,8 @@ internal object D2MovedOutputs : D2Scenario {
       kotlin("jvm") apply false
     }
 
-    tasks.withType(atlas.d2.tasks.WriteD2Classes::class.java).configureEach {
-      outputFile.set(layout.buildDirectory.file("atlas/classes.d2"))
+    tasks.named("writeD2Classes", atlas.d2.tasks.WriteD2Classes::class.java) { task ->
+      task.outputFile.set(layout.projectDirectory.file("charts/classes.d2"))
     }
     """
       .trimIndent()
@@ -35,8 +39,8 @@ internal object D2MovedOutputs : D2Scenario {
           kotlin("jvm")
         }
 
-        tasks.withType(atlas.d2.tasks.WriteD2Chart::class.java).configureEach {
-          outputFile.set(layout.buildDirectory.file("atlas/chart.d2"))
+        tasks.named("writeD2Chart", atlas.d2.tasks.WriteD2Chart::class.java) { task ->
+          task.outputFile.set(layout.projectDirectory.file("charts/chart.d2"))
         }
 
         dependencies {
@@ -50,8 +54,8 @@ internal object D2MovedOutputs : D2Scenario {
           kotlin("jvm")
         }
 
-        tasks.withType(atlas.d2.tasks.WriteD2Chart::class.java).configureEach {
-          outputFile.set(layout.buildDirectory.file("atlas/chart.d2"))
+        tasks.named("writeD2Chart", atlas.d2.tasks.WriteD2Chart::class.java) { task ->
+          task.outputFile.set(layout.projectDirectory.file("charts/chart.d2"))
         }
         """
           .trimIndent(),

@@ -17,6 +17,7 @@ import blueprint.test.contentEquals
 import blueprint.test.exists
 import blueprint.test.noTasksFailed
 import blueprint.test.taskSucceeded
+import java.io.File
 import kotlin.test.Test
 
 internal class WriteD2ChartTest : ScenarioTest() {
@@ -108,11 +109,23 @@ internal class WriteD2ChartTest : ScenarioTest() {
 
       // then the import points at wherever the classes file was moved to, not where Atlas would
       // have put it
-      assertThat(rootDir).childExists("build/atlas/classes.d2")
-      assertThat(resolve("a/build/atlas/chart.d2").readText().trimEnd().lines().last())
-        .isEqualTo("...@../../../build/atlas/classes.d2")
-      assertThat(resolve("nested/b/build/atlas/chart.d2").readText().trimEnd().lines().last())
-        .isEqualTo("...@../../../../build/atlas/classes.d2")
+      assertThat(rootDir).childExists("charts/classes.d2")
+      assertThat(resolve("a/charts/chart.d2").importLine()).isEqualTo("...@../../charts/classes.d2")
+      assertThat(resolve("nested/b/charts/chart.d2").importLine())
+        .isEqualTo("...@../../../charts/classes.d2")
+    }
+
+  @Test
+  @RequiresD2
+  fun `Check moved outputs against the dummy chart`() =
+    runScenario(D2MovedOutputs.withIntermediatesInProjectDir()) {
+      // given the real chart has been moved out of the directory the dummy writes to
+      assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
+      assertThat(resolve("a/charts/chart.d2").importLine()).isEqualTo("...@../../charts/classes.d2")
+
+      // when we check, then the dummy borrowed the real chart's location for its own import rather
+      // than using the build directory it writes to
+      assertThatTask("check").buildsSuccessfully().taskSucceeded(":a:checkD2Chart")
     }
 
   @Test
@@ -135,3 +148,5 @@ internal class WriteD2ChartTest : ScenarioTest() {
       assertThatTask("check").buildsSuccessfully().taskSucceeded(":path:to:my:project:checkD2Chart")
     }
 }
+
+private fun File.importLine(): String = readText().trimEnd().lines().last()
