@@ -657,8 +657,6 @@ public abstract interface class atlas/d2/D2ElkSpec : atlas/core/PropertiesSpec {
 	public abstract fun padding (I)V
 	public abstract fun padding (II)V
 	public abstract fun padding (IIII)V
-	public static synthetic fun padding$default (Latlas/d2/D2ElkSpec;IIIIILjava/lang/Object;)V
-	public static synthetic fun padding$default (Latlas/d2/D2ElkSpec;IIILjava/lang/Object;)V
 	public abstract fun setAlgorithm (Latlas/d2/ElkAlgorithm;)V
 	public abstract fun setEdgeNodeBetweenLayers (Ljava/lang/Integer;)V
 	public abstract fun setNodeNodeBetweenLayers (Ljava/lang/Integer;)V
@@ -668,8 +666,6 @@ public abstract interface class atlas/d2/D2ElkSpec : atlas/core/PropertiesSpec {
 
 public final class atlas/d2/D2ElkSpec$DefaultImpls {
 	public static fun clear (Latlas/d2/D2ElkSpec;)V
-	public static synthetic fun padding$default (Latlas/d2/D2ElkSpec;IIIIILjava/lang/Object;)V
-	public static synthetic fun padding$default (Latlas/d2/D2ElkSpec;IIILjava/lang/Object;)V
 	public static fun put (Latlas/d2/D2ElkSpec;Ljava/lang/String;Ljava/lang/Object;)V
 }
 

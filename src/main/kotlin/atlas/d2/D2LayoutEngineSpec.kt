@@ -65,10 +65,10 @@ public interface D2ElkSpec : PropertiesSpec {
   public fun padding(all: Int)
 
   /** Sets [padding] to one value on the left and right sides, and another on the top and bottom. */
-  public fun padding(horizontal: Int = 50, vertical: Int = 50)
+  public fun padding(horizontal: Int, vertical: Int)
 
   /** Sets [padding] to a different value per side. */
-  public fun padding(top: Int = 50, left: Int = 50, bottom: Int = 50, right: Int = 50)
+  public fun padding(top: Int, left: Int, bottom: Int, right: Int)
 }
 
 /** From running `d2 layout dagre` in the CLI */
