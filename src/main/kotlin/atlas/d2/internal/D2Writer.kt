@@ -24,12 +24,20 @@ internal class D2Writer(
   private var subgraphNestingLevel = 0
 
   override fun invoke(): String = buildIndentedString {
-    appendImports()
     appendProjects()
     appendLinks()
     appendLegend()
+    appendImports()
   }
 
+  /**
+   * Imported last, not first. Globs in the classes file - the ones [atlas.d2.D2GlobalPropsSpec]
+   * writes, for instance - are live: d2 re-runs them over the whole map every time a later key
+   * creates a field. Importing at the top means every project and every link replays them, which
+   * blows d2's 65536 work unit glob budget on any chart with a few dozen projects. Importing at the
+   * bottom leaves nothing for them to replay against, so they're applied exactly once. The rendered
+   * diagram is identical either way.
+   */
   private fun IndentedStringBuilder.appendImports() {
     appendLine("...@$pathToClassesFile")
   }
