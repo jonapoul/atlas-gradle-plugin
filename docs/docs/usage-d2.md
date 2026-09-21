@@ -163,7 +163,7 @@ atlas {
 }
 ```
 
-The D2 version to download. Unset by default, in which case Atlas may use `d2` from the PATH, and otherwise downloads the version this release of Atlas is tested against. Setting it means you want exactly that version, so the PATH is skipped and it's always downloaded, unless [`executableSource`](#executablesource) is `System`. D2 is downloaded from [its GitHub releases](https://github.com/d2lang/d2/releases) as a regular Gradle dependency, so it's cached in the Gradle user home and only downloaded once per version per machine. It also follows Gradle's usual rules for proxies, `--offline` and [dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html).
+The D2 version to download. Unset by default, in which case Atlas may use `d2` from the PATH, and otherwise downloads the version this release of Atlas is tested against. Setting it means you want exactly that version, so the PATH is skipped and it's always downloaded, unless [`executableSource`](#executablesource) is `Path`. D2 is downloaded from [its GitHub releases](https://github.com/d2lang/d2/releases) as a regular Gradle dependency, so it's cached in the Gradle user home and only downloaded once per version per machine. It also follows Gradle's usual rules for proxies, `--offline` and [dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html).
 
 Atlas adds an Ivy repository called `atlasD2Releases` to `dependencyResolutionManagement` for this. It only serves D2, and D2 is only fetched from it, so it doesn't change how anything else in your build resolves. Under Gradle's default `PREFER_PROJECT` repositories mode, a project that declares its own repositories ignores the settings ones, so Atlas adds the repository to those projects as well.
 
@@ -218,10 +218,10 @@ atlas {
 Where to find `d2` when [`d2Executable`](#d2executable) isn't set:
 
 - `Auto` (default): use `d2` from the system PATH if it's there, otherwise download it. If [`d2Version`](#d2version) is set, always download that version instead.
-- `System`: only use the system PATH, and never touch the network. [`d2Version`](#d2version) is ignored.
+- `Path`: only use the system PATH, and never touch the network. [`d2Version`](#d2version) is ignored.
 - `Download`: always download, using [`d2Version`](#d2version) if set. Best for CI, or anywhere the output is diffed, since D2's SVG output changes between releases.
 
-Also settable with the `atlas.d2.executableSource` Gradle property, e.g. `-Patlas.d2.executableSource=system`. With `--offline`, a build fails unless that D2 version is already in Gradle's cache.
+Also settable with the `atlas.d2.executableSource` Gradle property, e.g. `-Patlas.d2.executableSource=path`. With `--offline`, a build fails unless that D2 version is already in Gradle's cache.
 
 !!! note
 

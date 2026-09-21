@@ -857,7 +857,7 @@ public final class atlas/d2/ElkAlgorithm : java/lang/Enum, atlas/core/StringEnum
 public final class atlas/d2/ExecutableSource : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Auto Latlas/d2/ExecutableSource;
 	public static final field Download Latlas/d2/ExecutableSource;
-	public static final field System Latlas/d2/ExecutableSource;
+	public static final field Path Latlas/d2/ExecutableSource;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public fun getValue ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;

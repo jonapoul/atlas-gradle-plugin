@@ -214,7 +214,7 @@ public enum class ExecutableSource(override val value: String) : StringEnum {
   Auto("auto"),
 
   /** Only ever use `d2` from the system PATH, and never touch the network. */
-  System("system"),
+  Path("path"),
 
   /**
    * Always download D2, ignoring the system PATH. Uses [D2Spec.d2Version] if set. Best for CI, or

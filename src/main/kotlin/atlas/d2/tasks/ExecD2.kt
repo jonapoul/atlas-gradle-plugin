@@ -13,7 +13,7 @@ import atlas.d2.D2Spec
 import atlas.d2.ExecutableSource
 import atlas.d2.ExecutableSource.Auto
 import atlas.d2.ExecutableSource.Download
-import atlas.d2.ExecutableSource.System
+import atlas.d2.ExecutableSource.Path
 import atlas.d2.FileFormat
 import atlas.d2.internal.D2SpecImpl
 import atlas.d2.internal.DEFAULT_D2_VERSION
@@ -233,7 +233,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
         )
       val downloaded = downloadedD2(spec.d2Version.orElse(DEFAULT_D2_VERSION), config)
       val download = source.flatMap { s ->
-        if (s == System) providers.provider<RegularFile> { null } else downloaded
+        if (s == Path) providers.provider<RegularFile> { null } else downloaded
       }
       return explicit.orElse(onPath).orElse(download)
     }
