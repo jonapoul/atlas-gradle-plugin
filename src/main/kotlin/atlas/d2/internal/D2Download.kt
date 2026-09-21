@@ -28,7 +28,7 @@ import org.gradle.work.DisableCachingByDefault
  * tarball. Both results are cached in the Gradle user home, once per version and platform.
  */
 
-private const val D2_GROUP = "terrastruct"
+private const val D2_GROUP = "d2lang"
 private const val D2_MODULE = "d2"
 private const val TARBALL_TYPE = "tar.gz"
 private const val EXECUTABLE_TYPE = "d2-executable"
@@ -43,7 +43,7 @@ internal fun RepositoryHandler.d2Releases() {
     content.forRepository {
       ivy { repo ->
         repo.name = "atlasD2Releases"
-        repo.setUrl("https://github.com/terrastruct/d2/releases/download")
+        repo.setUrl("https://github.com/$D2_GROUP/$D2_MODULE/releases/download")
         repo.patternLayout { it.artifact("v[revision]/[module]-v[revision]-[classifier].[ext]") }
         repo.metadataSources { it.artifact() }
       }

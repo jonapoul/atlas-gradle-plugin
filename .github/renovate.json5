@@ -18,7 +18,9 @@
         "^(?<currentValue>\\S+)\\s*$",
       ],
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "terrastruct/d2",
+      "depNameTemplate": "d2lang/d2",
+      // The file holds a bare version, but D2 tags its releases with a v prefix
+      "extractVersionTemplate": "^v(?<version>.+)$",
     },
   ],
   "packageRules": [
