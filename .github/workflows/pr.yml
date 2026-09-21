@@ -60,6 +60,7 @@ jobs:
               - 'docs/**'
             docker:
               - 'docker/Dockerfile'
+              - 'config/d2.version'
 
   validate-renovate:
     needs: changed-files
@@ -169,6 +170,7 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: true
+          secrets: github_token=${{ secrets.GITHUB_TOKEN }}
           tags: ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.value }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

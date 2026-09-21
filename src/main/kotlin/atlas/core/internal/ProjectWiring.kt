@@ -1,5 +1,6 @@
 package atlas.core.internal
 
+import atlas.core.AtlasPlugin
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.CheckFileDiff
 import atlas.core.tasks.CollateProjectLinks
@@ -8,11 +9,48 @@ import atlas.core.tasks.WriteProjectLinks
 import atlas.core.tasks.WriteProjectTree
 import atlas.core.tasks.WriteProjectType
 import atlas.core.tasks.WriteReadme
+import atlas.d2.internal.d2Releases
+import atlas.d2.internal.downloadVersion
+import atlas.d2.internal.warnIfVersionIgnored
 import blueprint.core.isIntellijSyncing
 import org.gradle.api.Project
+import org.gradle.api.initialization.ProjectDescriptor
+import org.gradle.api.initialization.Settings
+import org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_PROJECT
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
+
+@Suppress("UnstableApiUsage")
+internal fun onSettingsEvaluated(
+  settings: Settings,
+  wiring: AtlasWiring,
+  extension: AtlasExtensionImpl,
+) {
+  val repositories = settings.dependencyResolutionManagement
+  val d2DownloadVersion =
+    if (D2 in extension.frameworks) extension.d2.downloadVersion(settings.providers) else null
+
+  wiring.config =
+    extension.snapshot(
+      rootDir = settings.rootDir,
+      subprojectPaths = chartedSubprojectPaths(settings.rootProject),
+      preferProjectRepositories = repositories.repositoriesMode.get() == PREFER_PROJECT,
+      d2DownloadVersion = d2DownloadVersion,
+    )
+
+  // Read here rather than on apply, since the settings script sets it after `plugins { }`
+  if (d2DownloadVersion != null) repositories.repositories.d2Releases()
+  extension.warnAboutConfig(AtlasPlugin.LOGGER)
+  if (D2 in extension.frameworks) extension.d2.warnIfVersionIgnored(AtlasPlugin.LOGGER)
+}
+
+private fun chartedSubprojectPaths(project: ProjectDescriptor): List<String> = buildList {
+  project.children.forEach { child ->
+    if (child.buildFile.exists()) add(child.path)
+    addAll(chartedSubprojectPaths(child))
+  }
+}
 
 internal fun wireProject(target: Project, wiring: AtlasWiring) {
   val context = AtlasContext(project = target, config = wiring.config, wiring = wiring)

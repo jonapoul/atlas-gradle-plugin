@@ -36,6 +36,8 @@ internal class AtlasConfig(
   val replacements: Set<Replacement>,
   val projectTypes: List<ProjectTypeMatcher>,
   val linkTypes: List<LinkType>,
+  val preferProjectRepositories: Boolean,
+  val d2DownloadVersion: String?,
 ) : Serializable
 
 /**
@@ -72,7 +74,12 @@ internal class AtlasWiring(
     }
 }
 
-internal fun AtlasExtensionImpl.snapshot(rootDir: File, subprojectPaths: List<String>) =
+internal fun AtlasExtensionImpl.snapshot(
+  rootDir: File,
+  subprojectPaths: List<String>,
+  preferProjectRepositories: Boolean,
+  d2DownloadVersion: String?,
+) =
   AtlasConfig(
     rootDir = rootDir,
     subprojectPaths = subprojectPaths,
@@ -88,6 +95,8 @@ internal fun AtlasExtensionImpl.snapshot(rootDir: File, subprojectPaths: List<St
     replacements = pathTransforms.replacements.get(),
     projectTypes = orderedProjectTypes().map(::projectTypeMatcher),
     linkTypes = orderedLinkTypes(),
+    preferProjectRepositories = preferProjectRepositories,
+    d2DownloadVersion = d2DownloadVersion,
   )
 
 private fun projectTypeMatcher(spec: ProjectTypeSpec) =

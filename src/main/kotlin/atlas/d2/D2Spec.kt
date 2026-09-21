@@ -18,8 +18,9 @@ import org.gradle.api.provider.Property
  *     animateLinks = true
  *     asciiMode = AsciiMode.Standard
  *     center = true
- *     d2Executable = file("/path/to/d2")
  *     direction = Direction.Down
+ *     executable = file("/path/to/d2")
+ *     executableSource = ExecutableSource.Download
  *     fileFormat = FileFormat.Svg
  *     groupLabelLocation = Location.Inside
  *     groupLabelPosition = Position.TopCenter
@@ -32,6 +33,7 @@ import org.gradle.api.provider.Property
  *     theme = Theme.ColorblindClear
  *     themeDark = Theme.DarkMauve
  *     timeout = 300
+ *     version = "0.9.0"
  *
  *     fonts {
  *       ...
@@ -94,20 +96,27 @@ public interface D2Spec : AtlasSpec {
   public val center: Property<Boolean>
 
   /**
-   * The `d2` executable to run. Defaults to the first `d2` found on the system PATH, so only set
-   * this if yours isn't on there.
-   *
-   * Also controlled by the `atlas.d2.d2Executable` Gradle property, which should be an absolute
-   * path.
-   */
-  public val d2Executable: RegularFileProperty
-
-  /**
    * The flow direction of the chart. Unset by default, so D2 uses [Direction.Down].
    *
    * Also controlled by the `atlas.d2.direction` Gradle property.
    */
   public val direction: Property<Direction>
+
+  /**
+   * The `d2` executable to run. Unset by default, so [executableSource] decides where it comes
+   * from. When set, it always wins.
+   *
+   * Also controlled by the `atlas.d2.executable` Gradle property, which should be an absolute path.
+   */
+  public val executable: RegularFileProperty
+
+  /**
+   * Where to find `d2` when [executable] isn't set. Defaults to [ExecutableSource.Auto], which uses
+   * the system PATH and falls back to a download, or always downloads if [version] is set.
+   *
+   * Also controlled by the `atlas.d2.executableSource` Gradle property.
+   */
+  public val executableSource: Property<ExecutableSource>
 
   /**
    * The format of the rendered chart file. Defaults to [FileFormat.Svg].
@@ -205,6 +214,18 @@ public interface D2Spec : AtlasSpec {
    * Also controlled by the `atlas.d2.timeout` Gradle property.
    */
   public val timeout: Property<Int>
+
+  /**
+   * The D2 version to download. Unset by default, so [executableSource] may use `d2` from the PATH,
+   * and otherwise downloads the version this release of Atlas is tested against.
+   *
+   * Setting it means you want exactly that version, so with the default [ExecutableSource.Auto] the
+   * PATH is skipped and this version is always downloaded. Downloads are cached in the Gradle user
+   * home.
+   *
+   * Also controlled by the `atlas.d2.version` Gradle property.
+   */
+  public val version: Property<String>
 
   /** Custom `.ttf` files to render the chart's text with. */
   public val fonts: D2FontsSpec

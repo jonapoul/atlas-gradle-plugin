@@ -9,7 +9,7 @@ internal object D2CliFlags : D2Scenario by D2Basic {
     projectTypes.useDefaults()
 
     d2 {
-      d2Executable = file("/bin/echo")
+      executable = file("/bin/echo")
       fileFormat = FileFormat.Ascii
       asciiMode = AsciiMode.Standard
       noXmlTag = true

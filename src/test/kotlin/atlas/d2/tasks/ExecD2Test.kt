@@ -9,13 +9,21 @@ import atlas.test.resolve
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2CliFlags
 import atlas.test.scenarios.D2CustomLayoutEngine
+import atlas.test.scenarios.D2FailOnProjectRepos
+import atlas.test.scenarios.D2PinnedVersion
+import atlas.test.scenarios.D2WithProjectRepositories
+import atlas.test.scenarios.GroovyD2PreferSettings
+import blueprint.test.Scenario as RunningScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
 import blueprint.test.childExists
 import blueprint.test.outputContains
+import blueprint.test.outputDoesNotContain
 import blueprint.test.taskHadResult
 import blueprint.test.withArgument
+import blueprint.test.withGradleProperty
+import java.io.File
 import kotlin.test.Test
 
 internal class ExecD2Test : ScenarioTest() {
@@ -94,7 +102,7 @@ internal class ExecD2Test : ScenarioTest() {
       // Third run setting a property to change the classes file - classes are written, chart is not
       // but the output file is regenerated
       assertThatTask(":a:execD2Chart")
-        .withArgument("-Patlas.d2.theme=7")
+        .withGradleProperty("atlas.d2.theme", 7)
         .buildsSuccessfully()
         .taskHadResult(":writeD2Classes", SUCCESS)
         .taskHadResult(":a:writeD2Chart", UP_TO_DATE)
@@ -122,4 +130,60 @@ internal class ExecD2Test : ScenarioTest() {
         // only used for SVGs
         .doesNotContain("--no-xml-tag")
     }
+
+  @Test
+  fun `Download d2 instead of using the PATH`() = runScenario(D2Basic) { assertD2Downloaded() }
+
+  @Test
+  fun `Download d2 when its version is set`() =
+    runScenario(D2PinnedVersion) { assertD2Downloaded(source = "auto") }
+
+  @Test
+  fun `Download d2 when settings repositories are preferred`() =
+    runScenario(GroovyD2PreferSettings) { assertD2Downloaded() }
+
+  @Test
+  @RequiresD2
+  fun `Use d2 from the PATH by default`() =
+    runScenario(D2Basic) {
+      assertThatTask(":a:execD2Chart")
+        .withArgument("--info")
+        .buildsSuccessfully()
+        .outputContains("Starting d2: '[${d2OnPath()}")
+        .outputDoesNotContain("/transformed/d2")
+    }
+
+  private fun d2OnPath(): String =
+    System.getenv("PATH")
+      .split(File.pathSeparator)
+      .map { File(it, "d2") }
+      .first { it.isFile && it.canExecute() }
+      .absolutePath
+
+  @Test
+  fun `Download d2 when projects declare their own repositories`() =
+    runScenario(D2WithProjectRepositories) { assertD2Downloaded() }
+
+  @Test
+  fun `Download d2 when project repositories are forbidden`() =
+    runScenario(D2FailOnProjectRepos) { assertD2Downloaded() }
+
+  private fun RunningScenario.assertD2Downloaded(source: String = "download") {
+    // when
+    assertThatTask(":a:execD2Chart")
+      .withGradleProperty("atlas.d2.executableSource", source)
+      .withArgument("--info")
+      .buildsSuccessfully()
+      .taskHadResult(":a:execD2Chart", SUCCESS)
+      // then the binary unpacked from the download ran, not whatever's on the PATH
+      .outputContains("/transformed/d2")
+
+    assertThat(rootDir).childExists("a/chart-d2.svg")
+
+    // and a second run is up to date
+    assertThatTask(":a:execD2Chart")
+      .withGradleProperty("atlas.d2.executableSource", source)
+      .buildsSuccessfully()
+      .taskHadResult(":a:execD2Chart", UP_TO_DATE)
+  }
 }
