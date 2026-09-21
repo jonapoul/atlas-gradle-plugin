@@ -36,9 +36,6 @@ internal class AtlasConfig(
   val replacements: Set<Replacement>,
   val projectTypes: List<ProjectTypeMatcher>,
   val linkTypes: List<LinkType>,
-  // Under RepositoriesMode.PREFER_PROJECT, a project declaring any repositories ignores the
-  // settings
-  // ones, so repositories Atlas needs have to be added to that project as well
   val preferProjectRepositories: Boolean,
 ) : Serializable
 
