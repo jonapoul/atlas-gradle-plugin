@@ -78,3 +78,17 @@ internal object D2DownloadPrintingRepositories : D2Scenario by D2Basic {
     """
       .trimIndent()
 }
+
+/** Pins a version that can never be downloaded, which is worth a warning. */
+internal object D2PathWithVersion : D2Scenario by D2Basic {
+  override val atlasConfig =
+    """
+    projectTypes.useDefaults()
+
+    d2 {
+      executableSource = ExecutableSource.Path
+      d2Version = "0.7.1"
+    }
+    """
+      .trimIndent()
+}

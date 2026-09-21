@@ -2,6 +2,7 @@ package atlas.d2.internal
 
 import atlas.core.internal.ATLAS_CONFIGURATION_PREFIX
 import atlas.core.internal.AtlasConfig
+import atlas.d2.D2Spec
 import atlas.d2.ExecutableSource
 import atlas.d2.ExecutableSource.Download
 import atlas.d2.ExecutableSource.Path
@@ -19,6 +20,7 @@ import org.gradle.api.artifacts.transform.TransformParameters
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE
 import org.gradle.api.file.FileSystemLocation
 import org.gradle.api.file.RegularFile
+import org.gradle.api.logging.Logger
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.PathSensitive
@@ -67,6 +69,21 @@ internal fun D2SpecImpl.downloadVersion(providers: ProviderFactory): String? =
     pinned = d2Version.orNull,
     onPath = { providers.d2OnPath().isPresent },
   )
+
+/** [D2Spec.d2Version] only picks what gets downloaded, so say when nothing will be. */
+internal fun D2SpecImpl.warnIfVersionIgnored(logger: Logger) {
+  val version = d2Version.orNull ?: return
+  val reason =
+    when {
+      d2Executable.isPresent || properties.d2Executable.isPresent -> "d2Executable is also set"
+      executableSource.get() == Path -> "executableSource is Path"
+      else -> return
+    }
+  logger.warn(
+    "Warning: d2Version is set to $version, but $reason, so it's ignored and nothing is " +
+      "downloaded. Remove d2Version, or set executableSource to Auto or Download."
+  )
+}
 
 /**
  * An explicit `d2` always wins. Otherwise [ExecutableSource.Auto] prefers the PATH, unless a

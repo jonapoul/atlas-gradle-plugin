@@ -11,6 +11,7 @@ import atlas.core.tasks.WriteProjectType
 import atlas.core.tasks.WriteReadme
 import atlas.d2.internal.d2Releases
 import atlas.d2.internal.downloadVersion
+import atlas.d2.internal.warnIfVersionIgnored
 import blueprint.core.isIntellijSyncing
 import org.gradle.api.Project
 import org.gradle.api.initialization.ProjectDescriptor
@@ -41,6 +42,7 @@ internal fun onSettingsEvaluated(
   // Read here rather than on apply, since the settings script sets it after `plugins { }`
   if (d2DownloadVersion != null) repositories.repositories.d2Releases()
   extension.warnAboutConfig(AtlasPlugin.LOGGER)
+  if (D2 in extension.frameworks) extension.d2.warnIfVersionIgnored(AtlasPlugin.LOGGER)
 }
 
 private fun chartedSubprojectPaths(project: ProjectDescriptor): List<String> = buildList {
