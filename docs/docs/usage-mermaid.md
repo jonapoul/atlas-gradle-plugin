@@ -10,7 +10,7 @@ icon: simple/mermaid
 
 Mermaid is a JavaScript-based diagramming and charting tool that renders Markdown-inspired text definitions to create diagrams dynamically. [See here for the official Mermaid docs](https://mermaid.js.org/) or [here for an online playground](https://mermaid.live/).
 
-Unlike Graphviz, and D2 unless Atlas downloads it for you, Mermaid diagrams don't need any external executable. They're rendered directly in Markdown viewers like GitHub, GitLab, and many IDEs including IntelliJ IDEA. This makes Mermaid diagrams highly portable and easy to share.
+Mermaid needs no executable at all, unlike Graphviz, which needs `dot` installed, and D2, which Atlas downloads if it isn't. Mermaid diagrams are rendered directly in Markdown viewers like GitHub, GitLab, and many IDEs including IntelliJ IDEA. This makes Mermaid diagrams highly portable and easy to share.
 
 Mermaid-specific configuration is performed from the `mermaid { }` block within the base `atlas` extension function:
 
