@@ -2,6 +2,9 @@ package atlas.d2.internal
 
 import atlas.core.internal.ATLAS_CONFIGURATION_PREFIX
 import atlas.core.internal.AtlasConfig
+import atlas.d2.ExecutableSource
+import atlas.d2.ExecutableSource.Download
+import atlas.d2.ExecutableSource.Path
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -17,6 +20,7 @@ import org.gradle.api.artifacts.type.ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIB
 import org.gradle.api.file.FileSystemLocation
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity.NONE
 import org.gradle.work.DisableCachingByDefault
@@ -53,13 +57,46 @@ internal fun RepositoryHandler.d2Releases() {
 }
 
 /**
- * The `d2` binary for this machine, at [version]. Nothing is downloaded unless the returned
- * provider is actually queried, which only happens when no other `d2` was found.
+ * Which D2 version to download, or null if `d2` comes from somewhere else. Decided once from
+ * settings, so that builds which never download get no repository or configuration for it.
  */
-internal fun Project.downloadedD2(
-  version: Provider<String>,
-  config: AtlasConfig,
-): Provider<RegularFile> {
+internal fun D2SpecImpl.downloadVersion(providers: ProviderFactory): String? =
+  d2DownloadVersion(
+    explicit = d2Executable.isPresent || properties.d2Executable.isPresent,
+    source = executableSource.get(),
+    pinned = d2Version.orNull,
+    onPath = { providers.d2OnPath().isPresent },
+  )
+
+/**
+ * An explicit `d2` always wins. Otherwise [ExecutableSource.Auto] prefers the PATH, unless a
+ * version was set, since that means the user wants exactly that version.
+ */
+internal fun d2DownloadVersion(
+  explicit: Boolean,
+  source: ExecutableSource,
+  pinned: String?,
+  onPath: () -> Boolean,
+): String? =
+  when {
+    explicit -> null
+    source == Path -> null
+    source == Download || pinned != null -> pinned ?: DEFAULT_D2_VERSION
+    onPath() -> null
+    else -> DEFAULT_D2_VERSION
+  }
+
+internal fun ProviderFactory.d2OnPath(): Provider<File> =
+  environmentVariable("PATH").flatMap { path ->
+    provider {
+      path
+        .split(File.pathSeparator)
+        .flatMap { dir -> listOf(File(dir, "d2"), File(dir, "d2.exe")) }
+        .firstOrNull { it.isFile && it.canExecute() }
+    }
+  }
+
+internal fun Project.downloadedD2(version: String, config: AtlasConfig): Provider<RegularFile> {
   val resolvable =
     if (CONFIGURATION_NAME in configurations.names) {
       configurations.named(CONFIGURATION_NAME)
@@ -89,24 +126,18 @@ private fun Project.addD2Releases(config: AtlasConfig) {
   afterEvaluate { if (repositories.isNotEmpty()) repositories.d2Releases() }
 }
 
-private fun Project.registerD2Configuration(version: Provider<String>) = run {
+private fun Project.registerD2Configuration(version: String) = run {
   dependencies.registerTransform(UnpackD2::class.java) { spec ->
     spec.from.attribute(ARTIFACT_TYPE_ATTRIBUTE, TARBALL_TYPE)
     spec.to.attribute(ARTIFACT_TYPE_ATTRIBUTE, EXECUTABLE_TYPE)
   }
 
   val scope = configurations.dependencyScope("${CONFIGURATION_NAME}Dependencies")
-  scope.configure { configuration ->
-    // Only picks the platform once resolved, so an unsupported one fails only if it downloads
-    configuration.dependencies.addLater(
-      version.map { v ->
-        val platform = D2Platform.current()
-        dependencies.create(
-          "$D2_GROUP:$D2_MODULE:${v.removePrefix("v")}:${platform.id}@$TARBALL_TYPE"
-        )
-      }
-    )
-  }
+  val platform = D2Platform.current()
+  dependencies.add(
+    scope.name,
+    "$D2_GROUP:$D2_MODULE:${version.removePrefix("v")}:${platform.id}@$TARBALL_TYPE",
+  )
 
   configurations.resolvable(CONFIGURATION_NAME) { it.extendsFrom(scope.get()) }
 }

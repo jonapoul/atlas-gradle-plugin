@@ -165,7 +165,7 @@ atlas {
 
 The D2 version to download. Unset by default, in which case Atlas may use `d2` from the PATH, and otherwise downloads the version this release of Atlas is tested against. Setting it means you want exactly that version, so the PATH is skipped and it's always downloaded, unless [`executableSource`](#executablesource) is `Path`. D2 is downloaded from [its GitHub releases](https://github.com/d2lang/d2/releases) as a regular Gradle dependency, so it's cached in the Gradle user home and only downloaded once per version per machine. It also follows Gradle's usual rules for proxies, `--offline` and [dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html).
 
-Atlas adds an Ivy repository called `atlasD2Releases` to `dependencyResolutionManagement` for this. It only serves D2, and D2 is only fetched from it, so it doesn't change how anything else in your build resolves. Under Gradle's default `PREFER_PROJECT` repositories mode, a project that declares its own repositories ignores the settings ones, so Atlas adds the repository to those projects as well.
+When a download is needed, Atlas adds an Ivy repository called `atlasD2Releases` to `dependencyResolutionManagement` for it. Builds that use a `d2` from the PATH or [`d2Executable`](#d2executable) get no repository at all. It only serves D2, and D2 is only fetched from it, so it doesn't change how anything else in your build resolves. Under Gradle's default `PREFER_PROJECT` repositories mode, a project that declares its own repositories ignores the settings ones, so Atlas adds the repository to those projects as well.
 
 !!! info "Dependency verification"
 

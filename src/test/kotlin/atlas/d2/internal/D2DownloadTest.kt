@@ -3,7 +3,13 @@ package atlas.d2.internal
 import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
 import assertk.assertions.isInstanceOf
+import assertk.assertions.isNull
+import atlas.d2.ExecutableSource
+import atlas.d2.ExecutableSource.Auto
+import atlas.d2.ExecutableSource.Download
+import atlas.d2.ExecutableSource.Path
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.io.path.createTempDirectory
@@ -11,6 +17,49 @@ import kotlin.test.Test
 import org.gradle.api.GradleException
 
 internal class D2DownloadTest {
+  @Test
+  fun `An explicit executable never downloads`() {
+    ExecutableSource.entries.forEach { source ->
+      assertThat(version(explicit = true, source = source, pinned = "0.7.1", onPath = false))
+        .isNull()
+    }
+  }
+
+  @Test
+  fun `Path never downloads`() {
+    assertThat(version(source = Path, pinned = "0.7.1", onPath = false)).isNull()
+    assertThat(version(source = Path, onPath = false)).isNull()
+  }
+
+  @Test
+  fun `Download always downloads, preferring the pinned version`() {
+    assertThat(version(source = Download, onPath = true)).isEqualTo(DEFAULT_D2_VERSION)
+    assertThat(version(source = Download, pinned = "0.7.1", onPath = true)).isEqualTo("0.7.1")
+  }
+
+  @Test
+  fun `Auto uses the PATH unless a version is pinned`() {
+    assertThat(version(source = Auto, onPath = true)).isNull()
+    assertThat(version(source = Auto, onPath = false)).isEqualTo(DEFAULT_D2_VERSION)
+    assertThat(version(source = Auto, pinned = "0.7.1", onPath = true)).isEqualTo("0.7.1")
+  }
+
+  @Test
+  fun `Only searches the PATH when it could matter`() {
+    var searched = false
+    d2DownloadVersion(explicit = false, source = Download, pinned = null) {
+      true.also { searched = true }
+    }
+    assertThat(searched).isFalse()
+  }
+
+  private fun version(
+    explicit: Boolean = false,
+    source: ExecutableSource,
+    pinned: String? = null,
+    onPath: Boolean,
+  ) = d2DownloadVersion(explicit, source, pinned) { onPath }
+
   @Test
   fun `Maps JVM platform names to D2 archive names`() {
     assertThat(D2Platform.of("Linux", "amd64").id).isEqualTo("linux-amd64")

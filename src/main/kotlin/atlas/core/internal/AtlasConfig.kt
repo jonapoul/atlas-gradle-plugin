@@ -37,6 +37,8 @@ internal class AtlasConfig(
   val projectTypes: List<ProjectTypeMatcher>,
   val linkTypes: List<LinkType>,
   val preferProjectRepositories: Boolean,
+  // Null when no project needs D2 downloaded, so Atlas adds no repository or configuration for it
+  val d2DownloadVersion: String?,
 ) : Serializable
 
 /**
@@ -77,6 +79,7 @@ internal fun AtlasExtensionImpl.snapshot(
   rootDir: File,
   subprojectPaths: List<String>,
   preferProjectRepositories: Boolean,
+  d2DownloadVersion: String?,
 ) =
   AtlasConfig(
     rootDir = rootDir,
@@ -94,6 +97,7 @@ internal fun AtlasExtensionImpl.snapshot(
     projectTypes = orderedProjectTypes().map(::projectTypeMatcher),
     linkTypes = orderedLinkTypes(),
     preferProjectRepositories = preferProjectRepositories,
+    d2DownloadVersion = d2DownloadVersion,
   )
 
 private fun projectTypeMatcher(spec: ProjectTypeSpec) =

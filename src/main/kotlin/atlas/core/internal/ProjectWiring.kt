@@ -10,6 +10,7 @@ import atlas.core.tasks.WriteProjectTree
 import atlas.core.tasks.WriteProjectType
 import atlas.core.tasks.WriteReadme
 import atlas.d2.internal.d2Releases
+import atlas.d2.internal.downloadVersion
 import blueprint.core.isIntellijSyncing
 import org.gradle.api.Project
 import org.gradle.api.initialization.ProjectDescriptor
@@ -26,15 +27,19 @@ internal fun onSettingsEvaluated(
   extension: AtlasExtensionImpl,
 ) {
   val repositories = settings.dependencyResolutionManagement
+  val d2DownloadVersion =
+    if (D2 in extension.frameworks) extension.d2.downloadVersion(settings.providers) else null
+
   wiring.config =
     extension.snapshot(
       rootDir = settings.rootDir,
       subprojectPaths = chartedSubprojectPaths(settings.rootProject),
       preferProjectRepositories = repositories.repositoriesMode.get() == PREFER_PROJECT,
+      d2DownloadVersion = d2DownloadVersion,
     )
 
   // Read here rather than on apply, since the settings script sets it after `plugins { }`
-  if (D2 in extension.frameworks) repositories.repositories.d2Releases()
+  if (d2DownloadVersion != null) repositories.repositories.d2Releases()
   extension.warnAboutConfig(AtlasPlugin.LOGGER)
 }
 

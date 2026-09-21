@@ -9,14 +9,9 @@ import atlas.core.internal.singleFile
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.TaskWithOutputFile
 import atlas.d2.AsciiMode
-import atlas.d2.D2Spec
-import atlas.d2.ExecutableSource
-import atlas.d2.ExecutableSource.Auto
-import atlas.d2.ExecutableSource.Download
-import atlas.d2.ExecutableSource.Path
 import atlas.d2.FileFormat
 import atlas.d2.internal.D2SpecImpl
-import atlas.d2.internal.DEFAULT_D2_VERSION
+import atlas.d2.internal.d2OnPath
 import atlas.d2.internal.downloadedD2
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -180,7 +175,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
       with(target) {
         val name = "execD2$variant"
         val execD2 = tasks.register(name, ExecD2::class.java)
-        // Outside configure {}, since the download wiring needs an afterEvaluate hook
+        // Outside configure {}, since the download wiring may need an afterEvaluate hook
         val d2Executable = d2Executable(spec, config)
 
         execD2.configure { task ->
@@ -218,36 +213,15 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
       }
 
     /**
-     * The explicitly configured `d2` always wins. Otherwise [ExecutableSource] decides between the
-     * one on the PATH and a download, which is only resolved when the PATH didn't have one. Setting
-     * [D2Spec.d2Version] means the user wants that version, so [Auto] skips the PATH for it.
+     * The explicitly configured `d2` always wins. Otherwise it's the one on the PATH, or a download
+     * if settings decided one is needed. See [atlas.d2.internal.d2DownloadVersion].
      */
     private fun Project.d2Executable(spec: D2SpecImpl, config: AtlasConfig): Provider<RegularFile> {
-      val source = spec.executableSource
       val explicit = spec.d2Executable.orElse(layout.file(spec.properties.d2Executable.map(::File)))
-      val isPinned = spec.d2Version.map { true }.orElse(false)
-      val skipPath = source.zip(isPinned) { s, pinned -> s == Download || (s == Auto && pinned) }
-      val onPath =
-        layout.file(
-          skipPath.flatMap { skip -> if (skip) providers.provider<File> { null } else d2OnPath() }
-        )
-      val downloaded = downloadedD2(spec.d2Version.orElse(DEFAULT_D2_VERSION), config)
-      val download = source.flatMap { s ->
-        if (s == Path) providers.provider<RegularFile> { null } else downloaded
-      }
-      return explicit.orElse(onPath).orElse(download)
+      val version = config.d2DownloadVersion
+      val fallback =
+        if (version == null) layout.file(providers.d2OnPath()) else downloadedD2(version, config)
+      return explicit.orElse(fallback)
     }
-
-    // Resolved up front rather than leaving it to exec, so the binary is a task input and a
-    // different d2 version invalidates the cached chart.
-    private fun Project.d2OnPath(): Provider<File> =
-      providers.environmentVariable("PATH").flatMap { path ->
-        providers.provider {
-          path
-            .split(File.pathSeparator)
-            .flatMap { dir -> listOf(File(dir, "d2"), File(dir, "d2.exe")) }
-            .firstOrNull { it.isFile && it.canExecute() }
-        }
-      }
   }
 }

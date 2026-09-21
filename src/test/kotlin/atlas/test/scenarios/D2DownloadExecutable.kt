@@ -45,3 +45,36 @@ internal object D2DownloadWithProjectRepositories : D2Scenario by D2DownloadExec
 internal object D2DownloadFailOnProjectRepos : D2Scenario by D2DownloadExecutable {
   override val repositoriesMode = "FAIL_ON_PROJECT_REPOS"
 }
+
+private const val PRINT_REPOSITORIES =
+  """
+  gradle.settingsEvaluated {
+    println("Settings repositories: " + dependencyResolutionManagement.repositories.names)
+  }
+  """
+
+/** Never downloads, so Atlas shouldn't add its repository. */
+internal object D2PathOnly : D2Scenario by D2Basic {
+  override val atlasConfig =
+    """
+    projectTypes.useDefaults()
+
+    d2 {
+      executableSource = ExecutableSource.Path
+    }
+
+    $PRINT_REPOSITORIES
+    """
+      .trimIndent()
+}
+
+/** Always downloads, so Atlas adds its repository. */
+internal object D2DownloadPrintingRepositories : D2Scenario by D2Basic {
+  override val atlasConfig =
+    """
+    ${D2DownloadExecutable.atlasConfig}
+
+    $PRINT_REPOSITORIES
+    """
+      .trimIndent()
+}
