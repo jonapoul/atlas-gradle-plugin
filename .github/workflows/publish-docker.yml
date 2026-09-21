@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - "docker/Dockerfile"
+      - "config/d2.version"
       - ".github/workflows/publish-docker.yml"
   workflow_dispatch:
 

@@ -19,7 +19,9 @@ import org.gradle.api.provider.Property
  *     asciiMode = AsciiMode.Standard
  *     center = true
  *     d2Executable = file("/path/to/d2")
+ *     d2Version = "0.9.0"
  *     direction = Direction.Down
+ *     executableSource = ExecutableSource.Download
  *     fileFormat = FileFormat.Svg
  *     groupLabelLocation = Location.Inside
  *     groupLabelPosition = Position.TopCenter
@@ -94,8 +96,8 @@ public interface D2Spec : AtlasSpec {
   public val center: Property<Boolean>
 
   /**
-   * The `d2` executable to run. Defaults to the first `d2` found on the system PATH, so only set
-   * this if yours isn't on there.
+   * The `d2` executable to run. Unset by default, so [executableSource] decides where it comes
+   * from. When set, it always wins.
    *
    * Also controlled by the `atlas.d2.d2Executable` Gradle property, which should be an absolute
    * path.
@@ -103,11 +105,27 @@ public interface D2Spec : AtlasSpec {
   public val d2Executable: RegularFileProperty
 
   /**
+   * The D2 version to download, when [executableSource] needs to. Defaults to the version this
+   * release of Atlas is tested against. Downloads are cached in the Gradle user home.
+   *
+   * Also controlled by the `atlas.d2.d2Version` Gradle property.
+   */
+  public val d2Version: Property<String>
+
+  /**
    * The flow direction of the chart. Unset by default, so D2 uses [Direction.Down].
    *
    * Also controlled by the `atlas.d2.direction` Gradle property.
    */
   public val direction: Property<Direction>
+
+  /**
+   * Where to find `d2` when [d2Executable] isn't set. Defaults to [ExecutableSource.Auto], which
+   * uses the system PATH and falls back to downloading [d2Version].
+   *
+   * Also controlled by the `atlas.d2.executableSource` Gradle property.
+   */
+  public val executableSource: Property<ExecutableSource>
 
   /**
    * The format of the rendered chart file. Defaults to [FileFormat.Svg].

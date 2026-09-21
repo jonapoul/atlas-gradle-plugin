@@ -744,7 +744,9 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getCenter ()Lorg/gradle/api/provider/Property;
 	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getD2Version ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDirection ()Lorg/gradle/api/provider/Property;
+	public abstract fun getExecutableSource ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFileFormat ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFonts ()Latlas/d2/D2FontsSpec;
 	public abstract fun getGlobalProps ()Latlas/d2/D2GlobalPropsSpec;
@@ -850,6 +852,17 @@ public final class atlas/d2/ElkAlgorithm : java/lang/Enum, atlas/core/StringEnum
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkAlgorithm;
 	public static fun values ()[Latlas/d2/ElkAlgorithm;
+}
+
+public final class atlas/d2/ExecutableSource : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Auto Latlas/d2/ExecutableSource;
+	public static final field Download Latlas/d2/ExecutableSource;
+	public static final field System Latlas/d2/ExecutableSource;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ExecutableSource;
+	public static fun values ()[Latlas/d2/ExecutableSource;
 }
 
 public final class atlas/d2/FileFormat : java/lang/Enum, atlas/core/StringEnum {
@@ -1037,7 +1050,9 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public abstract fun getClassesFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getCliArguments ()Lorg/gradle/api/provider/MapProperty;
 	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getD2Version ()Lorg/gradle/api/provider/Property;
 	public fun getDescription ()Ljava/lang/String;
+	public abstract fun getDownloadDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 	public abstract fun getFontBold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontItalic ()Lorg/gradle/api/file/RegularFileProperty;
@@ -1049,6 +1064,7 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public abstract fun getFontSemibold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getInputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getNoXmlTag ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOffline ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOmitVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getOutputFormat ()Lorg/gradle/api/provider/Property;

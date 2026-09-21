@@ -9,7 +9,9 @@ import atlas.core.internal.singleFile
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.TaskWithOutputFile
 import atlas.d2.AsciiMode
+import atlas.d2.ExecutableSource
 import atlas.d2.FileFormat
+import atlas.d2.internal.D2Downloader
 import atlas.d2.internal.D2SpecImpl
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -17,6 +19,7 @@ import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
@@ -25,6 +28,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
@@ -33,8 +37,8 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.process.ExecOperations
 
 /**
- * Executes `d2` with the configured inputs to generate an image file. Requires D2 to be
- * pre-installed.
+ * Executes `d2` with the configured inputs to generate an image file. Uses [d2Executable] if set,
+ * otherwise downloads [d2Version].
  *
  * Just so I don't forget, [classesFile] is only used to force regeneration if the classes file
  * updates, since we don't directly read it in this task.
@@ -78,6 +82,10 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   public abstract val cliArguments: MapProperty<String, String>
   @get:[PathSensitive(NONE) InputFile Optional]
   public abstract val d2Executable: RegularFileProperty
+  @get:[Input Optional]
+  public abstract val d2Version: Property<String>
+  @get:Internal public abstract val downloadDirectory: DirectoryProperty
+  @get:Internal public abstract val offline: Property<Boolean>
   @get:OutputFile abstract override val outputFile: RegularFileProperty
   @get:Inject public abstract val execOperations: ExecOperations
 
@@ -94,7 +102,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   public fun execute() {
     val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
-    val executable = d2Executable.orNull?.asFile?.absolutePath ?: "d2"
+    val executable = resolveExecutable()
     val cliArguments = cliArguments.getOrElse(emptyMap()).toMutableMap()
 
     // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
@@ -157,6 +165,15 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     logIfConfigured(outputFile)
   }
 
+  private fun resolveExecutable(): String {
+    d2Executable.orNull?.let {
+      return it.asFile.absolutePath
+    }
+    val version = d2Version.orNull ?: return "d2"
+    return D2Downloader.executable(version, downloadDirectory.get().asFile, offline.get())
+      .absolutePath
+  }
+
   internal companion object {
     internal fun get(target: Project, name: String): TaskProvider<ExecD2> =
       target.tasks.named(name, ExecD2::class.java)
@@ -182,11 +199,31 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
           task.classesFile.fileProvider(classesFile.singleFile(D2Classes))
           task.dependsOn(classesFile)
           task.inputFile.convention(d2File)
-          task.d2Executable.convention(
+          val source = spec.executableSource
+          val executable =
             spec.d2Executable.orElse(
-              layout.file(spec.properties.d2Executable.map(::File).orElse(d2OnPath()))
+              layout.file(
+                spec.properties.d2Executable
+                  .map(::File)
+                  .orElse(
+                    source.flatMap {
+                      if (it == ExecutableSource.Download) providers.provider<File> { null }
+                      else d2OnPath()
+                    }
+                  )
+              )
             )
+          task.d2Executable.convention(executable)
+          task.d2Version.convention(
+            providers.provider {
+              if (executable.isPresent || source.get() == ExecutableSource.System) null
+              else spec.d2Version.get()
+            }
           )
+          task.downloadDirectory.convention(
+            layout.projectDirectory.dir(gradle.gradleUserHomeDir.resolve("caches/atlas/d2").path)
+          )
+          task.offline.convention(gradle.startParameter.isOffline)
           task.outputFormat.convention(spec.fileFormat)
           task.outputFile.convention(layout.file(imageFile))
           task.cliArguments.convention(spec.layoutEngine.properties)

@@ -8,15 +8,17 @@
   ],
   "customManagers": [
     {
-      // d2 is installed from a shell script rather than a package manager, so its version is pinned in the Dockerfile
-      // and read from here. Left unpinned, an image rebuild silently changes the SVGs that CI diffs the samples against.
+      // config/d2.version holds nothing but the version. It feeds both the version Atlas downloads by default and
+      // docker/Dockerfile.
       "customType": "regex",
       "managerFilePatterns": [
-        "/^docker/Dockerfile$/",
+        "/^config/d2\\.version$/",
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+ENV D2_VERSION=(?<currentValue>\\S+)",
+        "^(?<currentValue>\\S+)\\s*$",
       ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "terrastruct/d2",
     },
   ],
   "packageRules": [

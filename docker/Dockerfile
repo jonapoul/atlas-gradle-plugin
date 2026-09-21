@@ -10,10 +10,13 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # https://d2lang.com/tour/install/
-# Pinned because d2's SVG output changes between releases, and the committed samples are diffed in CI.
-# renovate: datasource=github-releases depName=d2lang/d2
-ENV D2_VERSION=v0.9.0
-RUN curl -fsSL https://d2lang.com/install.sh | sh -s -- --version $D2_VERSION
+# Pinned in config/d2.version, since d2's SVG output changes between releases and the committed
+# samples are diffed in CI. The same file sets the version Atlas downloads by default.
+COPY config/d2.version /tmp/d2.version
+RUN D2_VERSION="$(tr -d '[:space:]' < /tmp/d2.version)" \
+  && test -n "$D2_VERSION" \
+  && curl -fsSL https://d2lang.com/install.sh | sh -s -- --version "v$D2_VERSION" \
+  && rm /tmp/d2.version
 
 WORKDIR /atlas
 CMD ["/bin/bash"]

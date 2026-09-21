@@ -8,7 +8,7 @@ icon: lucide/columns-2
 
 ## Overview
 
-See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). Generating D2 charts requires an existing installation of the `d2` executable on the system PATH. If it's not on the PATH, you can use the [`d2Executable`](#d2executable) config option.
+See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). By default Atlas uses `d2` from the system PATH, and downloads it if it's not there. See [`executableSource`](#executablesource) to change that.
 
 [See here for D2 installation steps](https://d2lang.com/tour/install/).
 
@@ -28,7 +28,9 @@ atlas {
     asciiMode = AsciiMode.Standard
     center = true
     d2Executable = file("/path/to/d2")
+    d2Version = "0.9.0"
     direction = Direction.Down
+    executableSource = ExecutableSource.Auto
     fileFormat = FileFormat.Svg
     groupLabelLocation = Location.Inside
     groupLabelPosition = Position.TopCenter
@@ -149,7 +151,19 @@ atlas {
 }
 ```
 
-By default, Atlas will try to call `d2` from the system path. Use this to call from a custom installation directory instead.
+Use a specific `d2` executable. When set, this always wins over [`executableSource`](#executablesource).
+
+### d2Version
+
+``` kotlin
+atlas {
+  d2 {
+    d2Version = "0.9.0"
+  }
+}
+```
+
+The D2 version to download, when [`executableSource`](#executablesource) needs one. Defaults to the version this release of Atlas is tested against. Downloads come from [D2's GitHub releases](https://github.com/terrastruct/d2/releases) and are cached in `~/.gradle/caches/atlas/d2/`, so each version is only downloaded once per machine.
 
 ### direction
 
@@ -184,6 +198,28 @@ Sets the flow direction of the dependency chart. Defaults to `Direction.Down`.
     <figcaption>Direction.Right</figcaption>
   </figure>
 </div>
+
+### executableSource
+
+``` kotlin
+atlas {
+  d2 {
+    executableSource = ExecutableSource.Download
+  }
+}
+```
+
+Where to find `d2` when [`d2Executable`](#d2executable) isn't set:
+
+- `Auto` (default): use `d2` from the system PATH if it's there, otherwise download [`d2Version`](#d2version).
+- `System`: only use the system PATH, and never touch the network.
+- `Download`: always download [`d2Version`](#d2version). Best for CI, or anywhere the output is diffed, since D2's SVG output changes between releases.
+
+Also settable with the `atlas.d2.executableSource` Gradle property, e.g. `-Patlas.d2.executableSource=system`. Gradle's `--offline` mode is respected, so an offline build fails unless the version is already cached.
+
+!!! note
+
+    If you set [`d2Version`](#d2version) older than 0.9.0, PNG, PDF, PPTX and GIF output need a Chromium download that D2 can't do from inside a Gradle build. See [`fileFormat`](#fileformat).
 
 ### fileFormat
 
