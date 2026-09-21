@@ -32,6 +32,7 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: true
+          secrets: github_token=${{ secrets.GITHUB_TOKEN }}
           tags: ghcr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
