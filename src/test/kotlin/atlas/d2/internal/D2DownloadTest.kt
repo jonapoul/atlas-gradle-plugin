@@ -58,7 +58,7 @@ internal class D2DownloadTest {
     source: ExecutableSource,
     pinned: String? = null,
     onPath: Boolean,
-  ) = d2DownloadVersion(explicit, source, pinned) { onPath }
+  ) = d2DownloadVersion(explicit = explicit, source = source, pinned = pinned, onPath = { onPath })
 
   @Test
   fun `Maps JVM platform names to D2 archive names`() {

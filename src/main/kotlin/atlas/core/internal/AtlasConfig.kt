@@ -37,7 +37,6 @@ internal class AtlasConfig(
   val projectTypes: List<ProjectTypeMatcher>,
   val linkTypes: List<LinkType>,
   val preferProjectRepositories: Boolean,
-  // Null when no project needs D2 downloaded, so Atlas adds no repository or configuration for it
   val d2DownloadVersion: String?,
 ) : Serializable
 

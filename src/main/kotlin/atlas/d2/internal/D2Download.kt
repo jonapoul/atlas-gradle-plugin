@@ -40,10 +40,6 @@ private const val TARBALL_TYPE = "tar.gz"
 private const val EXECUTABLE_TYPE = "d2-executable"
 private const val CONFIGURATION_NAME = "${ATLAS_CONFIGURATION_PREFIX}D2Executable"
 
-/**
- * Declares D2's GitHub releases as an Ivy repository. Exclusive in both directions: it only serves
- * D2, and D2 is only looked for here, so it can't affect how anything else in the build resolves.
- */
 internal fun RepositoryHandler.d2Releases() {
   exclusiveContent { content ->
     content.forRepository {
@@ -59,7 +55,7 @@ internal fun RepositoryHandler.d2Releases() {
 }
 
 /**
- * Which D2 version to download, or null if `d2` comes from somewhere else. Decided once from
+ * Which D2 version to download, or null if d2 comes from somewhere else. Decided once from
  * settings, so that builds which never download get no repository or configuration for it.
  */
 internal fun D2SpecImpl.downloadVersion(providers: ProviderFactory): String? =
@@ -86,8 +82,8 @@ internal fun D2SpecImpl.warnIfVersionIgnored(logger: Logger) {
 }
 
 /**
- * An explicit `d2` always wins. Otherwise [ExecutableSource.Auto] prefers the PATH, unless a
- * version was set, since that means the user wants exactly that version.
+ * An explicit d2 always wins. Otherwise [ExecutableSource.Auto] prefers the PATH, unless a version
+ * was set, since that means the user wants exactly that version.
  */
 internal fun d2DownloadVersion(
   explicit: Boolean,
@@ -143,6 +139,7 @@ private fun Project.addD2Releases(config: AtlasConfig) {
   afterEvaluate { if (repositories.isNotEmpty()) repositories.d2Releases() }
 }
 
+@Suppress("UnstableApiUsage")
 private fun Project.registerD2Configuration(version: String) = run {
   dependencies.registerTransform(UnpackD2::class.java) { spec ->
     spec.from.attribute(ARTIFACT_TYPE_ATTRIBUTE, TARBALL_TYPE)
@@ -159,7 +156,6 @@ private fun Project.registerD2Configuration(version: String) = run {
   configurations.resolvable(CONFIGURATION_NAME) { it.extendsFrom(scope.get()) }
 }
 
-/** Pulls the `d2` binary out of a release tarball. */
 @DisableCachingByDefault(because = "Quicker to unpack again than to fetch from a cache")
 internal abstract class UnpackD2 : TransformAction<TransformParameters.None> {
   @get:[InputArtifact PathSensitive(NONE)]
@@ -217,7 +213,6 @@ private fun Long.roundUpTo(block: Int): Long = (this + block - 1) / block * bloc
 private const val TAR_BLOCK = 512
 private val BINARY_NAMES = setOf("d2", "d2.exe")
 
-/** The OS and architecture pair in D2's release archive names, e.g. `linux-amd64`. */
 internal data class D2Platform(val os: String, val arch: String) {
   val id: String
     get() = "$os-$arch"

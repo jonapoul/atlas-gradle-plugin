@@ -12,8 +12,7 @@ RUN apt-get update && apt-get install -y \
 # https://d2lang.com/tour/install/
 # Pinned in config/d2.version, since d2's SVG output changes between releases and the committed
 # samples are diffed in CI. The same file sets the version Atlas downloads by default.
-# install.sh calls the GitHub API, so a token lifts it off the unauthenticated rate limit. It's
-# passed as a secret to keep it out of the image, and the build still works without one.
+# install.sh calls the GitHub API, so a token lifts it off the unauthenticated rate limit
 COPY config/d2.version /tmp/d2.version
 RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN \
   D2_VERSION="$(tr -d '[:space:]' < /tmp/d2.version)" \
