@@ -15,7 +15,7 @@ import kotlin.test.Test
 internal class FrameworkConfigTest : ScenarioTest() {
   @Test
   fun `Warn about style properties which no configured framework reads`() =
-    runScenario(PropertiesForUnusedFrameworks) {
+    PropertiesForUnusedFrameworks {
       // when
       assertThatTask("help")
         .buildsSuccessfully()
@@ -34,46 +34,42 @@ internal class FrameworkConfigTest : ScenarioTest() {
     }
 
   @Test
-  fun `Don't warn about properties the configured framework reads`() =
-    runScenario(MermaidBasic) {
-      // when
-      assertThatTask("help").buildsSuccessfully().outputDoesNotContain("Warning")
-    }
+  fun `Don't warn about properties the configured framework reads`() = MermaidBasic {
+    // when
+    assertThatTask("help").buildsSuccessfully().outputDoesNotContain("Warning")
+  }
 
   @Test
-  fun `Warn when a link style isn't supported by a configured framework`() =
-    runScenario(UnsupportedLinkStyle) {
-      // when, then
-      assertThatTask("help")
-        .buildsSuccessfully()
-        .outputContains(
-          "Warning: link type 'api' uses the dotted style, which Mermaid can't draw - " +
-            "Atlas will fall back to the closest style it has."
-        )
-    }
+  fun `Warn when a link style isn't supported by a configured framework`() = UnsupportedLinkStyle {
+    // when, then
+    assertThatTask("help")
+      .buildsSuccessfully()
+      .outputContains(
+        "Warning: link type 'api' uses the dotted style, which Mermaid can't draw - " +
+          "Atlas will fall back to the closest style it has."
+      )
+  }
 
   @Test
-  fun `Warn when no frameworks are configured`() =
-    runScenario(NoFrameworksConfigured) {
-      // when, then
-      assertThatTask("help")
-        .buildsSuccessfully()
-        .outputContains(
-          "Warning: no Atlas diagram frameworks are configured, so no charts will be generated."
-        )
-    }
+  fun `Warn when no frameworks are configured`() = NoFrameworksConfigured {
+    // when, then
+    assertThatTask("help")
+      .buildsSuccessfully()
+      .outputContains(
+        "Warning: no Atlas diagram frameworks are configured, so no charts will be generated."
+      )
+  }
 
   @Test
-  fun `Only register tasks for configured frameworks`() =
-    runScenario(MermaidBasic) {
-      // when
-      assertThatTask("tasks")
-        .withArgument("--all")
-        .buildsSuccessfully()
+  fun `Only register tasks for configured frameworks`() = MermaidBasic {
+    // when
+    assertThatTask("tasks")
+      .withArgument("--all")
+      .buildsSuccessfully()
 
-        // then
-        .outputContains("writeMermaidChart")
-        .outputDoesNotContain("writeGraphvizChart")
-        .outputDoesNotContain("writeD2Chart")
-    }
+      // then
+      .outputContains("writeMermaidChart")
+      .outputDoesNotContain("writeGraphvizChart")
+      .outputDoesNotContain("writeD2Chart")
+  }
 }

@@ -12,43 +12,40 @@ import org.junit.jupiter.api.Test
 internal class GraphvizGroovyTest : ScenarioTest() {
   @Test
   @RequiresGraphviz
-  fun `Configure graphviz`() =
-    runScenario(GroovyGraphVizBasic) {
-      // when
-      assertThatTask("atlasGenerate")
-        .buildsSuccessfully()
+  fun `Configure graphviz`() = GroovyGraphVizBasic {
+    // when
+    assertThatTask("atlasGenerate")
+      .buildsSuccessfully()
 
-        // then
-        .taskSucceeded(":a:atlasGenerate")
-        .taskSucceeded(":b:atlasGenerate")
-        .taskSucceeded(":c:atlasGenerate")
-    }
-
-  @Test
-  @RequiresGraphviz
-  fun `Configure graphviz project types`() =
-    runScenario(GroovyGraphVizProjectTypes) {
-      // when
-      assertThatTask("atlasGenerate")
-        .buildsSuccessfully()
-
-        // then
-        .taskSucceeded(":a:atlasGenerate")
-        .taskSucceeded(":b:atlasGenerate")
-        .taskSucceeded(":c:atlasGenerate")
-    }
+      // then
+      .taskSucceeded(":a:atlasGenerate")
+      .taskSucceeded(":b:atlasGenerate")
+      .taskSucceeded(":c:atlasGenerate")
+  }
 
   @Test
   @RequiresGraphviz
-  fun `Configure graphviz with everything`() =
-    runScenario(GroovyGraphVizFull) {
-      // when
-      assertThatTask("atlasGenerate")
-        .buildsSuccessfully()
+  fun `Configure graphviz project types`() = GroovyGraphVizProjectTypes {
+    // when
+    assertThatTask("atlasGenerate")
+      .buildsSuccessfully()
 
-        // then
-        .taskSucceeded(":a:atlasGenerate")
-        .taskSucceeded(":b:atlasGenerate")
-        .taskSucceeded(":c:atlasGenerate")
-    }
+      // then
+      .taskSucceeded(":a:atlasGenerate")
+      .taskSucceeded(":b:atlasGenerate")
+      .taskSucceeded(":c:atlasGenerate")
+  }
+
+  @Test
+  @RequiresGraphviz
+  fun `Configure graphviz with everything`() = GroovyGraphVizFull {
+    // when
+    assertThatTask("atlasGenerate")
+      .buildsSuccessfully()
+
+      // then
+      .taskSucceeded(":a:atlasGenerate")
+      .taskSucceeded(":b:atlasGenerate")
+      .taskSucceeded(":c:atlasGenerate")
+  }
 }

@@ -18,14 +18,8 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
   protected operator fun Scenario.invoke(
     runner: GradleRunner = defaultRunner(),
     test: RunningScenario.() -> Unit,
-  ) = runScenario(this, runner, test)
-
-  protected fun runScenario(
-    scenario: Scenario,
-    runner: GradleRunner = defaultRunner(),
-    test: RunningScenario.() -> Unit,
   ) {
-    current = scenario.toFileTree()
+    current = toFileTree()
     super.runScenario(runner, test)
   }
 

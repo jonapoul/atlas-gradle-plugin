@@ -164,7 +164,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
 
   @Test
   fun `Don't register check tasks when intermediates are in the build dir`() =
-    runScenario(CheckExplicitlyEnabled) {
+    CheckExplicitlyEnabled {
       assertThatTask("check")
         .withArgument("--dry-run")
         .buildsSuccessfully()
