@@ -5,7 +5,6 @@ import blueprint.test.FileTree
 import blueprint.test.Scenario as BlueprintScenario
 import blueprint.test.ScenarioTest as BlueprintScenarioTest
 import java.io.File
-import org.gradle.testkit.runner.GradleRunner
 
 @Suppress("AbstractClassCanBeConcreteClass")
 internal abstract class ScenarioTest : BlueprintScenarioTest() {
@@ -16,12 +15,9 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
   override val fileTree: FileTree
     get() = current
 
-  protected operator fun Scenario.invoke(
-    runner: GradleRunner = defaultRunner(),
-    test: BlueprintScenario.() -> Unit,
-  ) {
+  protected operator fun Scenario.invoke(test: BlueprintScenario.() -> Unit) {
     current = toFileTree()
-    super.runScenario(runner, test)
+    super.runScenario(defaultRunner(), test)
   }
 
   protected fun Scenario.withIntermediatesInProjectDir(test: BlueprintScenario.() -> Unit) {
@@ -36,7 +32,7 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
             "$framework { intermediateFilesInBuildDir = false }"
           }
       }
-    newScenario(test = test)
+    newScenario(test)
   }
 
   private fun Scenario.toFileTree(): FileTree =

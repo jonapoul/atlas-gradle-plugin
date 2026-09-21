@@ -13,7 +13,7 @@ import atlas.test.scenarios.D2FailOnProjectRepos
 import atlas.test.scenarios.D2PinnedVersion
 import atlas.test.scenarios.D2WithProjectRepositories
 import atlas.test.scenarios.GroovyD2PreferSettings
-import blueprint.test.Scenario as RunningScenario
+import blueprint.test.Scenario as BlueprintScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
@@ -166,7 +166,7 @@ internal class ExecD2Test : ScenarioTest() {
     assertD2Downloaded()
   }
 
-  private fun RunningScenario.assertD2Downloaded(source: String = "download") {
+  private fun BlueprintScenario.assertD2Downloaded(source: String = "download") {
     // when
     assertThatTask(":a:execD2Chart")
       .withGradleProperty("atlas.d2.executableSource", source)
