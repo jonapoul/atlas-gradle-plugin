@@ -92,3 +92,20 @@ internal object D2PathWithVersion : D2Scenario by D2Basic {
     """
       .trimIndent()
 }
+
+/** The default setup: Auto with no version, so a `d2` on the PATH wins. */
+internal object D2AutoDefaults : D2Scenario by D2Basic {
+  override val atlasConfig = "projectTypes.useDefaults()"
+}
+
+/** Groovy, so the settings file sets the repositories mode with Groovy's property syntax. */
+internal object GroovyD2DownloadPreferSettings : D2Scenario by GroovyD2Basic {
+  override val repositoriesMode = "PREFER_SETTINGS"
+  override val atlasConfig =
+    """
+    d2 {
+      executableSource = ExecutableSource.Download
+    }
+    """
+      .trimIndent()
+}

@@ -6,6 +6,7 @@ import atlas.d2.RequiresD2
 import atlas.test.ScenarioTest
 import atlas.test.contains
 import atlas.test.resolve
+import atlas.test.scenarios.D2AutoDefaults
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2CliFlags
 import atlas.test.scenarios.D2CustomLayoutEngine
@@ -13,14 +14,17 @@ import atlas.test.scenarios.D2DownloadExecutable
 import atlas.test.scenarios.D2DownloadFailOnProjectRepos
 import atlas.test.scenarios.D2DownloadPinnedVersion
 import atlas.test.scenarios.D2DownloadWithProjectRepositories
+import atlas.test.scenarios.GroovyD2DownloadPreferSettings
 import blueprint.test.Scenario as RunningScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
 import blueprint.test.childExists
 import blueprint.test.outputContains
+import blueprint.test.outputDoesNotContain
 import blueprint.test.taskHadResult
 import blueprint.test.withArgument
+import java.io.File
 import kotlin.test.Test
 
 internal class ExecD2Test : ScenarioTest() {
@@ -135,6 +139,28 @@ internal class ExecD2Test : ScenarioTest() {
   @Test
   fun `Download d2 when its version is set`() =
     runScenario(D2DownloadPinnedVersion) { assertD2Downloaded() }
+
+  @Test
+  fun `Download d2 when settings repositories are preferred`() =
+    runScenario(GroovyD2DownloadPreferSettings) { assertD2Downloaded() }
+
+  @Test
+  @RequiresD2
+  fun `Use d2 from the PATH by default`() =
+    runScenario(D2AutoDefaults) {
+      assertThatTask(":a:execD2Chart")
+        .withArgument("--info")
+        .buildsSuccessfully()
+        .outputContains("Starting d2: '[${d2OnPath()}")
+        .outputDoesNotContain("/transformed/d2")
+    }
+
+  private fun d2OnPath(): String =
+    System.getenv("PATH")
+      .split(File.pathSeparator)
+      .map { File(it, "d2") }
+      .first { it.isFile && it.canExecute() }
+      .absolutePath
 
   @Test
   fun `Download d2 when projects declare their own repositories`() =
