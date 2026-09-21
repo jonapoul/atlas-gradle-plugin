@@ -102,7 +102,7 @@ node in the chart either way, but every subproject resolves the collated files a
 
 ### D2 Executable
 
-`ExecD2` runs, in order: an explicit `d2Executable`, the `d2` on the system PATH, or a downloaded
+`ExecD2` runs, in order: an explicit `executable`, the `d2` on the system PATH, or a downloaded
 one, as picked by `ExecutableSource`. Whether anything downloads is decided once from settings
 (`d2DownloadVersion` in `d2/internal/D2Download.kt`) and kept in `AtlasConfig.d2DownloadVersion`.
 When that's null, Atlas adds no repository or configuration at all.

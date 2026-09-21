@@ -13,7 +13,7 @@ internal object D2LayoutFromProperties : D2Scenario by D2Basic {
     projectTypes.useDefaults()
 
     d2 {
-      d2Executable = file("/bin/echo")
+      executable = file("/bin/echo")
       fileFormat = FileFormat.Ascii
 
       layoutEngine.elk.nodeSelfLoop = 25

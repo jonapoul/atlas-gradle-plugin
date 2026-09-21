@@ -36,8 +36,8 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.process.ExecOperations
 
 /**
- * Executes `d2` with the configured inputs to generate an image file. [d2Executable] is whichever
- * of the configured one, the one on the system PATH or a downloaded one applies.
+ * Executes `d2` with the configured inputs to generate an image file. [executable] is whichever of
+ * the configured one, the one on the system PATH or a downloaded one applies.
  *
  * Just so I don't forget, [classesFile] is only used to force regeneration if the classes file
  * updates, since we don't directly read it in this task.
@@ -80,7 +80,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   @get:[Input Optional]
   public abstract val cliArguments: MapProperty<String, String>
   @get:[PathSensitive(NONE) InputFile Optional]
-  public abstract val d2Executable: RegularFileProperty
+  public abstract val executable: RegularFileProperty
   @get:OutputFile abstract override val outputFile: RegularFileProperty
   @get:Inject public abstract val execOperations: ExecOperations
 
@@ -97,7 +97,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   public fun execute() {
     val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
-    val executable = d2Executable.orNull?.asFile?.absolutePath ?: "d2"
+    val executable = executable.orNull?.asFile?.absolutePath ?: "d2"
     val cliArguments = cliArguments.getOrElse(emptyMap()).toMutableMap()
 
     // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
@@ -176,7 +176,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
         val name = "execD2$variant"
         val execD2 = tasks.register(name, ExecD2::class.java)
         // Outside configure {}, since the download wiring may need an afterEvaluate hook
-        val d2Executable = d2Executable(spec, config)
+        val executable = d2Executable(spec, config)
 
         execD2.configure { task ->
           val d2File = d2FileTask.flatMap { it.outputFile }
@@ -187,7 +187,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
           task.classesFile.fileProvider(classesFile.singleFile(D2Classes))
           task.dependsOn(classesFile)
           task.inputFile.convention(d2File)
-          task.d2Executable.convention(d2Executable)
+          task.executable.convention(executable)
           task.outputFormat.convention(spec.fileFormat)
           task.outputFile.convention(layout.file(imageFile))
           task.cliArguments.convention(spec.layoutEngine.properties)
@@ -217,7 +217,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
      * if settings decided one is needed. See [atlas.d2.internal.d2DownloadVersion].
      */
     private fun Project.d2Executable(spec: D2SpecImpl, config: AtlasConfig): Provider<RegularFile> {
-      val explicit = spec.d2Executable.orElse(layout.file(spec.properties.d2Executable.map(::File)))
+      val explicit = spec.executable.orElse(layout.file(spec.properties.executable.map(::File)))
       val version = config.d2DownloadVersion
       val fallback =
         if (version == null) layout.file(providers.d2OnPath()) else downloadedD2(version, config)

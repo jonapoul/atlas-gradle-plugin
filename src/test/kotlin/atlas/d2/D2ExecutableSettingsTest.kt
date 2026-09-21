@@ -22,18 +22,18 @@ internal class D2ExecutableSettingsTest : ScenarioTest() {
     }
 
   @Test
-  fun `Warn when d2Version can't be used`() =
+  fun `Warn when version can't be used`() =
     runScenario(D2PinnedVersion) {
       assertThatTask("help")
         .withGradleProperty("atlas.d2.executableSource", "path")
         .buildsSuccessfully()
         .outputContains(
-          "Warning: d2Version is set to 0.9.0, but executableSource is Path, so it's ignored"
+          "Warning: version is set to 0.9.0, but executableSource is Path, so it's ignored"
         )
     }
 
   @Test
-  fun `No warning when d2Version is used`() =
+  fun `No warning when version is used`() =
     runScenario(D2PinnedVersion) {
       assertThatTask("help").buildsSuccessfully().outputDoesNotContain("Warning")
     }

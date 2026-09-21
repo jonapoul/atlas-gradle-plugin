@@ -743,9 +743,8 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getAnimateLinks ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getCenter ()Lorg/gradle/api/provider/Property;
-	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
-	public abstract fun getD2Version ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDirection ()Lorg/gradle/api/provider/Property;
+	public abstract fun getExecutable ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getExecutableSource ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFileFormat ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFonts ()Latlas/d2/D2FontsSpec;
@@ -765,6 +764,7 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getThemeDarkOverrides ()Latlas/d2/D2ThemeOverridesSpec;
 	public abstract fun getThemeOverrides ()Latlas/d2/D2ThemeOverridesSpec;
 	public abstract fun getTimeout ()Lorg/gradle/api/provider/Property;
+	public abstract fun getVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun globalProps (Lorg/gradle/api/Action;)V
 	public abstract fun layoutEngine (Lorg/gradle/api/Action;)V
 	public abstract fun rootStyle (Lorg/gradle/api/Action;)V
@@ -1049,9 +1049,9 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getClassesFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getCliArguments ()Lorg/gradle/api/provider/MapProperty;
-	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
 	public fun getDescription ()Ljava/lang/String;
 	public abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
+	public abstract fun getExecutable ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontBold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontItalic ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontMono ()Lorg/gradle/api/file/RegularFileProperty;

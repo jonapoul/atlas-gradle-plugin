@@ -64,24 +64,24 @@ internal fun RepositoryHandler.d2Releases() {
  */
 internal fun D2SpecImpl.downloadVersion(providers: ProviderFactory): String? =
   d2DownloadVersion(
-    explicit = d2Executable.isPresent || properties.d2Executable.isPresent,
+    explicit = executable.isPresent || properties.executable.isPresent,
     source = executableSource.get(),
-    pinned = d2Version.orNull,
+    pinned = version.orNull,
     onPath = { providers.d2OnPath().isPresent },
   )
 
-/** [D2Spec.d2Version] only picks what gets downloaded, so say when nothing will be. */
+/** [D2Spec.version] only picks what gets downloaded, so say when nothing will be. */
 internal fun D2SpecImpl.warnIfVersionIgnored(logger: Logger) {
-  val version = d2Version.orNull ?: return
+  val pinned = version.orNull ?: return
   val reason =
     when {
-      d2Executable.isPresent || properties.d2Executable.isPresent -> "d2Executable is also set"
+      executable.isPresent || properties.executable.isPresent -> "executable is also set"
       executableSource.get() == Path -> "executableSource is Path"
       else -> return
     }
   logger.warn(
-    "Warning: d2Version is set to $version, but $reason, so it's ignored and nothing is " +
-      "downloaded. Remove d2Version, or set executableSource to Auto or Download."
+    "Warning: version is set to $pinned, but $reason, so it's ignored and nothing is " +
+      "downloaded. Remove version, or set executableSource to Auto or Download."
   )
 }
 
@@ -247,7 +247,7 @@ internal data class D2Platform(val os: String, val arch: String) {
     private fun unsupported(osName: String, osArch: String): Nothing =
       throw GradleException(
         "D2 publishes no binary for $osName/$osArch. Install d2 yourself and set " +
-          "atlas.d2.executableSource=path, or point atlas.d2.d2Executable at it."
+          "atlas.d2.executableSource=path, or point atlas.d2.executable at it."
       )
   }
 }

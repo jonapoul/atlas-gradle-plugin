@@ -9,7 +9,7 @@ internal object D2PinnedVersion : D2Scenario by D2Basic {
       "\n\n" +
       """
       d2 {
-        d2Version = "0.9.0"
+        version = "0.9.0"
       }
       """
         .trimIndent()

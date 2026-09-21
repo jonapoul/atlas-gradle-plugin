@@ -205,11 +205,11 @@ public enum class AsciiMode(override val value: String) : StringEnum {
   override fun toString(): String = value
 }
 
-/** Where Atlas finds the `d2` executable when [D2Spec.d2Executable] isn't set. */
+/** Where Atlas finds the `d2` executable when [D2Spec.executable] isn't set. */
 public enum class ExecutableSource(override val value: String) : StringEnum {
   /**
-   * Use `d2` from the system PATH if it's there, otherwise download it. If [D2Spec.d2Version] is
-   * set, always download that version instead.
+   * Use `d2` from the system PATH if it's there, otherwise download it. If [D2Spec.version] is set,
+   * always download that version instead.
    */
   Auto("auto"),
 
@@ -217,7 +217,7 @@ public enum class ExecutableSource(override val value: String) : StringEnum {
   Path("path"),
 
   /**
-   * Always download D2, ignoring the system PATH. Uses [D2Spec.d2Version] if set. Best for CI, or
+   * Always download D2, ignoring the system PATH. Uses [D2Spec.version] if set. Best for CI, or
    * anywhere the output is diffed, since every machine then renders with the same version.
    */
   Download("download");
