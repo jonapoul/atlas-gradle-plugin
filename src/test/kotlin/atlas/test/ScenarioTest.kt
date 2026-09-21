@@ -1,7 +1,8 @@
 package atlas.test
 
+import atlas.core.Framework
 import blueprint.test.FileTree
-import blueprint.test.Scenario as RunningScenario
+import blueprint.test.Scenario as BlueprintScenario
 import blueprint.test.ScenarioTest as BlueprintScenarioTest
 import java.io.File
 import org.gradle.testkit.runner.GradleRunner
@@ -17,10 +18,25 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
 
   protected operator fun Scenario.invoke(
     runner: GradleRunner = defaultRunner(),
-    test: RunningScenario.() -> Unit,
+    test: BlueprintScenario.() -> Unit,
   ) {
     current = toFileTree()
     super.runScenario(runner, test)
+  }
+
+  protected fun Scenario.withIntermediatesInProjectDir(test: BlueprintScenario.() -> Unit) {
+    val base = this
+    val newScenario =
+      object : Scenario by base {
+        override val atlasConfig =
+          (frameworks - Framework.Mermaid).joinToString(
+            separator = "\n",
+            prefix = base.atlasConfig + "\n",
+          ) { framework ->
+            "$framework { intermediateFilesInBuildDir = false }"
+          }
+      }
+    newScenario(test = test)
   }
 
   private fun Scenario.toFileTree(): FileTree =

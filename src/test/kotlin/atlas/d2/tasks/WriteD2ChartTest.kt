@@ -8,7 +8,6 @@ import atlas.test.resolve
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2MovedOutputs
 import atlas.test.scenarios.D2NestedProjects
-import atlas.test.withIntermediatesInProjectDir
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
@@ -115,7 +114,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
   @Test
   @RequiresD2
   fun `Check moved outputs against the dummy chart`() =
-    runScenario(D2MovedOutputs.withIntermediatesInProjectDir()) {
+    D2MovedOutputs.withIntermediatesInProjectDir {
       // given the real chart has been moved out of the directory the dummy writes to
       assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
       assertThat(resolve("a/charts/chart.d2").importLine()).isEqualTo("...@../../charts/classes.d2")
@@ -128,7 +127,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
   @Test
   @RequiresD2
   fun `Check nested projects with intermediates in the project dir`() =
-    runScenario(D2NestedProjects.withIntermediatesInProjectDir()) {
+    D2NestedProjects.withIntermediatesInProjectDir {
       // given
       assertThatTask("atlasGenerate").buildsSuccessfully().noTasksFailed()
       assertThat(resolve("path/to/my/project/chart-d2.d2"))
