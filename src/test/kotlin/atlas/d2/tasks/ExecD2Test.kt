@@ -6,15 +6,13 @@ import atlas.d2.RequiresD2
 import atlas.test.ScenarioTest
 import atlas.test.contains
 import atlas.test.resolve
-import atlas.test.scenarios.D2AutoDefaults
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2CliFlags
 import atlas.test.scenarios.D2CustomLayoutEngine
-import atlas.test.scenarios.D2DownloadExecutable
-import atlas.test.scenarios.D2DownloadFailOnProjectRepos
-import atlas.test.scenarios.D2DownloadPinnedVersion
-import atlas.test.scenarios.D2DownloadWithProjectRepositories
-import atlas.test.scenarios.GroovyD2DownloadPreferSettings
+import atlas.test.scenarios.D2FailOnProjectRepos
+import atlas.test.scenarios.D2PinnedVersion
+import atlas.test.scenarios.D2WithProjectRepositories
+import atlas.test.scenarios.GroovyD2PreferSettings
 import blueprint.test.Scenario as RunningScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
@@ -24,6 +22,7 @@ import blueprint.test.outputContains
 import blueprint.test.outputDoesNotContain
 import blueprint.test.taskHadResult
 import blueprint.test.withArgument
+import blueprint.test.withGradleProperty
 import java.io.File
 import kotlin.test.Test
 
@@ -103,7 +102,7 @@ internal class ExecD2Test : ScenarioTest() {
       // Third run setting a property to change the classes file - classes are written, chart is not
       // but the output file is regenerated
       assertThatTask(":a:execD2Chart")
-        .withArgument("-Patlas.d2.theme=7")
+        .withGradleProperty("atlas.d2.theme", 7)
         .buildsSuccessfully()
         .taskHadResult(":writeD2Classes", SUCCESS)
         .taskHadResult(":a:writeD2Chart", UP_TO_DATE)
@@ -133,21 +132,20 @@ internal class ExecD2Test : ScenarioTest() {
     }
 
   @Test
-  fun `Download d2 instead of using the PATH`() =
-    runScenario(D2DownloadExecutable) { assertD2Downloaded() }
+  fun `Download d2 instead of using the PATH`() = runScenario(D2Basic) { assertD2Downloaded() }
 
   @Test
   fun `Download d2 when its version is set`() =
-    runScenario(D2DownloadPinnedVersion) { assertD2Downloaded() }
+    runScenario(D2PinnedVersion) { assertD2Downloaded(source = "auto") }
 
   @Test
   fun `Download d2 when settings repositories are preferred`() =
-    runScenario(GroovyD2DownloadPreferSettings) { assertD2Downloaded() }
+    runScenario(GroovyD2PreferSettings) { assertD2Downloaded() }
 
   @Test
   @RequiresD2
   fun `Use d2 from the PATH by default`() =
-    runScenario(D2AutoDefaults) {
+    runScenario(D2Basic) {
       assertThatTask(":a:execD2Chart")
         .withArgument("--info")
         .buildsSuccessfully()
@@ -164,15 +162,16 @@ internal class ExecD2Test : ScenarioTest() {
 
   @Test
   fun `Download d2 when projects declare their own repositories`() =
-    runScenario(D2DownloadWithProjectRepositories) { assertD2Downloaded() }
+    runScenario(D2WithProjectRepositories) { assertD2Downloaded() }
 
   @Test
   fun `Download d2 when project repositories are forbidden`() =
-    runScenario(D2DownloadFailOnProjectRepos) { assertD2Downloaded() }
+    runScenario(D2FailOnProjectRepos) { assertD2Downloaded() }
 
-  private fun RunningScenario.assertD2Downloaded() {
+  private fun RunningScenario.assertD2Downloaded(source: String = "download") {
     // when
     assertThatTask(":a:execD2Chart")
+      .withGradleProperty("atlas.d2.executableSource", source)
       .withArgument("--info")
       .buildsSuccessfully()
       .taskHadResult(":a:execD2Chart", SUCCESS)
@@ -183,6 +182,7 @@ internal class ExecD2Test : ScenarioTest() {
 
     // and a second run is up to date
     assertThatTask(":a:execD2Chart")
+      .withGradleProperty("atlas.d2.executableSource", source)
       .buildsSuccessfully()
       .taskHadResult(":a:execD2Chart", UP_TO_DATE)
   }
