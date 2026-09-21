@@ -1050,9 +1050,7 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public abstract fun getClassesFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getCliArguments ()Lorg/gradle/api/provider/MapProperty;
 	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
-	public abstract fun getD2Version ()Lorg/gradle/api/provider/Property;
 	public fun getDescription ()Ljava/lang/String;
-	public abstract fun getDownloadDirectory ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 	public abstract fun getFontBold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontItalic ()Lorg/gradle/api/file/RegularFileProperty;
@@ -1064,7 +1062,6 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public abstract fun getFontSemibold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getInputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getNoXmlTag ()Lorg/gradle/api/provider/Property;
-	public abstract fun getOffline ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOmitVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getOutputFormat ()Lorg/gradle/api/provider/Property;

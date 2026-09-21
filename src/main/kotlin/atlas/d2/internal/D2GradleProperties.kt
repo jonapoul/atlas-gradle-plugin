@@ -25,7 +25,7 @@ internal class D2GradleProperties(override val providers: ProviderFactory) : IGr
   val asciiMode: Provider<AsciiMode> = enum("atlas.d2.asciiMode", default = null)
   val center: Provider<Boolean> = bool("atlas.d2.center", default = null)
   val d2Executable: Provider<String> = string("atlas.d2.d2Executable", default = null)
-  val d2Version: Provider<String> = string("atlas.d2.d2Version", default = DEFAULT_D2_VERSION)
+  val d2Version: Provider<String> = string("atlas.d2.d2Version", default = null)
   val darkTheme: Provider<Theme> = intEnum("atlas.d2.darkTheme", default = null)
   val direction: Provider<Direction> = enum("atlas.d2.direction", default = null)
   val executableSource: Provider<ExecutableSource> =

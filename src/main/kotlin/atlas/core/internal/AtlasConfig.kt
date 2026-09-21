@@ -36,6 +36,10 @@ internal class AtlasConfig(
   val replacements: Set<Replacement>,
   val projectTypes: List<ProjectTypeMatcher>,
   val linkTypes: List<LinkType>,
+  // Under RepositoriesMode.PREFER_PROJECT, a project declaring any repositories ignores the
+  // settings
+  // ones, so repositories Atlas needs have to be added to that project as well
+  val preferProjectRepositories: Boolean,
 ) : Serializable
 
 /**
@@ -72,7 +76,11 @@ internal class AtlasWiring(
     }
 }
 
-internal fun AtlasExtensionImpl.snapshot(rootDir: File, subprojectPaths: List<String>) =
+internal fun AtlasExtensionImpl.snapshot(
+  rootDir: File,
+  subprojectPaths: List<String>,
+  preferProjectRepositories: Boolean,
+) =
   AtlasConfig(
     rootDir = rootDir,
     subprojectPaths = subprojectPaths,
@@ -88,6 +96,7 @@ internal fun AtlasExtensionImpl.snapshot(rootDir: File, subprojectPaths: List<St
     replacements = pathTransforms.replacements.get(),
     projectTypes = orderedProjectTypes().map(::projectTypeMatcher),
     linkTypes = orderedLinkTypes(),
+    preferProjectRepositories = preferProjectRepositories,
   )
 
 private fun projectTypeMatcher(spec: ProjectTypeSpec) =

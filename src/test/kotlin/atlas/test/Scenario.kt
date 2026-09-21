@@ -17,6 +17,10 @@ internal interface Scenario {
   val gradlePropertiesFile: String
     get() = ""
 
+  // A `RepositoriesMode` entry name for `settings.gradle.kts`. Null leaves Gradle's default
+  val repositoriesMode: String?
+    get() = null
+
   val isGroovy: Boolean
     get() = false
 

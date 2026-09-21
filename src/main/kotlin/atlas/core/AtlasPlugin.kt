@@ -5,6 +5,7 @@ import atlas.core.internal.AtlasWiring
 import atlas.core.internal.snapshot
 import atlas.core.internal.warnAboutConfig
 import atlas.core.internal.wireProject
+import atlas.d2.internal.d2Releases
 import javax.inject.Inject
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.ProjectDescriptor
@@ -54,11 +55,16 @@ constructor(
       AtlasWiring(d2 = extension.d2, graphviz = extension.graphviz, mermaid = extension.mermaid)
 
     target.gradle.settingsEvaluated { settings ->
+      val repositories = settings.dependencyResolutionManagement
       wiring.config =
         extension.snapshot(
           rootDir = settings.rootDir,
           subprojectPaths = chartedSubprojectPaths(settings.rootProject),
+          preferProjectRepositories = repositories.repositoriesMode.get() == PREFER_PROJECT,
         )
+
+      // Read here rather than on apply, since the settings script sets it after `plugins { }`
+      if (Framework.D2 in extension.frameworks) repositories.repositories.d2Releases()
       extension.warnAboutConfig(LOGGER)
     }
 

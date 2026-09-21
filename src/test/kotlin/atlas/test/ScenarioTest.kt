@@ -67,6 +67,14 @@ internal abstract class ScenarioTest : BlueprintScenarioTest() {
 
     // This has to come after `plugins { }`, which only tolerates pluginManagement before it
     appendLine(DEPENDENCY_RESOLUTION_MANAGEMENT_KTS)
+    repositoriesMode?.let { mode ->
+      val qualified = "org.gradle.api.initialization.resolve.RepositoriesMode.$mode"
+      if (isGroovy) {
+        appendLine("dependencyResolutionManagement.repositoriesMode = $qualified")
+      } else {
+        appendLine("dependencyResolutionManagement.repositoriesMode.set($qualified)")
+      }
+    }
     appendLine()
 
     subprojectBuildFiles.keys.forEach { path ->

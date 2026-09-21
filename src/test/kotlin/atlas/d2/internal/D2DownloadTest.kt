@@ -10,14 +10,13 @@ import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import org.gradle.api.GradleException
 
-internal class D2DownloaderTest {
+internal class D2DownloadTest {
   @Test
   fun `Maps JVM platform names to D2 archive names`() {
     assertThat(D2Platform.of("Linux", "amd64").id).isEqualTo("linux-amd64")
     assertThat(D2Platform.of("Mac OS X", "aarch64").id).isEqualTo("macos-arm64")
     assertThat(D2Platform.of("Mac OS X", "x86_64").id).isEqualTo("macos-amd64")
-    assertThat(D2Platform.of("Windows 11", "amd64").binaryName).isEqualTo("d2.exe")
-    assertThat(D2Platform.of("Linux", "aarch64").binaryName).isEqualTo("d2")
+    assertThat(D2Platform.of("Windows 11", "amd64").id).isEqualTo("windows-amd64")
   }
 
   @Test
@@ -34,19 +33,20 @@ internal class D2DownloaderTest {
         "d2-v0.9.0/bin/d2" to "the binary",
         "d2-v0.9.0/man/d2.1" to "manual",
       )
-    val destination = File(createTempDirectory().toFile(), "d2")
+    val dir = createTempDirectory().toFile()
 
-    D2Downloader.extract(tar.inputStream(), "d2", destination)
+    val binary = extractD2(tar.inputStream()) { name -> File(dir, name) }
 
-    assertThat(destination.readText()).isEqualTo("the binary")
+    assertThat(binary.name).isEqualTo("d2")
+    assertThat(binary.readText()).isEqualTo("the binary")
   }
 
   @Test
   fun `Fails if the tarball has no binary`() {
     val tar = tarOf("d2-v0.9.0/README.md" to "readme")
-    val destination = File(createTempDirectory().toFile(), "d2")
+    val dir = createTempDirectory().toFile()
 
-    assertFailure { D2Downloader.extract(tar.inputStream(), "d2", destination) }
+    assertFailure { extractD2(tar.inputStream()) { name -> File(dir, name) } }
       .isInstanceOf<GradleException>()
   }
 

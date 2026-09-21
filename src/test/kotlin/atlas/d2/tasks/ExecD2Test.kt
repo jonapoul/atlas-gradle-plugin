@@ -3,7 +3,6 @@ package atlas.d2.tasks
 import assertk.assertThat
 import assertk.assertions.doesNotContain
 import atlas.d2.RequiresD2
-import atlas.d2.internal.DEFAULT_D2_VERSION
 import atlas.test.ScenarioTest
 import atlas.test.contains
 import atlas.test.resolve
@@ -11,6 +10,10 @@ import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2CliFlags
 import atlas.test.scenarios.D2CustomLayoutEngine
 import atlas.test.scenarios.D2DownloadExecutable
+import atlas.test.scenarios.D2DownloadFailOnProjectRepos
+import atlas.test.scenarios.D2DownloadPinnedVersion
+import atlas.test.scenarios.D2DownloadWithProjectRepositories
+import blueprint.test.Scenario as RunningScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
@@ -127,20 +130,34 @@ internal class ExecD2Test : ScenarioTest() {
 
   @Test
   fun `Download d2 instead of using the PATH`() =
-    runScenario(D2DownloadExecutable) {
-      // when
-      assertThatTask(":a:execD2Chart")
-        .withArgument("--info")
-        .buildsSuccessfully()
-        .taskHadResult(":a:execD2Chart", SUCCESS)
-        // then the cached download ran, not whatever's on the PATH
-        .outputContains("caches/atlas/d2/v$DEFAULT_D2_VERSION/")
+    runScenario(D2DownloadExecutable) { assertD2Downloaded() }
 
-      assertThat(rootDir).childExists("a/chart-d2.svg")
+  @Test
+  fun `Download d2 when its version is set`() =
+    runScenario(D2DownloadPinnedVersion) { assertD2Downloaded() }
 
-      // and a second run is cached, since the version is the task input rather than the binary
-      assertThatTask(":a:execD2Chart")
-        .buildsSuccessfully()
-        .taskHadResult(":a:execD2Chart", UP_TO_DATE)
-    }
+  @Test
+  fun `Download d2 when projects declare their own repositories`() =
+    runScenario(D2DownloadWithProjectRepositories) { assertD2Downloaded() }
+
+  @Test
+  fun `Download d2 when project repositories are forbidden`() =
+    runScenario(D2DownloadFailOnProjectRepos) { assertD2Downloaded() }
+
+  private fun RunningScenario.assertD2Downloaded() {
+    // when
+    assertThatTask(":a:execD2Chart")
+      .withArgument("--info")
+      .buildsSuccessfully()
+      .taskHadResult(":a:execD2Chart", SUCCESS)
+      // then the binary unpacked from the download ran, not whatever's on the PATH
+      .outputContains("/transformed/d2")
+
+    assertThat(rootDir).childExists("a/chart-d2.svg")
+
+    // and a second run is up to date
+    assertThatTask(":a:execD2Chart")
+      .buildsSuccessfully()
+      .taskHadResult(":a:execD2Chart", UP_TO_DATE)
+  }
 }

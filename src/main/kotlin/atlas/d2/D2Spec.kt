@@ -105,8 +105,12 @@ public interface D2Spec : AtlasSpec {
   public val d2Executable: RegularFileProperty
 
   /**
-   * The D2 version to download, when [executableSource] needs to. Defaults to the version this
-   * release of Atlas is tested against. Downloads are cached in the Gradle user home.
+   * The D2 version to download. Unset by default, so [executableSource] may use `d2` from the PATH,
+   * and otherwise downloads the version this release of Atlas is tested against.
+   *
+   * Setting it means you want exactly that version, so with the default [ExecutableSource.Auto] the
+   * PATH is skipped and this version is always downloaded. Downloads are cached in the Gradle user
+   * home.
    *
    * Also controlled by the `atlas.d2.d2Version` Gradle property.
    */
@@ -121,7 +125,7 @@ public interface D2Spec : AtlasSpec {
 
   /**
    * Where to find `d2` when [d2Executable] isn't set. Defaults to [ExecutableSource.Auto], which
-   * uses the system PATH and falls back to downloading [d2Version].
+   * uses the system PATH and falls back to a download, or always downloads if [d2Version] is set.
    *
    * Also controlled by the `atlas.d2.executableSource` Gradle property.
    */
