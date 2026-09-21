@@ -50,19 +50,6 @@ internal interface MermaidScenario : Scenario {
     get() = setOf(Mermaid)
 }
 
-internal fun Scenario.withIntermediatesInProjectDir(): Scenario {
-  val base = this
-  return object : Scenario by base {
-    override val atlasConfig =
-      (frameworks - Framework.Mermaid).joinToString(
-        separator = "\n",
-        prefix = base.atlasConfig + "\n",
-      ) { framework ->
-        "$framework { intermediateFilesInBuildDir = false }"
-      }
-  }
-}
-
 /** The single framework a scenario uses, for tests which assert on generated file paths. */
 internal val Scenario.framework: Framework
   get() = frameworks.single()

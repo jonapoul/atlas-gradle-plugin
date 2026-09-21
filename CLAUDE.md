@@ -124,8 +124,8 @@ buildconfig plugin), `docker/Dockerfile` and Renovate.
 ### Testing Approach
 
 Scenarios (e.g. `DiamondGraph`, `TriangleGraph`) in `src/test/kotlin/atlas/test/scenarios/` define
-complete multi-module structures; `ScenarioTest.runScenario()` builds them in a temp dir and runs
-tasks via TestKit. Scenarios are reused across test classes for different plugin variants.
+complete multi-module structures. Inside a `ScenarioTest`, `DiamondGraph { ... }` builds one in a
+temp dir and runs tasks via TestKit. Scenarios are reused across test classes for different plugin variants.
 
 Rules that follow from Atlas being a settings plugin:
 - The `atlas { }` block goes in `Scenario.atlasConfig`, which `ScenarioTest` writes into
