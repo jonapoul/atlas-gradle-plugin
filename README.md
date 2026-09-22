@@ -42,7 +42,7 @@ Then:
 # write the diagrams
 gradle atlasGenerate
 
-# verify they match the current project structure. Only relevant if
+# verify they match the current project structure. Useful in CI if you commit the diagrams
 gradle atlasCheck
 ```
 
