@@ -61,19 +61,19 @@ internal class DotWriterTest {
           ":app"
           subgraph cluster_data {
             label = ":data"
-            ":data:a"
-            ":data:b"
+            ":data:a" [label=":a"]
+            ":data:b" [label=":b"]
           }
           subgraph cluster_domain {
             label = ":domain"
-            ":domain:a"
-            ":domain:b"
+            ":domain:a" [label=":a"]
+            ":domain:b" [label=":b"]
           }
           subgraph cluster_ui {
             label = ":ui"
-            ":ui:a"
-            ":ui:b"
-            ":ui:c"
+            ":ui:a" [label=":a"]
+            ":ui:b" [label=":b"]
+            ":ui:c" [label=":c"]
           }
           ":app" -> ":ui:a"
           ":app" -> ":ui:b"
@@ -111,8 +111,8 @@ internal class DotWriterTest {
             ":data:b"
             subgraph cluster_sub {
               label = ":sub"
-              ":data:sub:sub1"
-              ":data:sub:sub2"
+              ":data:sub:sub1" [label=":sub1"]
+              ":data:sub:sub2" [label=":sub2"]
             }
           }
           subgraph cluster_domain {

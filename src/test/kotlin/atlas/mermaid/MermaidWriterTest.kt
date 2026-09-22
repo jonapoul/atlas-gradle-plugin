@@ -58,17 +58,17 @@ internal class MermaidWriterTest {
         graph TD
           _app[":app"]
           subgraph data[":data"]
-            _data_a[":data:a"]
-            _data_b[":data:b"]
+            _data_a[":a"]
+            _data_b[":b"]
           end
           subgraph domain[":domain"]
-            _domain_a[":domain:a"]
-            _domain_b[":domain:b"]
+            _domain_a[":a"]
+            _domain_b[":b"]
           end
           subgraph ui[":ui"]
-            _ui_a[":ui:a"]
-            _ui_b[":ui:b"]
-            _ui_c[":ui:c"]
+            _ui_a[":a"]
+            _ui_b[":b"]
+            _ui_c[":c"]
           end
           _app --> _ui_a
           _app --> _ui_b
@@ -100,21 +100,21 @@ internal class MermaidWriterTest {
         graph TD
           _app[":app"]
           subgraph data[":data"]
-            _data_a[":data:a"]
-            _data_b[":data:b"]
+            _data_a[":a"]
+            _data_b[":b"]
             subgraph sub[":sub"]
-              _data_sub_sub1[":data:sub:sub1"]
-              _data_sub_sub2[":data:sub:sub2"]
+              _data_sub_sub1[":sub1"]
+              _data_sub_sub2[":sub2"]
             end
           end
           subgraph domain[":domain"]
-            _domain_a[":domain:a"]
-            _domain_b[":domain:b"]
+            _domain_a[":a"]
+            _domain_b[":b"]
           end
           subgraph ui[":ui"]
-            _ui_a[":ui:a"]
-            _ui_b[":ui:b"]
-            _ui_c[":ui:c"]
+            _ui_a[":a"]
+            _ui_b[":b"]
+            _ui_c[":c"]
           end
           _app --> _ui_a
           _app --> _ui_b

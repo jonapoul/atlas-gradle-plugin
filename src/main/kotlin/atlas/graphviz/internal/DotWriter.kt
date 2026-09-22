@@ -73,7 +73,10 @@ internal data class DotWriter(
 
   override fun IndentedStringBuilder.appendProject(project: TypedProject) {
     val nodePath = project.projectPath.cleaned()
-    val attrs = Attrs()
+    val label = project.projectPath.nodeLabel()
+
+    // Graphviz labels a node with its ID by default, so only say otherwise when it differs
+    val attrs = Attrs("label" to label.takeIf { it != nodePath })
 
     project.type?.let { type ->
       val properties = mapOf("fillcolor" to type.color) + type.properties(Graphviz)

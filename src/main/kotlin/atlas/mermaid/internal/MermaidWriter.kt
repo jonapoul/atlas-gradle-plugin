@@ -73,7 +73,7 @@ internal class MermaidWriter(
   }
 
   override fun IndentedStringBuilder.appendProject(project: TypedProject) {
-    appendLine("${project.label}[\"${project.projectPath.cleaned()}\"]")
+    appendLine("${project.label}[\"${project.projectPath.nodeLabel()}\"]")
   }
 
   private fun IndentedStringBuilder.appendTypes() {

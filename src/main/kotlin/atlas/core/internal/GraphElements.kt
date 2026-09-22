@@ -111,6 +111,10 @@ internal abstract class ChartWriter {
   protected abstract val groupProjects: Boolean
   protected abstract val thisPath: String
 
+  // How many subgraphs deep we currently are, i.e. 0 while writing top-level nodes
+  protected var subgraphNestingLevel: Int = 0
+    private set
+
   protected abstract fun IndentedStringBuilder.appendProject(project: TypedProject)
 
   protected abstract fun IndentedStringBuilder.appendSubgraphHeader(graph: Subgraph)
@@ -137,11 +141,13 @@ internal abstract class ChartWriter {
 
   private fun IndentedStringBuilder.appendSubgraph(graph: Subgraph) {
     appendSubgraphHeader(graph)
+    subgraphNestingLevel++
     indent {
       for (element in graph.elements) {
         appendGraphNode(element)
       }
     }
+    subgraphNestingLevel--
     appendSubgraphFooter()
   }
 
@@ -156,6 +162,13 @@ internal abstract class ChartWriter {
       // Single-project case - we still want this project to be shown along with its type
       typedProjects.firstOrNull { it.projectPath == thisPath }?.let { appendProject(it.cleaned()) }
     }
+  }
+
+  protected fun String.nodeLabel(): String {
+    val path = cleaned()
+    if (!groupProjects) return path
+    val segment = path.split(":").filter { it.isNotEmpty() }.getOrNull(subgraphNestingLevel)
+    return if (segment == null) path else ":$segment"
   }
 
   protected fun String.cleaned(): String = cleaned(replacements)
