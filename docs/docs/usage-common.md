@@ -171,7 +171,7 @@ atlas {
 }
 ```
 
-Set to true if you want project charts to gather together groups of projects into bordered containers. E.g. a graph with `":a"`, `":b"` and `":c"` won't be grouped at all because they don't share any path segments, but `":a:b"` and `"a:c"` will be grouped together. Disabled by default.
+Set to true if you want project charts to gather together groups of projects into bordered containers. E.g. a graph with `":a"`, `":b"` and `":c"` won't be grouped at all because they don't share any path segments, but `":a:b"` and `"a:c"` will be grouped together. A grouped project is labelled with only its last path segment, e.g. `":b"` instead of `":a:b"`, since its container already shows the rest. Disabled by default.
 
 !!! tip
 

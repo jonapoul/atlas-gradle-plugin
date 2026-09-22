@@ -70,14 +70,14 @@ internal class WriteMermaidChartTest : ScenarioTest() {
         graph TD
           _a[":a"]
           subgraph b[":b"]
-            _b_b1[":b:b1"]
-            _b_b2[":b:b2"]
+            _b_b1[":b1"]
+            _b_b2[":b2"]
           end
           subgraph c[":c"]
-            _c_c3[":c:c3"]
+            _c_c3[":c3"]
             subgraph inner[":inner"]
-              _c_inner_c1[":c:inner:c1"]
-              _c_inner_c2[":c:inner:c2"]
+              _c_inner_c1[":c1"]
+              _c_inner_c2[":c2"]
             end
           end
           _a --> _b_b1
