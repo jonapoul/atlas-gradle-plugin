@@ -32,6 +32,8 @@ public interface AtlasExtension {
    * regeneration of your project diagrams. Defaults to false.
    *
    * Be careful enabling this on large projects - sync time might extend quite a lot.
+   *
+   * Also controlled by the `atlas.generateOnSync` Gradle property.
    */
   public val generateOnSync: Property<Boolean>
 
@@ -39,6 +41,8 @@ public interface AtlasExtension {
    * Set to true if you want project charts to gather together groups of projects into bordered
    * containers. E.g. a graph with ":a", ":b" and ":c" won't be grouped at all because they don't
    * share any path segments, but ":a:b" and "a:c" will be grouped together.
+   *
+   * Also controlled by the `atlas.groupProjects` Gradle property.
    */
   public val groupProjects: Property<Boolean>
 
@@ -60,12 +64,16 @@ public interface AtlasExtension {
    * Set to true if you want project charts to also show projects that depend on the one in
    * question. This will traverse the graph both directions and show all upstream and downstream
    * projects. Defaults to false.
+   *
+   * Also controlled by the `atlas.alsoTraverseUpwards` Gradle property.
    */
   public val alsoTraverseUpwards: Property<Boolean>
 
   /**
    * Set to true to print the absolute path of any generated files to the Gradle console output.
    * Defaults to false.
+   *
+   * Also controlled by the `atlas.printFilesToConsole` Gradle property.
    */
   public val printFilesToConsole: Property<Boolean>
 
@@ -75,6 +83,8 @@ public interface AtlasExtension {
    * message. Defaults to true.
    *
    * D2 and Graphviz only register these tasks when their `intermediateFilesInBuildDir` is false.
+   *
+   * Also controlled by the `atlas.checkOutputs` Gradle property.
    */
   public val checkOutputs: Property<Boolean>
 
@@ -82,6 +92,8 @@ public interface AtlasExtension {
    * Set to true to attach a string label on each project link, showing which configuration caused
    * the link to be created. Defaults to false. When true, the [LinkTypeSpec.name] property will be
    * shown.
+   *
+   * Also controlled by the `atlas.displayLinkLabels` Gradle property.
    */
   public val displayLinkLabels: Property<Boolean>
 

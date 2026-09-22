@@ -82,12 +82,6 @@ atlas {
 }
 ```
 
-!!! tip "Import Atlas types, don't fully qualify them"
-
-    Inside `settings.gradle.kts` the `atlas` extension accessor shadows the `atlas` package, so
-    `atlas.mermaid.Theme.Forest` won't resolve. Add an `import` at the top of the file, as above, and
-    refer to the type by its short name.
-
 !!! info "Only the settings file needs to change"
 
     You don't apply Atlas to your subprojects, and you don't add anything to their build scripts.
@@ -97,12 +91,6 @@ Then generate your diagrams by running:
 
 ``` shell
 gradle atlasGenerate
-```
-
-or validate them by running:
-
-``` shell
-gradle atlasCheck
 ```
 
 That's all you need to get it working! See the next pages for further configuration of each of the above plugins.

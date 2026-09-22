@@ -11,9 +11,8 @@ For anything bigger than a small fix, please open an issue first so we can agree
 You'll need Java 21 or newer. Then:
 
 ```bash
-./gradlew build           # build and test
-./gradlew check           # detekt, licensee and the ABI dump
-./scripts/ktfmt.sh        # format your changes
+./gradlew check
+./scripts/ktfmt.sh
 ```
 
 If you change the public API, run `./gradlew updateKotlinAbi` and commit the updated dump, otherwise `check` will fail.

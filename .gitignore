@@ -1,4 +1,3 @@
-!.idea/detekt.xml
 *.jks
 *.keystore
 .cache/
