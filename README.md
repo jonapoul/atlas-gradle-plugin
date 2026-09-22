@@ -1,14 +1,19 @@
 # Atlas Gradle Plugin
 
-### [jonapoul.github.io/atlas-gradle-plugin](https://jonapoul.github.io/atlas-gradle-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.jonpoulton.atlas/plugin)](https://central.sonatype.com/artifact/dev.jonpoulton.atlas/plugin)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](./LICENSE.txt)
 
-A Gradle settings plugin for generating diagrams of your project's module structure, rendered with
-[D2](https://d2lang.org/), [Graphviz](https://graphviz.org/) or [Mermaid](https://mermaid.js.org/) -
-any combination of the three. Supports Gradle 9, the configuration cache and isolated projects.
+A Gradle settings plugin for generating diagrams of your project's module structure. Supported frameworks:
+
+- [D2](https://d2lang.org/)
+- [Graphviz](https://graphviz.org/)
+- [Mermaid](https://mermaid.js.org/)
+
+You can choose any one of the above, or any combination of them.
 
 ## Quick start
 
-Atlas is applied and configured in `settings.gradle.kts`, not in a build script:
+In `settings.gradle.kts`:
 
 ```kotlin
 pluginManagement {
@@ -18,7 +23,7 @@ pluginManagement {
 }
 
 plugins {
-  id("dev.jonpoulton.atlas") version "x.y.z"
+  id("dev.jonpoulton.atlas") version "<version>"
 }
 
 include(":app", ":core")
@@ -29,18 +34,30 @@ atlas {
 }
 ```
 
-Nothing is generated until you configure at least one framework block. Your subprojects need no
-changes - the settings plugin wires up every project in the build.
+Nothing is generated until you configure at least one framework block. Your subprojects need no changes - the settings plugin wires up every project in the build.
 
 Then:
 
 ```shell
-gradle atlasGenerate   # write the diagrams
-gradle atlasCheck      # verify they match the current project structure
+# write the diagrams
+gradle atlasGenerate
+
+# verify they match the current project structure. Only relevant if
+gradle atlasCheck
 ```
 
-See the [documentation](https://jonapoul.github.io/atlas-gradle-plugin) for the full configuration
-reference, and [`samples/`](samples) for complete worked examples of each framework.
+# Usage
+
+[See here](https://jonapoul.github.io/atlas-gradle-plugin) for a full usage/configuration reference, or the [sample projects](./samples/) for full example implementations.
+
+# Examples
+
+The same plugin, three renderers, each pointed at a different kind of build. See the [sample projects](./samples/) for the full configs.
+
+| [D2](https://jonapoul.github.io/atlas-gradle-plugin/usage-d2/) | [Graphviz](https://jonapoul.github.io/atlas-gradle-plugin/usage-graphviz/) | [Mermaid](https://jonapoul.github.io/atlas-gradle-plugin/usage-mermaid/) |
+|---|---|---|
+| ![](docs/docs/img/readme-d2.png) | ![](docs/docs/img/readme-graphviz.png) | ![](docs/docs/img/readme-mermaid.png) |
+| A 14-module Android app, grouped into `:app`, `:feature` and `:core`. ELK layout, per-type shapes and fills, an embedded legend | A 15-module JVM backend of services, shared libs, API contracts and legacy Java. Left-to-right `dot` layout with custom node, edge and graph attributes | Hand-drawn look, the Forest theme, ELK tuning and custom theme variables |
 
 ## License
 

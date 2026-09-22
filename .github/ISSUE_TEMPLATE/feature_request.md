@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Which plugin?**
-D2, Mermaid, Graphviz? Shared between them? Or a new plugin?
+D2, Mermaid, Graphviz? Common between them? Or a new plugin?
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.

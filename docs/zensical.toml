@@ -10,7 +10,6 @@ extra_css = ["stylesheets/extra.css"]
 nav = [
   { "Overview" = "index.md" },
   { "Installation" = "installation.md" },
-  { "Samples" = "samples.md" },
   { "Configuration" = [
     { "Common" = "usage-common.md" },
     { "D2" = "usage-d2.md" },
