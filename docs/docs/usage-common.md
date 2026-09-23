@@ -55,7 +55,10 @@ atlas {
     fileFormat = FileFormat.Svg
   }
 
-  // graphviz() isn't called, so no Graphviz tasks are registered
+  // setting a property directly switches it on too
+  graphviz.pathToDotCommand = "/usr/local/bin/dot"
+
+  // any framework not mentioned at all gets no tasks
 }
 ```
 

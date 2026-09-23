@@ -73,33 +73,41 @@ constructor(
   override val frameworks: Set<Framework>
     get() = mutableFrameworks.toSet()
 
-  override val d2: D2SpecImpl = D2SpecImpl(objects, providers)
+  // Atlas reads these rather than the public getters, which switch the framework on
+  internal val d2Spec = D2SpecImpl(objects, providers)
+  internal val graphvizSpec = GraphvizSpecImpl(objects, providers)
+  internal val mermaidSpec = MermaidSpecImpl(objects, providers)
+
+  override val d2: D2SpecImpl
+    get() = d2Spec.also { d2() }
 
   override fun d2(action: Action<D2Spec>) {
     d2()
-    action.execute(d2)
+    action.execute(d2Spec)
   }
 
   override fun d2() {
     mutableFrameworks += D2
   }
 
-  override val graphviz: GraphvizSpecImpl = GraphvizSpecImpl(objects, providers)
+  override val graphviz: GraphvizSpecImpl
+    get() = graphvizSpec.also { graphviz() }
 
   override fun graphviz(action: Action<GraphvizSpec>) {
     graphviz()
-    action.execute(graphviz)
+    action.execute(graphvizSpec)
   }
 
   override fun graphviz() {
     mutableFrameworks += Graphviz
   }
 
-  override val mermaid: MermaidSpecImpl = MermaidSpecImpl(objects, providers)
+  override val mermaid: MermaidSpecImpl
+    get() = mermaidSpec.also { mermaid() }
 
   override fun mermaid(action: Action<MermaidSpec>) {
     mermaid()
-    action.execute(mermaid)
+    action.execute(mermaidSpec)
   }
 
   override fun mermaid() {
