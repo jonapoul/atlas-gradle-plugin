@@ -12,9 +12,10 @@ package atlas.core
  * ```
  *
  * Each project's chart is written next to its README, named for the framework that drew it, e.g.
- * `chart-d2.svg`. Legends are shared by the whole build, so they go in the root project's `atlas/`
- * directory as `legend-d2.svg` and so on. The framework is in the filename, so enabling several at
- * once never causes them to overwrite each other.
+ * `chart-d2.svg`. Graphviz and Mermaid legends are shared by the whole build, so they go in the
+ * root project's `atlas/` directory as `legend-graphviz.svg` and `legend-mermaid.md`. D2 draws its
+ * legend inside each chart instead. The framework is in the filename, so enabling several at once
+ * never causes them to overwrite each other.
  */
 public enum class Framework(override val value: String) : StringEnum {
   D2("d2"),

@@ -46,7 +46,7 @@ atlas {
 }
 ```
 
-Each project's chart is written into that project's own directory, next to its README, and the framework is part of the filename, so enabling several at once never has two of them fighting over the same file. Legends are shared by the whole build, so they go in the root project's `atlas/` directory. Passing a configuration block switches the framework on too, so this is enough:
+Each project's chart is written into that project's own directory, next to its README, and the framework is part of the filename, so enabling several at once never has two of them fighting over the same file. Graphviz and Mermaid legends are shared by the whole build, so they go in the root project's `atlas/` directory. D2 draws its legend inside each chart. Passing a configuration block switches the framework on too, so this is enough:
 
 ``` kotlin
 atlas {

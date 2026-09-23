@@ -24,8 +24,8 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
 
 /**
- * Creates or updates a README.md file to inject the generated chart/legend files. If the readme
- * contains a block like below:
+ * Creates or updates a README.md file to inject the generated chart/legend files. An existing
+ * readme must contain a block like below, or the task fails:
  * ```markdown
  * Something above
  *
@@ -39,13 +39,14 @@ import org.gradle.api.tasks.TaskProvider
  * then the text in between will be replaced with the generated images. Anything outside will be
  * left as-is.
  *
- * If generating a new README, the output will look like below:
+ * If generating a new README, the output will look like below, e.g. for Graphviz in `:app`:
  * ```markdown
- * # :path:to:my:project
+ * # app
  *
  * <!--region chart-->
- * ![](chart-d2.png)
- * ![](../atlas/legend-d2.png)
+ * ![chart](chart-graphviz.svg)
+ *
+ * ![legend](../atlas/legend-graphviz.svg)
  * <!--endregion-->
  * ```
  *

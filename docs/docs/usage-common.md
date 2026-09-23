@@ -43,7 +43,7 @@ atlas {
 
 ## Frameworks
 
-Everything above applies to every diagram Atlas generates. Which diagrams those are is decided by the framework blocks you configure - use one, or all three. Each project's chart is written into that project's directory as `chart-<framework>.<ext>`, so they never overwrite each other, and every framework you enable adds its own block to each project's README. Legends belong to the whole build, so they go in the root project's `atlas/` directory as `legend-<framework>.<ext>`.
+Everything above applies to every diagram Atlas generates. Which diagrams those are is decided by the framework blocks you configure - use one, or all three. Each project's chart is written into that project's directory as `chart-<framework>.<ext>`, so they never overwrite each other, and every framework you enable adds its own block to each project's README. Graphviz and Mermaid legends belong to the whole build, so they go in the root project's `atlas/` directory as `legend-<framework>.<ext>`. D2 draws its legend inside each chart instead.
 
 ``` kotlin
 atlas {
@@ -67,6 +67,22 @@ The framework-specific configs are documented in:
 - [Graphviz](usage-graphviz.md)
 - [D2](usage-d2.md)
 - [Mermaid](usage-mermaid.md)
+
+## README
+
+`gradle atlasGenerate` also writes each project's charts and legends into its `README.md`. A project with no README gets a new one. A project that already has one needs a region for Atlas to write into, otherwise the build fails:
+
+``` markdown
+# My project
+
+Anything up here is left alone.
+
+<!--region chart-->
+Atlas replaces everything in here.
+<!--endregion-->
+
+Anything down here is left alone too.
+```
 
 ## Properties
 
@@ -174,7 +190,7 @@ atlas {
 }
 ```
 
-Set to true if you want project charts to gather together groups of projects into bordered containers. E.g. a graph with `":a"`, `":b"` and `":c"` won't be grouped at all because they don't share any path segments, but `":a:b"` and `"a:c"` will be grouped together. A grouped project is labelled with only its last path segment, e.g. `":b"` instead of `":a:b"`, since its container already shows the rest. Disabled by default.
+Set to true if you want project charts to gather together groups of projects into bordered containers. E.g. a graph with `":a"`, `":b"` and `":c"` won't be grouped at all because they don't share any path segments, but `":a:b"` and `":a:c"` will be grouped together. A grouped project is labelled with only its last path segment, e.g. `":b"` instead of `":a:b"`, since its container already shows the rest. Disabled by default.
 
 !!! tip
 
@@ -291,13 +307,13 @@ A few project type quick-access functions are built into Atlas for use in the pr
 atlas {
   projectTypes {
     androidApp()
-    androidLibrary()
-    java()
-    kotlinJvm()
     kotlinMultiplatform()
+    androidLibrary()
+    kotlinJvm()
+    java()
     other()
 
-    // or useDefaults() to quickly add all of the above
+    // or useDefaults() to quickly add all of the above, in this order
   }
 }
 ```
@@ -391,7 +407,7 @@ atlas {
 
 !!! warning
 
-    As with project types, remember that the order of declaration matters! Top takes priority. So if you define "implementation" before "testImplementation", you won't get any links matching the latter because they all also match the former.
+    As with project types, remember that the order of declaration matters! Top takes priority. Each link type's configuration is matched against the whole configuration name, ignoring case - either exactly, or as a regex. The `api()` and `implementation()` helpers use the regexes `.*?api` and `.*?implementation`, so they also match `jvmMainImplementation`, `releaseApi` and so on. If you want `jvmMainImplementation` links to have their own type, declare it before `implementation()`.
 
 ### pathTransforms
 
@@ -444,7 +460,10 @@ A few things have no Gradle property:
 - `put("key", value)`, since the key is arbitrary. See [Extra properties](#extra-properties).
 - [`d2.fonts`](usage-d2.md#fonts), which takes file paths.
 - [`ignoredConfigs`](#ignoredconfigs) and [`ignoredProjects`](#ignoredprojects), which take collections.
+- [`pathTransforms`](#pathtransforms).
 - Styles on [projectTypes](#projecttypes) and [linkTypes](#linktypes).
+- [`graphviz.pathToDotCommand`](usage-graphviz.md#pathtodotcommand).
+- [`mermaid.layout`](usage-mermaid.md#layout)'s `name`.
 
 Each property's KDoc names its Gradle property, so [check the API docs](api/index.html) if you're unsure about one.
 

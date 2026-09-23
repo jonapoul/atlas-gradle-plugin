@@ -40,7 +40,7 @@ public interface AtlasExtension {
   /**
    * Set to true if you want project charts to gather together groups of projects into bordered
    * containers. E.g. a graph with ":a", ":b" and ":c" won't be grouped at all because they don't
-   * share any path segments, but ":a:b" and "a:c" will be grouped together. A grouped project is
+   * share any path segments, but ":a:b" and ":a:c" will be grouped together. A grouped project is
    * labelled with only its last path segment, since its container already shows the rest.
    *
    * Also controlled by the `atlas.groupProjects` Gradle property.
