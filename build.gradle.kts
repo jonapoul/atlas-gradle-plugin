@@ -126,7 +126,7 @@ java {
 
 dokka {
   dokkaPublications.html {
-    outputDirectory = project.layout.projectDirectory.dir("docs/api")
+    outputDirectory = project.layout.projectDirectory.dir("docs/docs/api")
     includes.from(project.layout.projectDirectory.file("README.md"))
   }
 

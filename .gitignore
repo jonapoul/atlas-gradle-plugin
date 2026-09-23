@@ -7,6 +7,6 @@
 .kotlin/
 .venv/
 build/
-docs/api/
+docs/docs/api/
 docs/site/
 local.properties

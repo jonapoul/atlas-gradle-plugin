@@ -23,7 +23,7 @@ configuration cache, parallel execution and isolated projects all enabled.
 ./scripts/ktfmt.sh --force         # all files
 
 # Slow, only when really necessary:
-./gradlew dokkaGeneratePublicationHtml --rerun-tasks --no-build-cache  # API docs to docs/api/
+./gradlew dokkaGeneratePublicationHtml --rerun-tasks --no-build-cache  # API docs to docs/docs/api/
 ```
 
 ## Architecture
