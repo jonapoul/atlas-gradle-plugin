@@ -150,7 +150,7 @@ internal class DotWriterTest {
     val writer =
       dotWriter(
         typedProjects = OneLevelOfSubprojects.projects,
-        links = emptySet(),
+        links = OneLevelOfSubprojects.links,
         groupProjects = true,
         config = DotConfig(clusterAttributes = mapOf("bgcolor" to "lightgrey")),
       )
@@ -179,6 +179,16 @@ internal class DotWriterTest {
             ":ui:b" [label=":b"]
             ":ui:c" [label=":c"]
           }
+          ":app" -> ":ui:a"
+          ":app" -> ":ui:b"
+          ":app" -> ":ui:c"
+          ":domain:a" -> ":data:a"
+          ":domain:b" -> ":data:a"
+          ":domain:b" -> ":data:b"
+          ":ui:a" -> ":domain:a"
+          ":ui:b" -> ":domain:b"
+          ":ui:c" -> ":domain:a"
+          ":ui:c" -> ":domain:b"
         }
         """
           .trimIndent()
