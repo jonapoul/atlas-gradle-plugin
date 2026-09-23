@@ -1,6 +1,7 @@
 package atlas.core
 
 import assertk.assertThat
+import assertk.assertions.endsWith
 import atlas.test.ScenarioTest
 import atlas.test.resolve
 import atlas.test.scenarios.MermaidBasic
@@ -38,10 +39,10 @@ internal class WriteReadmeTest : ScenarioTest() {
           _a --> _c
         ```
         <!--endregion-->
-
         """
           .trimIndent()
       )
+    assertThat(resolve("a/README.md").readText()).endsWith("\n")
   }
 
   @Test
@@ -74,7 +75,6 @@ internal class WriteReadmeTest : ScenarioTest() {
         | implementation | #5555FF |
         | compileOnly | Yellow Dashed |
         <!--endregion-->
-
         """
           .trimIndent()
       )
