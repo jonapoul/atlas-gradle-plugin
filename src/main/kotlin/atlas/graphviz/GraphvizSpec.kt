@@ -29,6 +29,10 @@ import org.gradle.api.provider.Property
  *     graph {
  *       ...
  *     }
+ *
+ *     cluster {
+ *       ...
+ *     }
  *   }
  * }
  * ```
@@ -88,4 +92,12 @@ public interface GraphvizSpec : AtlasSpec {
   public val graph: GraphAttributes
 
   public fun graph(action: Action<GraphAttributes>)
+
+  /**
+   * Configure the attributes applied to each cluster of grouped projects. Only used when
+   * [atlas.core.AtlasExtension.groupProjects] is enabled.
+   */
+  public val cluster: ClusterAttributes
+
+  public fun cluster(action: Action<ClusterAttributes>)
 }

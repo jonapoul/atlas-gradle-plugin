@@ -3,6 +3,7 @@ package atlas.graphviz.internal
 import atlas.core.internal.bool
 import atlas.core.internal.enum
 import atlas.core.internal.string
+import atlas.graphviz.ClusterAttributes
 import atlas.graphviz.EdgeAttributes
 import atlas.graphviz.FileFormat
 import atlas.graphviz.GraphAttributes
@@ -39,4 +40,8 @@ internal class GraphvizSpecImpl(
   override val graph = GraphAttributesImpl(objects, providers)
 
   override fun graph(action: Action<GraphAttributes>) = action.execute(graph)
+
+  override val cluster = ClusterAttributesImpl(objects, providers)
+
+  override fun cluster(action: Action<ClusterAttributes>) = action.execute(cluster)
 }

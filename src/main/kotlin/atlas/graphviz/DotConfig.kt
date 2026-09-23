@@ -15,6 +15,7 @@ public class DotConfig(
   public val nodeAttributes: Map<String, String>? = null,
   public val edgeAttributes: Map<String, String>? = null,
   public val graphAttributes: Map<String, String>? = null,
+  public val clusterAttributes: Map<String, String>? = null,
 ) : JSerializable
 
 internal fun DotConfig(
@@ -27,4 +28,5 @@ internal fun DotConfig(
     nodeAttributes = spec.node.properties.orNull,
     edgeAttributes = spec.edge.properties.orNull,
     graphAttributes = spec.graph.properties.orNull,
+    clusterAttributes = spec.cluster.properties.orNull,
   )
