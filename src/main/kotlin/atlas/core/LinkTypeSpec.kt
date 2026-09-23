@@ -32,8 +32,10 @@ import org.gradle.api.provider.Property
  * You can create new types with the string invoke operator as above (similar to one used in Gradle
  * dependencies sometimes), or just call one of the [register] overloads.
  *
- * Added entries are checked in priority order, so a configuration of `apiImplementationCompileOnly`
- * in the example above would match `api` but not reach `implementation` or `compileOnly`.
+ * Each entry is matched against the whole configuration name, ignoring case - either exactly, or as
+ * a regex. Entries are checked in priority order, so in the example above a configuration of
+ * `jvmMainImplementation` would match `implementation`, since that uses the regex
+ * `.*?implementation`.
  */
 @AtlasDsl
 public interface NamedLinkTypeContainer : NamedDomainObjectContainer<LinkTypeSpec> {

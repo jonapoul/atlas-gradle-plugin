@@ -103,7 +103,7 @@ When enabled, dashed and dotted links between project nodes will be animated. Di
 
 !!! warning
 
-    This will only work for "animatable" [output formats](#fileformat): either SVG or GIF. If you choose a different output, you'll get a Gradle warning to tell you about it when syncing the IDE.
+    This will only work for "animatable" [output formats](#fileformat): either SVG or GIF. If you choose a different output, you'll get a Gradle warning about it when the build is configured.
 
 <div class="side-by-side">
   <figure>
@@ -139,7 +139,7 @@ atlas {
 }
 ```
 
-This flag centers the SVG within the containing viewbox. Doesn't really give an obvious change in me experience, but ¯\_(ツ)_/¯. [See here](https://d2lang.com/tour/vars/#configuration-variables).
+This flag centers the SVG within the containing viewbox. Doesn't really give an obvious change in my experience, but ¯\_(ツ)_/¯. [See here](https://d2lang.com/tour/vars/#configuration-variables).
 
 ### direction
 
@@ -644,4 +644,4 @@ Each one is also a [Gradle property](usage-common.md#gradle-properties), e.g. `a
     }
     ```
 
-    I'm not going to document all this in here, but [take a look at the D2 docs if you're interested](https://d2lang.com/tour/globs/). If you want to add them to your chart, `globalProps` is probably(?) the best place for it. This will add the glob property to the global `classes.d2` file, which gets auto-imported into all project chart diagrams.
+    I'm not going to document all this in here, but [take a look at the D2 docs if you're interested](https://d2lang.com/tour/globs/). If you want to add them to your chart, `globalProps` is probably(?) the best place for it. This will add the glob property to the global `classes-d2.d2` file, which gets auto-imported into all project chart diagrams.
