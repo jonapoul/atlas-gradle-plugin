@@ -29,7 +29,7 @@ internal fun onSettingsEvaluated(
 ) {
   val repositories = settings.dependencyResolutionManagement
   val d2DownloadVersion =
-    if (D2 in extension.frameworks) extension.d2.downloadVersion(settings.providers) else null
+    if (D2 in extension.frameworks) extension.d2Spec.downloadVersion(settings.providers) else null
 
   wiring.config =
     extension.snapshot(
@@ -42,7 +42,7 @@ internal fun onSettingsEvaluated(
   // Read here rather than on apply, since the settings script sets it after `plugins { }`
   if (d2DownloadVersion != null) repositories.repositories.d2Releases()
   extension.warnAboutConfig(AtlasPlugin.LOGGER)
-  if (D2 in extension.frameworks) extension.d2.warnIfVersionIgnored(AtlasPlugin.LOGGER)
+  if (D2 in extension.frameworks) extension.d2Spec.warnIfVersionIgnored(AtlasPlugin.LOGGER)
 }
 
 private fun chartedSubprojectPaths(project: ProjectDescriptor): List<String> = buildList {

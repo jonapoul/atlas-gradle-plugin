@@ -1,6 +1,7 @@
 package atlas.core
 
 import atlas.test.ScenarioTest
+import atlas.test.scenarios.FrameworkPropertySetDirectly
 import atlas.test.scenarios.MermaidBasic
 import atlas.test.scenarios.NoFrameworksConfigured
 import atlas.test.scenarios.PropertiesForUnusedFrameworks
@@ -72,4 +73,19 @@ internal class FrameworkConfigTest : ScenarioTest() {
       .outputDoesNotContain("writeGraphvizChart")
       .outputDoesNotContain("writeD2Chart")
   }
+
+  @Test
+  fun `Setting a framework property directly switches that framework on`() =
+    FrameworkPropertySetDirectly {
+      // when
+      assertThatTask("tasks")
+        .withArgument("--all")
+        .buildsSuccessfully()
+
+        // then
+        .outputContains("writeGraphvizChart")
+        .outputDoesNotContain("writeMermaidChart")
+        .outputDoesNotContain("writeD2Chart")
+        .outputDoesNotContain("no Atlas diagram frameworks are configured")
+    }
 }

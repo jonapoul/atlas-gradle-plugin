@@ -120,8 +120,9 @@ public interface AtlasExtension {
   public val frameworks: Set<Framework>
 
   /**
-   * Configuration for D2 charts. Touching this block - even an empty one - registers the D2
-   * generation tasks, which write `chart-d2.<ext>` into each project.
+   * Configuration for D2 charts. Any use of it registers the D2 generation tasks, which write
+   * `chart-d2.<ext>` into each project. That includes `d2()`, an empty `d2 { }` block, or setting a
+   * property directly like `d2.sketch = true`.
    */
   public val d2: D2Spec
 
@@ -132,8 +133,9 @@ public interface AtlasExtension {
   public fun d2()
 
   /**
-   * Configuration for Graphviz charts. Touching this block - even an empty one - registers the
-   * Graphviz generation tasks, which write `chart-graphviz.<ext>` into each project.
+   * Configuration for Graphviz charts. Any use of it registers the Graphviz generation tasks, which
+   * write `chart-graphviz.<ext>` into each project. That includes `graphviz()`, an empty `graphviz
+   * { }` block, or setting a property directly like `graphviz.pathToDotCommand = "..."`.
    */
   public val graphviz: GraphvizSpec
 
@@ -144,8 +146,9 @@ public interface AtlasExtension {
   public fun graphviz()
 
   /**
-   * Configuration for Mermaid charts. Touching this block - even an empty one - registers the
-   * Mermaid generation tasks, which write `chart-mermaid.mmd` into each project.
+   * Configuration for Mermaid charts. Any use of it registers the Mermaid generation tasks, which
+   * write `chart-mermaid.mmd` into each project. That includes `mermaid()`, an empty `mermaid { }`
+   * block, or setting a property directly like `mermaid.theme = Theme.Forest`.
    */
   public val mermaid: MermaidSpec
 

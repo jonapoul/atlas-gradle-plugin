@@ -58,6 +58,17 @@ internal object NoFrameworksConfigured : Scenario {
   override val subprojectBuildFiles = SIMPLE_SUBPROJECTS
 }
 
+/** No framework block, but a framework property is set directly. */
+internal object FrameworkPropertySetDirectly : Scenario {
+  override val frameworks = emptySet<Framework>()
+
+  override val rootBuildFile = SIMPLE_ROOT_BUILD_FILE
+
+  override val atlasConfig = """graphviz.pathToDotCommand = "dot""""
+
+  override val subprojectBuildFiles = SIMPLE_SUBPROJECTS
+}
+
 private val SIMPLE_ROOT_BUILD_FILE =
   """
   plugins {

@@ -49,7 +49,11 @@ constructor(
     // the isolation that GradleLifecycle applies to the callback below. The containers do not, so
     // everything else is flattened into a value snapshot first.
     val wiring =
-      AtlasWiring(d2 = extension.d2, graphviz = extension.graphviz, mermaid = extension.mermaid)
+      AtlasWiring(
+        d2 = extension.d2Spec,
+        graphviz = extension.graphvizSpec,
+        mermaid = extension.mermaidSpec,
+      )
 
     target.gradle.settingsEvaluated { settings ->
       onSettingsEvaluated(settings, wiring, extension)

@@ -1,8 +1,8 @@
 package atlas.core
 
 /**
- * The diagram frameworks Atlas can generate. A framework is switched on by configuring its block in
- * your build script:
+ * The diagram frameworks Atlas can generate. A framework is switched on by using its block in your
+ * build script:
  * ```kotlin
  * atlas {
  *   d2 { }         // generates D2 charts
