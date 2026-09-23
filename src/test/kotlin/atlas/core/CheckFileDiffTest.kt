@@ -8,7 +8,6 @@ import atlas.test.scenarios.CheckExplicitlyEnabled
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.GraphVizBasicWithPngOutput
 import atlas.test.scenarios.GraphvizBasic
-import atlas.test.withIntermediatesInProjectDir
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
 import blueprint.test.contentContains
@@ -24,7 +23,7 @@ import org.junit.jupiter.api.Test
 internal class CheckFileDiffTest : ScenarioTest() {
   @Test
   fun `Write doesn't run as a dependency of check for graphviz`() =
-    runScenario(GraphvizBasic.withIntermediatesInProjectDir()) {
+    GraphvizBasic.withIntermediatesInProjectDir {
       // when
       assertThatTask(":a:checkGraphvizChart")
         .withArgument("--dry-run")
@@ -38,7 +37,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
 
   @Test
   fun `Write doesn't run as a dependency of check for D2`() =
-    runScenario(D2Basic.withIntermediatesInProjectDir()) {
+    D2Basic.withIntermediatesInProjectDir {
       // when
       assertThatTask(":a:checkD2Chart")
         .withArgument("--dry-run")
@@ -52,7 +51,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
 
   @Test
   fun `Fail if the expected file hasn't been generated yet`() =
-    runScenario(GraphvizBasic.withIntermediatesInProjectDir()) {
+    GraphvizBasic.withIntermediatesInProjectDir {
       assertThatTask(":a:checkGraphvizChart")
         .failsBuild()
         .outputContains(
@@ -70,7 +69,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
 
   @Test
   fun `Verify projects of a basic project`() =
-    runScenario(GraphVizBasicWithPngOutput.withIntermediatesInProjectDir()) {
+    GraphVizBasicWithPngOutput.withIntermediatesInProjectDir {
       // given initial dotfile is generated
       assertThatTask(":a:writeGraphvizChart").buildsSuccessfully()
 
@@ -102,47 +101,46 @@ internal class CheckFileDiffTest : ScenarioTest() {
     }
 
   @Test
-  fun `Verify legend of a basic project`() =
-    runScenario(GraphvizBasic.withIntermediatesInProjectDir()) {
-      // given initial dotfile is generated
-      assertThatTask("writeGraphvizLegend").buildsSuccessfully()
+  fun `Verify legend of a basic project`() = GraphvizBasic.withIntermediatesInProjectDir {
+    // given initial dotfile is generated
+    assertThatTask("writeGraphvizLegend").buildsSuccessfully()
 
-      // when we check it with no changes
-      assertThatTask("checkGraphvizLegend")
-        .buildsSuccessfully()
-        .taskHadResult(":checkGraphvizLegend", SUCCESS)
+    // when we check it with no changes
+    assertThatTask("checkGraphvizLegend")
+      .buildsSuccessfully()
+      .taskHadResult(":checkGraphvizLegend", SUCCESS)
 
-      // given we manually adjust the generated file
-      val legendFile = resolve("atlas/legend-graphviz.dot")
-      val editedLegend = legendFile.readText().replace("CELLBORDER=\"1\"", "CELLBORDER=\"100\"")
-      legendFile.writeText(editedLegend)
+    // given we manually adjust the generated file
+    val legendFile = resolve("atlas/legend-graphviz.dot")
+    val editedLegend = legendFile.readText().replace("CELLBORDER=\"1\"", "CELLBORDER=\"100\"")
+    legendFile.writeText(editedLegend)
 
-      // when we run a check again, then it fails and spits out the expected diff
-      assertThatTask("checkGraphvizLegend")
-        .failsBuild()
-        .taskHadResult(":checkGraphvizLegend", FAILED)
-        .outputContains(
-          """
-          |          digraph {
-          |            node [shape="plaintext"]
-          |            projects [label=<
-          |      ---   <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
-          |      +++   <TABLE BORDER="0" CELLBORDER="100" CELLSPACING="0" CELLPADDING="4">
-          |              <TR><TD COLSPAN="2"><B>Project Types</B></TD></TR>
-          |              <TR><TD>Kotlin JVM</TD><TD BGCOLOR="mediumorchid">&lt;project-name&gt;</TD></TR>
-          |              <TR><TD>Java</TD><TD BGCOLOR="orange">&lt;project-name&gt;</TD></TR>
-          |              <TR><TD>Custom</TD><TD BGCOLOR="#123456">&lt;project-name&gt;</TD></TR>
-          |            </TABLE>
-          |            >];
-          |          }
-          """
-            .trimMargin()
-        )
-    }
+    // when we run a check again, then it fails and spits out the expected diff
+    assertThatTask("checkGraphvizLegend")
+      .failsBuild()
+      .taskHadResult(":checkGraphvizLegend", FAILED)
+      .outputContains(
+        """
+        |          digraph {
+        |            node [shape="plaintext"]
+        |            projects [label=<
+        |      ---   <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+        |      +++   <TABLE BORDER="0" CELLBORDER="100" CELLSPACING="0" CELLPADDING="4">
+        |              <TR><TD COLSPAN="2"><B>Project Types</B></TD></TR>
+        |              <TR><TD>Kotlin JVM</TD><TD BGCOLOR="mediumorchid">&lt;project-name&gt;</TD></TR>
+        |              <TR><TD>Java</TD><TD BGCOLOR="orange">&lt;project-name&gt;</TD></TR>
+        |              <TR><TD>Custom</TD><TD BGCOLOR="#123456">&lt;project-name&gt;</TD></TR>
+        |            </TABLE>
+        |            >];
+        |          }
+        """
+          .trimMargin()
+      )
+  }
 
   @Test
   fun `Register check tasks when checkOutputs is true`() =
-    runScenario(CheckExplicitlyEnabled.withIntermediatesInProjectDir()) {
+    CheckExplicitlyEnabled.withIntermediatesInProjectDir {
       assertThatTask("check")
         .withArgument("--dry-run")
         .buildsSuccessfully()
@@ -155,7 +153,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
 
   @Test
   fun `Don't register check tasks when checkOutputs is false`() =
-    runScenario(CheckExplicitlyDisabled.withIntermediatesInProjectDir()) {
+    CheckExplicitlyDisabled.withIntermediatesInProjectDir {
       assertThatTask("check")
         .withArgument("--dry-run")
         .buildsSuccessfully()
@@ -164,7 +162,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
 
   @Test
   fun `Don't register check tasks when intermediates are in the build dir`() =
-    runScenario(CheckExplicitlyEnabled) {
+    CheckExplicitlyEnabled {
       assertThatTask("check")
         .withArgument("--dry-run")
         .buildsSuccessfully()
@@ -173,16 +171,15 @@ internal class CheckFileDiffTest : ScenarioTest() {
     }
 
   @Test
-  fun `Run aggregated check task`() =
-    runScenario(GraphvizBasic.withIntermediatesInProjectDir()) {
-      assertThatTask("atlasGenerate").buildsSuccessfully()
+  fun `Run aggregated check task`() = GraphvizBasic.withIntermediatesInProjectDir {
+    assertThatTask("atlasGenerate").buildsSuccessfully()
 
-      assertThatTask("atlasCheck")
-        .buildsSuccessfully()
-        .taskSucceeded(":checkGraphvizLegend")
-        .taskSucceeded(":a:checkGraphvizChart")
-        .taskSucceeded(":b:checkGraphvizChart")
-        .taskSucceeded(":c:checkGraphvizChart")
-        .taskSucceeded(":atlasCheck")
-    }
+    assertThatTask("atlasCheck")
+      .buildsSuccessfully()
+      .taskSucceeded(":checkGraphvizLegend")
+      .taskSucceeded(":a:checkGraphvizChart")
+      .taskSucceeded(":b:checkGraphvizChart")
+      .taskSucceeded(":c:checkGraphvizChart")
+      .taskSucceeded(":atlasCheck")
+  }
 }

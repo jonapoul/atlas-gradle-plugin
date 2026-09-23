@@ -11,6 +11,8 @@ import atlas.core.tasks.TaskWithOutputFile
 import atlas.d2.AsciiMode
 import atlas.d2.FileFormat
 import atlas.d2.internal.D2SpecImpl
+import atlas.d2.internal.d2OnPath
+import atlas.d2.internal.downloadedD2
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
@@ -18,6 +20,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -33,8 +36,8 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.process.ExecOperations
 
 /**
- * Executes `d2` with the configured inputs to generate an image file. Requires D2 to be
- * pre-installed.
+ * Executes `d2` with the configured inputs to generate an image file. [executable] is whichever of
+ * the configured one, the one on the system PATH or a downloaded one applies.
  *
  * Just so I don't forget, [classesFile] is only used to force regeneration if the classes file
  * updates, since we don't directly read it in this task.
@@ -77,7 +80,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   @get:[Input Optional]
   public abstract val cliArguments: MapProperty<String, String>
   @get:[PathSensitive(NONE) InputFile Optional]
-  public abstract val d2Executable: RegularFileProperty
+  public abstract val executable: RegularFileProperty
   @get:OutputFile abstract override val outputFile: RegularFileProperty
   @get:Inject public abstract val execOperations: ExecOperations
 
@@ -94,7 +97,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
   public fun execute() {
     val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
-    val executable = d2Executable.orNull?.asFile?.absolutePath ?: "d2"
+    val executable = executable.orNull?.asFile?.absolutePath ?: "d2"
     val cliArguments = cliArguments.getOrElse(emptyMap()).toMutableMap()
 
     // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
@@ -172,6 +175,8 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
       with(target) {
         val name = "execD2$variant"
         val execD2 = tasks.register(name, ExecD2::class.java)
+        // Outside configure {}, since the download wiring may need an afterEvaluate hook
+        val executable = d2Executable(spec, config)
 
         execD2.configure { task ->
           val d2File = d2FileTask.flatMap { it.outputFile }
@@ -182,11 +187,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
           task.classesFile.fileProvider(classesFile.singleFile(D2Classes))
           task.dependsOn(classesFile)
           task.inputFile.convention(d2File)
-          task.d2Executable.convention(
-            spec.d2Executable.orElse(
-              layout.file(spec.properties.d2Executable.map(::File).orElse(d2OnPath()))
-            )
-          )
+          task.executable.convention(executable)
           task.outputFormat.convention(spec.fileFormat)
           task.outputFile.convention(layout.file(imageFile))
           task.cliArguments.convention(spec.layoutEngine.properties)
@@ -211,16 +212,16 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
         return execD2
       }
 
-    // Resolved up front rather than leaving it to exec, so the binary is a task input and a
-    // different d2 version invalidates the cached chart.
-    private fun Project.d2OnPath(): Provider<File> =
-      providers.environmentVariable("PATH").flatMap { path ->
-        providers.provider {
-          path
-            .split(File.pathSeparator)
-            .flatMap { dir -> listOf(File(dir, "d2"), File(dir, "d2.exe")) }
-            .firstOrNull { it.isFile && it.canExecute() }
-        }
-      }
+    /**
+     * The explicitly configured `d2` always wins. Otherwise it's the one on the PATH, or a download
+     * if settings decided one is needed. See [atlas.d2.internal.d2DownloadVersion].
+     */
+    private fun Project.d2Executable(spec: D2SpecImpl, config: AtlasConfig): Provider<RegularFile> {
+      val explicit = spec.executable.orElse(layout.file(spec.properties.executable.map(::File)))
+      val version = config.d2DownloadVersion
+      val fallback =
+        if (version == null) layout.file(providers.d2OnPath()) else downloadedD2(version, config)
+      return explicit.orElse(fallback)
+    }
   }
 }

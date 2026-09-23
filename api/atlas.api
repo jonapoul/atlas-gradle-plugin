@@ -745,8 +745,9 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getAnimateLinks ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getCenter ()Lorg/gradle/api/provider/Property;
-	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getDirection ()Lorg/gradle/api/provider/Property;
+	public abstract fun getExecutable ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getExecutableSource ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFileFormat ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFonts ()Latlas/d2/D2FontsSpec;
 	public abstract fun getGlobalProps ()Latlas/d2/D2GlobalPropsSpec;
@@ -765,6 +766,7 @@ public abstract interface class atlas/d2/D2Spec : atlas/core/AtlasSpec {
 	public abstract fun getThemeDarkOverrides ()Latlas/d2/D2ThemeOverridesSpec;
 	public abstract fun getThemeOverrides ()Latlas/d2/D2ThemeOverridesSpec;
 	public abstract fun getTimeout ()Lorg/gradle/api/provider/Property;
+	public abstract fun getVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun globalProps (Lorg/gradle/api/Action;)V
 	public abstract fun layoutEngine (Lorg/gradle/api/Action;)V
 	public abstract fun rootStyle (Lorg/gradle/api/Action;)V
@@ -852,6 +854,17 @@ public final class atlas/d2/ElkAlgorithm : java/lang/Enum, atlas/core/StringEnum
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkAlgorithm;
 	public static fun values ()[Latlas/d2/ElkAlgorithm;
+}
+
+public final class atlas/d2/ExecutableSource : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Auto Latlas/d2/ExecutableSource;
+	public static final field Download Latlas/d2/ExecutableSource;
+	public static final field Path Latlas/d2/ExecutableSource;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ExecutableSource;
+	public static fun values ()[Latlas/d2/ExecutableSource;
 }
 
 public final class atlas/d2/FileFormat : java/lang/Enum, atlas/core/StringEnum {
@@ -1038,9 +1051,9 @@ public abstract class atlas/d2/tasks/ExecD2 : org/gradle/api/DefaultTask, atlas/
 	public abstract fun getAsciiMode ()Lorg/gradle/api/provider/Property;
 	public abstract fun getClassesFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getCliArguments ()Lorg/gradle/api/provider/MapProperty;
-	public abstract fun getD2Executable ()Lorg/gradle/api/file/RegularFileProperty;
 	public fun getDescription ()Ljava/lang/String;
 	public abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
+	public abstract fun getExecutable ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontBold ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontItalic ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getFontMono ()Lorg/gradle/api/file/RegularFileProperty;
@@ -1104,6 +1117,38 @@ public final class atlas/graphviz/ArrowType : java/lang/Enum, atlas/core/StringE
 	public static fun values ()[Latlas/graphviz/ArrowType;
 }
 
+public abstract interface class atlas/graphviz/ClusterAttributes : atlas/core/PropertiesSpec {
+	public abstract fun getBgColor ()Ljava/lang/String;
+	public abstract fun getFillColor ()Ljava/lang/String;
+	public abstract fun getFontColor ()Ljava/lang/String;
+	public abstract fun getFontName ()Ljava/lang/String;
+	public abstract fun getFontSize ()Ljava/lang/String;
+	public abstract fun getLabelJust ()Ljava/lang/String;
+	public abstract fun getLabelLoc ()Ljava/lang/String;
+	public abstract fun getLineColor ()Ljava/lang/String;
+	public abstract fun getMargin ()Ljava/lang/String;
+	public abstract fun getPenColor ()Ljava/lang/String;
+	public abstract fun getPenWidth ()Ljava/lang/Number;
+	public abstract fun getStyle ()Ljava/lang/String;
+	public abstract fun setBgColor (Ljava/lang/String;)V
+	public abstract fun setFillColor (Ljava/lang/String;)V
+	public abstract fun setFontColor (Ljava/lang/String;)V
+	public abstract fun setFontName (Ljava/lang/String;)V
+	public abstract fun setFontSize (Ljava/lang/String;)V
+	public abstract fun setLabelJust (Ljava/lang/String;)V
+	public abstract fun setLabelLoc (Ljava/lang/String;)V
+	public abstract fun setLineColor (Ljava/lang/String;)V
+	public abstract fun setMargin (Ljava/lang/String;)V
+	public abstract fun setPenColor (Ljava/lang/String;)V
+	public abstract fun setPenWidth (Ljava/lang/Number;)V
+	public abstract fun setStyle (Ljava/lang/String;)V
+}
+
+public final class atlas/graphviz/ClusterAttributes$DefaultImpls {
+	public static fun clear (Latlas/graphviz/ClusterAttributes;)V
+	public static fun put (Latlas/graphviz/ClusterAttributes;Ljava/lang/String;Ljava/lang/Object;)V
+}
+
 public final class atlas/graphviz/ClusterMode : java/lang/Enum, atlas/core/StringEnum {
 	public static final field Global Latlas/graphviz/ClusterMode;
 	public static final field Local Latlas/graphviz/ClusterMode;
@@ -1130,8 +1175,9 @@ public final class atlas/graphviz/Dir : java/lang/Enum, atlas/core/StringEnum {
 public final class atlas/graphviz/DotConfig : java/io/Serializable {
 	public static final field Companion Latlas/graphviz/DotConfig$Companion;
 	public fun <init> ()V
-	public fun <init> (Ljava/lang/Boolean;Latlas/graphviz/LayoutEngine;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;)V
-	public synthetic fun <init> (Ljava/lang/Boolean;Latlas/graphviz/LayoutEngine;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/Boolean;Latlas/graphviz/LayoutEngine;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/Boolean;Latlas/graphviz/LayoutEngine;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getClusterAttributes ()Ljava/util/Map;
 	public final fun getDisplayLinkLabels ()Ljava/lang/Boolean;
 	public final fun getEdgeAttributes ()Ljava/util/Map;
 	public final fun getGraphAttributes ()Ljava/util/Map;
@@ -1571,7 +1617,9 @@ public final class atlas/graphviz/GraphAttributes$DefaultImpls {
 }
 
 public abstract interface class atlas/graphviz/GraphvizSpec : atlas/core/AtlasSpec {
+	public abstract fun cluster (Lorg/gradle/api/Action;)V
 	public abstract fun edge (Lorg/gradle/api/Action;)V
+	public abstract fun getCluster ()Latlas/graphviz/ClusterAttributes;
 	public abstract fun getEdge ()Latlas/graphviz/EdgeAttributes;
 	public abstract fun getFileFormat ()Lorg/gradle/api/provider/Property;
 	public abstract fun getGraph ()Latlas/graphviz/GraphAttributes;

@@ -1,5 +1,5 @@
 [versions]
-agp = "9.4.0"
+agp = "9.4.1"
 blueprint = "2.4.2"
 junit = "6.1.3"
 kotlin = "2.4.20"
@@ -23,7 +23,7 @@ agp-kmp = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp"
 agp-lib = { id = "com.android.library", version.ref = "agp" }
 blueprint = { id = "dev.jonpoulton.blueprint", version.ref = "blueprint" }
 blueprintTest = { id = "dev.jonpoulton.blueprint.test", version.ref = "blueprint" }
-buildConfig = { id = "com.github.gmazzo.buildconfig", version = "6.1.0" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "6.1.1" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.6" }
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

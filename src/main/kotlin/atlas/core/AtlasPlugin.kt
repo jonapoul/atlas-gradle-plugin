@@ -2,12 +2,10 @@ package atlas.core
 
 import atlas.core.internal.AtlasExtensionImpl
 import atlas.core.internal.AtlasWiring
-import atlas.core.internal.snapshot
-import atlas.core.internal.warnAboutConfig
+import atlas.core.internal.onSettingsEvaluated
 import atlas.core.internal.wireProject
 import javax.inject.Inject
 import org.gradle.api.Plugin
-import org.gradle.api.initialization.ProjectDescriptor
 import org.gradle.api.initialization.Settings
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
@@ -51,32 +49,20 @@ constructor(
     // the isolation that GradleLifecycle applies to the callback below. The containers do not, so
     // everything else is flattened into a value snapshot first.
     val wiring =
-      AtlasWiring(d2 = extension.d2, graphviz = extension.graphviz, mermaid = extension.mermaid)
+      AtlasWiring(
+        d2 = extension.d2Spec,
+        graphviz = extension.graphvizSpec,
+        mermaid = extension.mermaidSpec,
+      )
 
     target.gradle.settingsEvaluated { settings ->
-      wiring.config =
-        extension.snapshot(
-          rootDir = settings.rootDir,
-          subprojectPaths = chartedSubprojectPaths(settings.rootProject),
-        )
-      extension.warnAboutConfig(LOGGER)
+      onSettingsEvaluated(settings, wiring, extension)
     }
 
     target.gradle.lifecycle.beforeProject { project -> wireProject(project, wiring) }
   }
 
-  /**
-   * Projects without a build file are only there to group their children, so they get no node of
-   * their own in the chart and publish nothing for the root to collate.
-   */
-  private fun chartedSubprojectPaths(project: ProjectDescriptor): List<String> = buildList {
-    project.children.forEach { child ->
-      if (child.buildFile.exists()) add(child.path)
-      addAll(chartedSubprojectPaths(child))
-    }
-  }
-
-  private companion object {
+  internal companion object {
     val LOGGER: Logger = Logging.getLogger(AtlasPlugin::class.java)
   }
 }

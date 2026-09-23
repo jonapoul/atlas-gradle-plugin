@@ -1,4 +1,3 @@
-!.idea/detekt.xml
 *.jks
 *.keystore
 .cache/
@@ -8,6 +7,6 @@
 .kotlin/
 .venv/
 build/
-docs/api/
+docs/docs/api/
 docs/site/
 local.properties

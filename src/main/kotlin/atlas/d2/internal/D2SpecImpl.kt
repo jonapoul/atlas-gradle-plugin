@@ -44,8 +44,9 @@ internal class D2SpecImpl(
   override val animateInterval = objects.int(properties.animateInterval)
   override val asciiMode = objects.enum(properties.asciiMode)
   override val center = objects.bool(properties.center)
-  override val d2Executable: RegularFileProperty = objects.fileProperty()
   override val direction = objects.enum(properties.direction)
+  override val executable: RegularFileProperty = objects.fileProperty()
+  override val executableSource = objects.enum(properties.executableSource)
   override val fileFormat = objects.enum(properties.fileFormat)
   override val groupLabelLocation = objects.enum(properties.groupLabelLocation)
   override val groupLabelPosition = objects.enum(properties.groupLabelPosition)
@@ -56,8 +57,9 @@ internal class D2SpecImpl(
   override val scale = objects.float(properties.scale)
   override val sketch = objects.bool(properties.sketch)
   override val theme = objects.intEnum(properties.theme)
-  override val themeDark = objects.intEnum(properties.darkTheme)
+  override val themeDark = objects.intEnum(properties.themeDark)
   override val timeout = objects.int(properties.timeout)
+  override val version = objects.string(properties.version)
 
   override val fonts: D2FontsSpec = objects.newInstance(D2FontsSpec::class.java)
 

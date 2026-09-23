@@ -9,7 +9,6 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import org.gradle.kotlin.dsl.withType
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier.Public
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
@@ -127,7 +126,7 @@ java {
 
 dokka {
   dokkaPublications.html {
-    outputDirectory = project.layout.projectDirectory.dir("docs/api")
+    outputDirectory = project.layout.projectDirectory.dir("docs/docs/api")
     includes.from(project.layout.projectDirectory.file("README.md"))
   }
 
@@ -185,7 +184,18 @@ licensee {
 
 buildConfig {
   generateAtSync = true
-  sourceSets.getByName("test") {
+
+  sourceSets.named("main") {
+    packageName = "atlas.d2.internal"
+    useKotlinOutput { topLevelConstants = true }
+    val d2VersionFile = layout.projectDirectory.file("config/d2.version")
+    buildConfigField(
+      "DEFAULT_D2_VERSION",
+      providers.fileContents(d2VersionFile).asText.map(String::trim),
+    )
+  }
+
+  sourceSets.named("test") {
     packageName = "atlas.test"
     useKotlinOutput { topLevelConstants = true }
     buildConfigField("AGP_VERSION", libs.versions.agp)

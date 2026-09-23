@@ -46,7 +46,7 @@ atlas {
 }
 ```
 
-Each project's chart is written into that project's own directory, next to its README, and the framework is part of the filename, so enabling several at once never has two of them fighting over the same file. Legends are shared by the whole build, so they go in the root project's `atlas/` directory. Passing a configuration block switches the framework on too, so this is enough:
+Each project's chart is written into that project's own directory, next to its README, and the framework is part of the filename, so enabling several at once never has two of them fighting over the same file. Graphviz and Mermaid legends are shared by the whole build, so they go in the root project's `atlas/` directory. D2 draws its legend inside each chart. Passing a configuration block switches the framework on too, so this is enough:
 
 ``` kotlin
 atlas {
@@ -82,12 +82,6 @@ atlas {
 }
 ```
 
-!!! tip "Import Atlas types, don't fully qualify them"
-
-    Inside `settings.gradle.kts` the `atlas` extension accessor shadows the `atlas` package, so
-    `atlas.mermaid.Theme.Forest` won't resolve. Add an `import` at the top of the file, as above, and
-    refer to the type by its short name.
-
 !!! info "Only the settings file needs to change"
 
     You don't apply Atlas to your subprojects, and you don't add anything to their build scripts.
@@ -97,12 +91,6 @@ Then generate your diagrams by running:
 
 ``` shell
 gradle atlasGenerate
-```
-
-or validate them by running:
-
-``` shell
-gradle atlasCheck
 ```
 
 That's all you need to get it working! See the next pages for further configuration of each of the above plugins.

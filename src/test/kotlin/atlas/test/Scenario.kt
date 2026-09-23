@@ -17,6 +17,10 @@ internal interface Scenario {
   val gradlePropertiesFile: String
     get() = ""
 
+  // A `RepositoriesMode` entry name for `settings.gradle.kts`. Null leaves Gradle's default
+  val repositoriesMode: String?
+    get() = null
+
   val isGroovy: Boolean
     get() = false
 
@@ -44,19 +48,6 @@ internal interface GraphvizScenario : Scenario {
 internal interface MermaidScenario : Scenario {
   override val frameworks: Set<Framework>
     get() = setOf(Mermaid)
-}
-
-internal fun Scenario.withIntermediatesInProjectDir(): Scenario {
-  val base = this
-  return object : Scenario by base {
-    override val atlasConfig =
-      (frameworks - Framework.Mermaid).joinToString(
-        separator = "\n",
-        prefix = base.atlasConfig + "\n",
-      ) { framework ->
-        "$framework { intermediateFilesInBuildDir = false }"
-      }
-  }
 }
 
 /** The single framework a scenario uses, for tests which assert on generated file paths. */

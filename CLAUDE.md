@@ -23,7 +23,7 @@ configuration cache, parallel execution and isolated projects all enabled.
 ./scripts/ktfmt.sh --force         # all files
 
 # Slow, only when really necessary:
-./gradlew dokkaGeneratePublicationHtml --rerun-tasks --no-build-cache  # API docs to docs/api/
+./gradlew dokkaGeneratePublicationHtml --rerun-tasks --no-build-cache  # API docs to docs/docs/api/
 ```
 
 ## Architecture
@@ -100,6 +100,21 @@ node in the chart either way, but every subproject resolves the collated files a
 > graph, and skips anything with that prefix. Drop the prefix and Atlas's own plumbing draws itself
 > into every user's diagrams as a phantom edge to the root project.
 
+### D2 Executable
+
+`ExecD2` runs, in order: an explicit `executable`, the `d2` on the system PATH, or a downloaded
+one, as picked by `ExecutableSource`. Whether anything downloads is decided once from settings
+(`d2DownloadVersion` in `d2/internal/D2Download.kt`) and kept in `AtlasConfig.d2DownloadVersion`.
+When that's null, Atlas adds no repository or configuration at all.
+
+A download is plain dependency resolution: an exclusive Ivy repository `atlasD2Releases` pointing at
+D2's GitHub releases, the `atlasD2Executable` configuration, and the `UnpackD2` transform. The
+repository goes in `dependencyResolutionManagement`, and under `PREFER_PROJECT` also into every
+project declaring repositories of its own, since those ignore the settings ones.
+
+The default version lives only in `config/d2.version`. It feeds `DEFAULT_D2_VERSION` (via the
+buildconfig plugin), `docker/Dockerfile` and Renovate.
+
 ### Task Execution Flow
 
 `WriteProjectType` + `WriteProjectLinks` per subproject → `CollateProjectTypes` /
@@ -109,8 +124,8 @@ node in the chart either way, but every subproject resolves the collated files a
 ### Testing Approach
 
 Scenarios (e.g. `DiamondGraph`, `TriangleGraph`) in `src/test/kotlin/atlas/test/scenarios/` define
-complete multi-module structures; `ScenarioTest.runScenario()` builds them in a temp dir and runs
-tasks via TestKit. Scenarios are reused across test classes for different plugin variants.
+complete multi-module structures. Inside a `ScenarioTest`, `DiamondGraph { ... }` builds one in a
+temp dir and runs tasks via TestKit. Scenarios are reused across test classes for different plugin variants.
 
 Rules that follow from Atlas being a settings plugin:
 - The `atlas { }` block goes in `Scenario.atlasConfig`, which `ScenarioTest` writes into

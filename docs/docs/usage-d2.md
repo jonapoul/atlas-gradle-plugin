@@ -8,7 +8,7 @@ icon: lucide/columns-2
 
 ## Overview
 
-See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). Generating D2 charts requires an existing installation of the `d2` executable on the system PATH. If it's not on the PATH, you can use the [`d2Executable`](#d2executable) config option.
+See [here for the official D2 docs](https://d2lang.com/tour/intro/) or [here for an online playground](https://play.d2lang.com/). By default Atlas uses `d2` from the system PATH, and downloads it if it's not there. See [`executableSource`](#executablesource) to change that.
 
 [See here for D2 installation steps](https://d2lang.com/tour/install/).
 
@@ -27,8 +27,9 @@ atlas {
     animateLinks = true
     asciiMode = AsciiMode.Standard
     center = true
-    d2Executable = file("/path/to/d2")
     direction = Direction.Down
+    executable = file("/path/to/d2")
+    executableSource = ExecutableSource.Auto
     fileFormat = FileFormat.Svg
     groupLabelLocation = Location.Inside
     groupLabelPosition = Position.TopCenter
@@ -41,6 +42,7 @@ atlas {
     theme = Theme.ColorblindClear
     themeDark = Theme.DarkMauve
     timeout = 300
+    version = "0.9.0"
 
     fonts {
       // ...
@@ -101,7 +103,7 @@ When enabled, dashed and dotted links between project nodes will be animated. Di
 
 !!! warning
 
-    This will only work for "animatable" [output formats](#fileformat): either SVG or GIF. If you choose a different output, you'll get a Gradle warning to tell you about it when syncing the IDE.
+    This will only work for "animatable" [output formats](#fileformat): either SVG or GIF. If you choose a different output, you'll get a Gradle warning about it when the build is configured.
 
 <div class="side-by-side">
   <figure>
@@ -137,19 +139,7 @@ atlas {
 }
 ```
 
-This flag centers the SVG within the containing viewbox. Doesn't really give an obvious change in me experience, but ¯\_(ツ)_/¯. [See here](https://d2lang.com/tour/vars/#configuration-variables).
-
-### d2Executable
-
-``` kotlin
-atlas {
-  d2 {
-    d2Executable = file("/custom/path/to/d2")
-  }
-}
-```
-
-By default, Atlas will try to call `d2` from the system path. Use this to call from a custom installation directory instead.
+This flag centers the SVG within the containing viewbox. Doesn't really give an obvious change in my experience, but ¯\_(ツ)_/¯. [See here](https://d2lang.com/tour/vars/#configuration-variables).
 
 ### direction
 
@@ -184,6 +174,40 @@ Sets the flow direction of the dependency chart. Defaults to `Direction.Down`.
     <figcaption>Direction.Right</figcaption>
   </figure>
 </div>
+
+### executable
+
+``` kotlin
+atlas {
+  d2 {
+    executable = file("/custom/path/to/d2")
+  }
+}
+```
+
+Use a specific `d2` executable. When set, this always wins over [`executableSource`](#executablesource).
+
+### executableSource
+
+``` kotlin
+atlas {
+  d2 {
+    executableSource = ExecutableSource.Download
+  }
+}
+```
+
+Where to find `d2` when [`executable`](#executable) isn't set:
+
+- `Auto` (default): use `d2` from the system PATH if it's there, otherwise download it. If [`version`](#version) is set, always download that version instead.
+- `Path`: only use the system PATH, and never touch the network. [`version`](#version) is ignored.
+- `Download`: always download, using [`version`](#version) if set. Best for CI, or anywhere the output is diffed, since D2's SVG output changes between releases.
+
+Also settable with the `atlas.d2.executableSource` Gradle property, e.g. `-Patlas.d2.executableSource=path`. With `--offline`, a build fails unless that D2 version is already in Gradle's cache.
+
+!!! note
+
+    If you set [`version`](#version) older than 0.9.0, PNG, PDF, PPTX and GIF output need a Chromium download that D2 can't do from inside a Gradle build. See [`fileFormat`](#fileformat).
 
 ### fileFormat
 
@@ -430,6 +454,24 @@ atlas {
 
 The maximum number of seconds D2 can run for before the task fails. Optional - leave it unset and D2 uses its own default of 120. Worth raising if you have a very large chart. Set it to 0 to turn the limit off.
 
+### version
+
+``` kotlin
+atlas {
+  d2 {
+    version = "0.9.0"
+  }
+}
+```
+
+The D2 version to download. Unset by default, in which case Atlas may use `d2` from the PATH, and otherwise downloads the version this release of Atlas is tested against. Setting it means you want exactly that version, so the PATH is skipped and it's always downloaded, unless [`executableSource`](#executablesource) is `Path`. D2 is downloaded from [its GitHub releases](https://github.com/d2lang/d2/releases) as a regular Gradle dependency, so it's cached in the Gradle user home and only downloaded once per version per machine. It also follows Gradle's usual rules for proxies, `--offline` and [dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html).
+
+When a download is needed, Atlas adds an Ivy repository called `atlasD2Releases` to `dependencyResolutionManagement` for it. Builds that use a `d2` from the PATH or [`executable`](#executable) get no repository at all. It only serves D2, and D2 is only fetched from it, so it doesn't change how anything else in your build resolves. Under Gradle's default `PREFER_PROJECT` repositories mode, a project that declares its own repositories ignores the settings ones, so Atlas adds the repository to those projects as well.
+
+!!! info "Dependency verification"
+
+    If your build verifies dependencies, the D2 tarball needs an entry like any other dependency. Running with `--write-verification-metadata sha256` adds it.
+
 ## Functions
 
 ### layoutEngine
@@ -603,4 +645,4 @@ Each one is also a [Gradle property](usage-common.md#gradle-properties), e.g. `a
     }
     ```
 
-    I'm not going to document all this in here, but [take a look at the D2 docs if you're interested](https://d2lang.com/tour/globs/). If you want to add them to your chart, `globalProps` is probably(?) the best place for it. This will add the glob property to the global `classes.d2` file, which gets auto-imported into all project chart diagrams.
+    I'm not going to document all this in here, but [take a look at the D2 docs if you're interested](https://d2lang.com/tour/globs/). If you want to add them to your chart, `globalProps` is probably(?) the best place for it. This will add the glob property to the global `classes-d2.d2` file, which gets auto-imported into all project chart diagrams.

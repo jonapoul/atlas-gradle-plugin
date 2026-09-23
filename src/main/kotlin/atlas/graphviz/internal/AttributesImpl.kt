@@ -11,6 +11,7 @@ import atlas.core.internal.int
 import atlas.core.internal.number
 import atlas.core.internal.string
 import atlas.graphviz.ArrowType
+import atlas.graphviz.ClusterAttributes
 import atlas.graphviz.ClusterMode
 import atlas.graphviz.Dir
 import atlas.graphviz.EdgeAttributes
@@ -253,4 +254,21 @@ internal class GraphAttributesImpl(objects: ObjectFactory, providers: ProviderFa
   override var viewPort by string("viewport")
   override var voroMargin by number("voro_margin")
   override var xdotVersion by string("xdotversion")
+}
+
+internal class ClusterAttributesImpl(objects: ObjectFactory, providers: ProviderFactory) :
+  ClusterAttributes,
+  InternalPropertiesSpec by PropertiesSpecImpl(objects, providers, "atlas.graphviz.cluster") {
+  override var bgColor by string("bgcolor")
+  override var fillColor by string("fillcolor")
+  override var fontColor by string("fontcolor")
+  override var fontName by string("fontname")
+  override var fontSize by string("fontsize")
+  override var labelJust by string("labeljust")
+  override var labelLoc by string("labelloc")
+  override var lineColor by string("color")
+  override var margin by string("margin")
+  override var penColor by string("pencolor")
+  override var penWidth by number("penwidth")
+  override var style by string("style")
 }

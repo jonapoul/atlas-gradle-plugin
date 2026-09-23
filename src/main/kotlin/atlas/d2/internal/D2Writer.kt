@@ -21,8 +21,6 @@ internal class D2Writer(
   override val groupProjects: Boolean,
   private val pathToClassesFile: String,
 ) : ChartWriter() {
-  private var subgraphNestingLevel = 0
-
   override fun invoke(): String = buildIndentedString {
     appendProjects()
     appendLinks()
@@ -46,12 +44,10 @@ internal class D2Writer(
     val key = graph.path[subgraphNestingLevel].cleaned()
     appendLine("$key: :${graph.name} {")
     indent { appendLine("class: $CONTAINER_CLASS") }
-    subgraphNestingLevel++
   }
 
   override fun IndentedStringBuilder.appendSubgraphFooter() {
     appendLine("}")
-    subgraphNestingLevel--
   }
 
   override fun IndentedStringBuilder.appendProject(project: TypedProject) {

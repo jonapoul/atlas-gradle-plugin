@@ -10,7 +10,7 @@ import org.gradle.api.provider.ProviderFactory
 internal class CoreGradleProperties(override val providers: ProviderFactory) : IGradleProperties {
   val alsoTraverseUpwards = bool("atlas.alsoTraverseUpwards", default = false)
   val checkOutputs = bool(key = "atlas.checkOutputs", default = true)
-  val displayLinkLabels = bool(key = "atlas.addLinkLabels", default = false)
+  val displayLinkLabels = bool(key = "atlas.displayLinkLabels", default = false)
   val generateOnSync = bool(key = "atlas.generateOnSync", default = false)
   val groupProjects = bool(key = "atlas.groupProjects", default = false)
   val printFilesToConsole = bool(key = "atlas.printFilesToConsole", default = false)

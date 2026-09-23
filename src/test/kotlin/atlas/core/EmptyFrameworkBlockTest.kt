@@ -19,32 +19,29 @@ import kotlin.test.Test
  */
 internal class EmptyFrameworkBlockTest : ScenarioTest() {
   @Test
-  fun `Bare d2() with no config registers D2 generation`() =
-    runScenario(GroovyD2Basic) {
-      // when
-      assertThatTask("writeD2Chart").buildsSuccessfully().allTasksSuccessful()
+  fun `Bare d2() with no config registers D2 generation`() = GroovyD2Basic {
+    // when
+    assertThatTask("writeD2Chart").buildsSuccessfully().allTasksSuccessful()
 
-      // then
-      assertThat(resolve("a/build/atlas/chart-d2.d2")).exists()
-    }
-
-  @Test
-  fun `Bare graphviz() with no config registers Graphviz generation`() =
-    runScenario(GroovyGraphVizBasic) {
-      // when
-      assertThatTask("writeGraphvizChart").buildsSuccessfully().allTasksSuccessful()
-
-      // then
-      assertThat(resolve("a/build/atlas/chart-graphviz.dot")).exists()
-    }
+    // then
+    assertThat(resolve("a/build/atlas/chart-d2.d2")).exists()
+  }
 
   @Test
-  fun `Bare mermaid() with no config registers Mermaid generation`() =
-    runScenario(GroovyMermaidBasic) {
-      // when
-      assertThatTask("writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
+  fun `Bare graphviz() with no config registers Graphviz generation`() = GroovyGraphVizBasic {
+    // when
+    assertThatTask("writeGraphvizChart").buildsSuccessfully().allTasksSuccessful()
 
-      // then
-      assertThat(resolve("a/chart-mermaid.mmd")).exists()
-    }
+    // then
+    assertThat(resolve("a/build/atlas/chart-graphviz.dot")).exists()
+  }
+
+  @Test
+  fun `Bare mermaid() with no config registers Mermaid generation`() = GroovyMermaidBasic {
+    // when
+    assertThatTask("writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
+
+    // then
+    assertThat(resolve("a/chart-mermaid.mmd")).exists()
+  }
 }

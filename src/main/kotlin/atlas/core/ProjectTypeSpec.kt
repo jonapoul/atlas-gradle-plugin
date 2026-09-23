@@ -23,13 +23,13 @@ import org.gradle.internal.impldep.org.intellij.lang.annotations.Language
  * atlas {
  *   projectTypes {
  *     androidApp()
- *     androidLibrary()
- *     java()
- *     kotlinJvm()
  *     kotlinMultiplatform()
+ *     androidLibrary()
+ *     kotlinJvm()
+ *     java()
  *     other()
  *
- *     // or use useDefaults() to include all of the above
+ *     // or use useDefaults() to include all of the above, in this order
  *   }
  * }
  * ```

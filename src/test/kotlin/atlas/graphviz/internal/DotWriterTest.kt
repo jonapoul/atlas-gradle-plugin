@@ -1,6 +1,7 @@
 package atlas.graphviz.internal
 
 import assertk.assertThat
+import atlas.graphviz.DotConfig
 import atlas.graphviz.dotWriter
 import atlas.test.OneLevelOfSubprojects
 import atlas.test.ProjectWithNoLinks
@@ -61,19 +62,19 @@ internal class DotWriterTest {
           ":app"
           subgraph cluster_data {
             label = ":data"
-            ":data:a"
-            ":data:b"
+            ":data:a" [label=":a"]
+            ":data:b" [label=":b"]
           }
           subgraph cluster_domain {
             label = ":domain"
-            ":domain:a"
-            ":domain:b"
+            ":domain:a" [label=":a"]
+            ":domain:b" [label=":b"]
           }
           subgraph cluster_ui {
             label = ":ui"
-            ":ui:a"
-            ":ui:b"
-            ":ui:c"
+            ":ui:a" [label=":a"]
+            ":ui:b" [label=":b"]
+            ":ui:c" [label=":c"]
           }
           ":app" -> ":ui:a"
           ":app" -> ":ui:b"
@@ -107,24 +108,24 @@ internal class DotWriterTest {
           ":app"
           subgraph cluster_data {
             label = ":data"
-            ":data:a"
-            ":data:b"
+            ":data:a" [label=":a"]
+            ":data:b" [label=":b"]
             subgraph cluster_sub {
               label = ":sub"
-              ":data:sub:sub1"
-              ":data:sub:sub2"
+              ":data:sub:sub1" [label=":sub1"]
+              ":data:sub:sub2" [label=":sub2"]
             }
           }
           subgraph cluster_domain {
             label = ":domain"
-            ":domain:a"
-            ":domain:b"
+            ":domain:a" [label=":a"]
+            ":domain:b" [label=":b"]
           }
           subgraph cluster_ui {
             label = ":ui"
-            ":ui:a"
-            ":ui:b"
-            ":ui:c"
+            ":ui:a" [label=":a"]
+            ":ui:b" [label=":b"]
+            ":ui:c" [label=":c"]
           }
           ":app" -> ":ui:a"
           ":app" -> ":ui:b"
@@ -132,6 +133,56 @@ internal class DotWriterTest {
           ":domain:a" -> ":data:a"
           ":domain:a" -> ":data:sub:sub1"
           ":domain:a" -> ":data:sub:sub2"
+          ":domain:b" -> ":data:a"
+          ":domain:b" -> ":data:b"
+          ":ui:a" -> ":domain:a"
+          ":ui:b" -> ":domain:b"
+          ":ui:c" -> ":domain:a"
+          ":ui:c" -> ":domain:b"
+        }
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun `Cluster attributes`() {
+    val writer =
+      dotWriter(
+        typedProjects = OneLevelOfSubprojects.projects,
+        links = OneLevelOfSubprojects.links,
+        groupProjects = true,
+        config = DotConfig(clusterAttributes = mapOf("bgcolor" to "lightgrey")),
+      )
+
+    assertThat(writer())
+      .isEqualToTrimmed(
+        """
+        digraph {
+          ":app"
+          subgraph cluster_data {
+            label = ":data"
+            bgcolor = "lightgrey"
+            ":data:a" [label=":a"]
+            ":data:b" [label=":b"]
+          }
+          subgraph cluster_domain {
+            label = ":domain"
+            bgcolor = "lightgrey"
+            ":domain:a" [label=":a"]
+            ":domain:b" [label=":b"]
+          }
+          subgraph cluster_ui {
+            label = ":ui"
+            bgcolor = "lightgrey"
+            ":ui:a" [label=":a"]
+            ":ui:b" [label=":b"]
+            ":ui:c" [label=":c"]
+          }
+          ":app" -> ":ui:a"
+          ":app" -> ":ui:b"
+          ":app" -> ":ui:c"
+          ":domain:a" -> ":data:a"
           ":domain:b" -> ":data:a"
           ":domain:b" -> ":data:b"
           ":ui:a" -> ":domain:a"

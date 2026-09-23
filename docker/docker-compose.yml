@@ -6,6 +6,8 @@ x-atlas: &atlas
   build:
     context: ..
     dockerfile: docker/Dockerfile
+    secrets:
+      - github_token
   volumes:
     - $HOME/.gradle:/home/gradle/.gradle
     - ..:/atlas
@@ -15,6 +17,11 @@ x-atlas: &atlas
   # flag has to reach the container - otherwise a missing tool silently skips on CI too.
   environment:
     CI: ${CI:-false}
+
+secrets:
+  # Lets the d2 install call the GitHub API without hitting the unauthenticated rate limit.
+  github_token:
+    environment: GITHUB_TOKEN
 
 services:
   check:

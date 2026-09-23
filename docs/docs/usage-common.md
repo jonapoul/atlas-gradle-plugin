@@ -11,7 +11,7 @@ icon: lucide/component
 Configuration is done via the `atlas` Gradle extension function in your `settings.gradle.kts` file. [See here for the KDoc](api/atlas/atlas.core/-atlas-extension/index.html), or [here for the source file](https://github.com/jonapoul/atlas-gradle-plugin/blob/main/src/main/kotlin/atlas/core/AtlasExtension.kt).
 
 ``` kotlin
-// none of these are required - these values are the defaults
+// none of these are required - the below values are the defaults
 atlas {
   alsoTraverseUpwards = false
   checkOutputs = true
@@ -41,29 +41,24 @@ atlas {
 }
 ```
 
-Alternatively, if calling from a settings plugin in `build-logic` (or similar), the extension is on the `Settings` object:
-
-``` kotlin
-settings.extensions.configure<AtlasExtension> {
-  // ...
-}
-```
-
 ## Frameworks
 
-Everything above applies to every diagram Atlas generates. Which diagrams those are is decided by the framework blocks you configure - use one, or all three. Each project's chart is written into that project's directory as `chart-<framework>.<ext>`, so they never overwrite each other, and every framework you enable adds its own block to each project's README. Legends belong to the whole build, so they go in the root project's `atlas/` directory as `legend-<framework>.<ext>`.
+Everything above applies to every diagram Atlas generates. Which diagrams those are is decided by the framework blocks you configure - use one, or all three. Each project's chart is written into that project's directory as `chart-<framework>.<ext>`, so they never overwrite each other, and every framework you enable adds its own block to each project's README. Graphviz and Mermaid legends belong to the whole build, so they go in the root project's `atlas/` directory as `legend-<framework>.<ext>`. D2 draws its legend inside each chart instead.
 
 ``` kotlin
 atlas {
   // switch a framework on with its defaults
   mermaid()
 
-  // or configure it, which switches it on too
+  // or to enable and apply some non-default configuration
   d2 {
     fileFormat = FileFormat.Svg
   }
 
-  // graphviz isn't mentioned, so no Graphviz tasks are registered
+  // setting a property directly switches it on too
+  graphviz.pathToDotCommand = "/usr/local/bin/dot"
+
+  // any framework not mentioned at all gets no tasks
 }
 ```
 
@@ -73,23 +68,21 @@ The framework-specific configs are documented in:
 - [D2](usage-d2.md)
 - [Mermaid](usage-mermaid.md)
 
-## Isolated projects and configuration on demand
+## README
 
-Atlas supports [isolated projects](https://docs.gradle.org/current/userguide/isolated_projects.html) and [configuration on demand](https://docs.gradle.org/current/userguide/multi_project_configuration_and_execution.html#sec:configuration_on_demand). Both can be switched on without restricting how you invoke Atlas:
+`gradle atlasGenerate` also writes each project's charts and legends into its `README.md`. A project with no README gets a new one. A project that already has one needs a region for Atlas to write into, otherwise the build fails:
 
-``` shell
-gradle atlasGenerate            # the whole build
-gradle :path:to:atlasGenerate   # one project
-gradle :path:to:atlasCheck
+``` markdown
+# My project
+
+Anything up here is left alone.
+
+<!--region chart-->
+Atlas replaces everything in here.
+<!--endregion-->
+
+Anything down here is left alone too.
 ```
-
-Running on a single project still produces a complete chart. Atlas shares data between projects using ordinary dependency resolution, so asking for one project's diagram automatically pulls in every other project it needs to describe the graph.
-
-!!! info "Changed in 0.6.0"
-
-    Earlier versions restricted `atlasGenerate` and `atlasCheck` to the root project whenever
-    `org.gradle.configureondemand=true` was set, because they read dependency information directly
-    from other projects at configuration time. That restriction is gone.
 
 ## Properties
 
@@ -102,6 +95,8 @@ atlas {
 ```
 
 If enabled, the generated project graph will also go "upwards" (showing projects depending on this one) as well as the default "downwards" (projects being consumed by this one).
+
+Also settable with the `atlas.alsoTraverseUpwards` [Gradle property](#gradle-properties).
 
 Examples below from the perspective of `:android:lib`:
 
@@ -131,6 +126,8 @@ The generated task name will depend on your chosen framework (`D2`, `Mermaid` or
 
 Even if this option is disabled, the task will still be created, it just won't be attached to `gradle check`.
 
+Also settable with the `atlas.checkOutputs` [Gradle property](#gradle-properties).
+
 D2 and Graphviz only create these tasks when their `intermediateFilesInBuildDir` is set to false, which isn't the default. See the [D2](usage-d2.md#intermediatefilesinbuilddir) and [Graphviz](usage-graphviz.md#intermediatefilesinbuilddir) docs.
 
 ### displayLinkLabels
@@ -140,8 +137,13 @@ atlas {
   displayLinkLabels = true
 
   linkTypes {
+    // two built-in link types:
     api(style = LinkStyle.Bold, displayName = "API")
     implementation(LinkStyle.Dashed, color = "red")
+
+    // for using other configurations:
+    "compileOnly"(style = LinkStyle.Dotted, displayName = "Compile Only")
+    "^commonMain.*"(style = LinkStyle.Dashed, displayName = "Supports case-insensitive regex")
   }
 }
 ```
@@ -149,6 +151,8 @@ atlas {
 When enabled, a string label is attached on each project link, showing which configuration caused the link. When true, the `LinkTypeSpec.name` property will be used. Disabled by default.
 
 Requires some `linkTypes` to be declared - otherwise this will have no effect.
+
+Also settable with the `atlas.displayLinkLabels` [Gradle property](#gradle-properties).
 
 <div class="side-by-side">
   <figure>
@@ -172,6 +176,8 @@ atlas {
 
 When enabled, syncing your IntelliJ IDE (including Android Studio) will automatically trigger regeneration of your project diagrams. Disabled by default.
 
+Also settable with the `atlas.generateOnSync` [Gradle property](#gradle-properties).
+
 !!! danger
 
     Be careful enabling this on larger projects - sync time might extend quite a bit.
@@ -184,7 +190,7 @@ atlas {
 }
 ```
 
-Set to true if you want project charts to gather together groups of projects into bordered containers. E.g. a graph with `":a"`, `":b"` and `":c"` won't be grouped at all because they don't share any path segments, but `":a:b"` and `"a:c"` will be grouped together. Disabled by default.
+Set to true if you want project charts to gather together groups of projects into bordered containers. E.g. a graph with `":a"`, `":b"` and `":c"` won't be grouped at all because they don't share any path segments, but `":a:b"` and `":a:c"` will be grouped together. A grouped project is labelled with only its last path segment, e.g. `":b"` instead of `":a:b"`, since its container already shows the rest. Disabled by default.
 
 !!! tip
 
@@ -193,6 +199,8 @@ Set to true if you want project charts to gather together groups of projects int
 !!! warning
 
     Automatic layout generation will get a bit complicated for larger projects when using grouping.
+
+Also settable with the `atlas.groupProjects` [Gradle property](#gradle-properties).
 
 <div class="side-by-side">
   <figure>
@@ -222,6 +230,8 @@ Defaults to `setOf("debug", "kover", "ksp", "test")`.
 
     If you don't ignore any configurations, you might end up with double links between projects - or broken builds
 
+This has no Gradle property - it's a set, so it can only be set from the DSL.
+
 ### ignoredProjects
 
 ``` kotlin
@@ -235,6 +245,8 @@ atlas {
 
 Use this to leave projects out of your charts, based on their path. Each pattern has to match the whole path. Defaults to an empty set.
 
+This has no Gradle property - the patterns are `Regex` objects, so they can only be set from the DSL.
+
 ### printFilesToConsole
 
 ``` kotlin
@@ -246,6 +258,8 @@ atlas {
 Set to true to print the absolute path of any generated files to the Gradle console output. You can use this to help with scripting, if you like.
 
 Disabled by default.
+
+Also settable with the `atlas.printFilesToConsole` [Gradle property](#gradle-properties).
 
 ## Functions
 
@@ -293,13 +307,13 @@ A few project type quick-access functions are built into Atlas for use in the pr
 atlas {
   projectTypes {
     androidApp()
-    androidLibrary()
-    java()
-    kotlinJvm()
     kotlinMultiplatform()
+    androidLibrary()
+    kotlinJvm()
+    java()
     other()
 
-    // or useDefaults() to quickly add all of the above
+    // or useDefaults() to quickly add all of the above, in this order
   }
 }
 ```
@@ -393,7 +407,7 @@ atlas {
 
 !!! warning
 
-    As with project types, remember that the order of declaration matters! Top takes priority. So if you define "implementation" before "testImplementation", you won't get any links matching the latter because they all also match the former.
+    As with project types, remember that the order of declaration matters! Top takes priority. Each link type's configuration is matched against the whole configuration name, ignoring case - either exactly, or as a regex. The `api()` and `implementation()` helpers use the regexes `.*?api` and `.*?implementation`, so they also match `jvmMainImplementation`, `releaseApi` and so on. If you want `jvmMainImplementation` links to have their own type, declare it before `implementation()`.
 
 ### pathTransforms
 
@@ -418,7 +432,12 @@ Remember the declarations inside `pathTransforms` are called in descending order
 Most config can also be set from `gradle.properties`, which is handy for changing something in CI without touching the build scripts. The property name follows the path through the DSL:
 
 ``` properties
+atlas.alsoTraverseUpwards=true
+atlas.checkOutputs=false
+atlas.displayLinkLabels=true
+atlas.generateOnSync=true
 atlas.groupProjects=true
+atlas.printFilesToConsole=true
 atlas.d2.theme=DarkMauve
 atlas.d2.layoutEngine=elk
 atlas.d2.layoutEngine.elk.nodeSelfLoop=50
@@ -440,7 +459,11 @@ A few things have no Gradle property:
 
 - `put("key", value)`, since the key is arbitrary. See [Extra properties](#extra-properties).
 - [`d2.fonts`](usage-d2.md#fonts), which takes file paths.
+- [`ignoredConfigs`](#ignoredconfigs) and [`ignoredProjects`](#ignoredprojects), which take collections.
+- [`pathTransforms`](#pathtransforms).
 - Styles on [projectTypes](#projecttypes) and [linkTypes](#linktypes).
+- [`graphviz.pathToDotCommand`](usage-graphviz.md#pathtodotcommand).
+- [`mermaid.layout`](usage-mermaid.md#layout)'s `name`.
 
 Each property's KDoc names its Gradle property, so [check the API docs](api/index.html) if you're unsure about one.
 

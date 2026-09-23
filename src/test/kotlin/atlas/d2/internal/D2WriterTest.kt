@@ -285,7 +285,7 @@ internal class D2WriterTest {
   }
 
   @Test
-  fun `Graph with link styles and colors`() {
+  fun `Graph with link types`() {
     val writer =
       d2Writer(
         layout = D2AbcWithLinkStyles,
@@ -298,13 +298,13 @@ internal class D2WriterTest {
         a: :a
         b: :b
         c: :c
-        a -> b { class: link-implementation }
+        a -> b { class: link-api }
         a -> c { class: link-implementation }
         vars: {
           d2-legend: {
             project-dummy1.class: hidden
             project-dummy2.class: hidden
-            project-dummy1 -> project-dummy2: implementation { class: link-implementation }
+            project-dummy1 -> project-dummy2: api { class: link-api }
             project-dummy1 -> project-dummy2: implementation { class: link-implementation }
           }
         }
@@ -317,7 +317,13 @@ internal class D2WriterTest {
   private object D2AbcWithLinkStyles : ProjectLayout by Abc {
     override val links =
       setOf(
-        projectLink(fromPath = ":a", toPath = ":b", style = Dashed, color = "orange"),
+        projectLink(
+          fromPath = ":a",
+          toPath = ":b",
+          configuration = "api",
+          style = Dashed,
+          color = "orange",
+        ),
         projectLink(fromPath = ":a", toPath = ":c", style = Bold),
       )
   }
