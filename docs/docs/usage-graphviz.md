@@ -39,6 +39,10 @@ atlas {
     graph {
       // ...
     }
+
+    cluster {
+      // ...
+    }
   }
 }
 ```
@@ -133,9 +137,9 @@ though some of them (*cough* neato *cough*) will probably need tweaking of prope
 
 ## Functions
 
-As mentioned in [the Extra Properties section on the previous page](usage-common.md#extra-properties), the following three config sections all implement PropertiesSpec. As such, you can call `put("key", value)` within each of these lambda blocks to pass in your own config options - in case you want to set a property which hasn't been exposed by Atlas yet.
+As mentioned in [the Extra Properties section on the previous page](usage-common.md#extra-properties), the following four config sections all implement PropertiesSpec. As such, you can call `put("key", value)` within each of these lambda blocks to pass in your own config options - in case you want to set a property which hasn't been exposed by Atlas yet.
 
-Every attribute in the three sections is also a [Gradle property](usage-common.md#gradle-properties), named after the Kotlin property rather than the Graphviz attribute: `atlas.graphviz.node.shape=box`, `atlas.graphviz.edge.arrowHead=box`, `atlas.graphviz.graph.rankDir=LR`.
+Every attribute in these sections is also a [Gradle property](usage-common.md#gradle-properties), named after the Kotlin property rather than the Graphviz attribute: `atlas.graphviz.node.shape=box`, `atlas.graphviz.edge.arrowHead=box`, `atlas.graphviz.graph.rankDir=LR`, `atlas.graphviz.cluster.bgColor=lightgrey`.
 
 ### node
 
@@ -472,3 +476,37 @@ atlas {
 | [viewPort](https://graphviz.org/docs/attrs/viewport/) | String |
 | [voroMargin](https://graphviz.org/docs/attrs/voro_margin/) | Number |
 | [xdotVersion](https://graphviz.org/docs/attrs/xdotversion/) | String |
+
+### cluster
+
+Set properties to be applied to every cluster, i.e. the containers drawn around grouped projects when [`groupProjects`](usage-common.md#groupprojects) is enabled. [See the Graphviz docs](https://graphviz.org/docs/clusters/) for everything a cluster supports, and `put` for anything not listed below:
+
+``` kotlin
+atlas {
+  groupProjects = true
+
+  graphviz {
+    cluster {
+      bgColor = "lightgrey"
+      penWidth = 2
+      style = "rounded"
+      labelJust = "l"
+    }
+  }
+}
+```
+
+| Cluster Property | Type |
+|--|--|
+| [bgColor](https://graphviz.org/docs/attrs/bgcolor/) | String |
+| [fillColor](https://graphviz.org/docs/attrs/fillcolor/) | String |
+| [fontColor](https://graphviz.org/docs/attrs/fontcolor/) | String |
+| [fontName](https://graphviz.org/docs/attrs/fontname/) | String |
+| [fontSize](https://graphviz.org/docs/attrs/fontsize/) | String |
+| [labelJust](https://graphviz.org/docs/attrs/labeljust/) | String |
+| [labelLoc](https://graphviz.org/docs/attrs/labelloc/) | String |
+| [lineColor](https://graphviz.org/docs/attrs/color/) | String |
+| [margin](https://graphviz.org/docs/attrs/margin/) | String |
+| [penColor](https://graphviz.org/docs/attrs/pencolor/) | String |
+| [penWidth](https://graphviz.org/docs/attrs/penwidth/) | Number |
+| [style](https://graphviz.org/docs/attrs/style/) | String |

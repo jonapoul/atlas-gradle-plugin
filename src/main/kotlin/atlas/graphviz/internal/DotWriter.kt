@@ -64,6 +64,7 @@ internal data class DotWriter(
     appendLine("subgraph cluster_$cleanedProjectName {")
     indent {
       appendLine("label = \":${graph.name}\"")
+      config.clusterAttributes?.forEach { (key, value) -> appendLine("$key = \"$value\"") }
     }
   }
 
