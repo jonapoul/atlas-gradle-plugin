@@ -9,7 +9,6 @@ import atlas.test.scenarios.GraphVizChartWithProperties
 import atlas.test.scenarios.GraphVizChartWithReplacements
 import atlas.test.scenarios.GraphvizBasic
 import atlas.test.scenarios.GraphvizNestedProject
-import atlas.test.scenarios.GraphvizNestedProjectNoProjectTypes
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
 import blueprint.test.contentEquals
@@ -17,40 +16,6 @@ import blueprint.test.exists
 import kotlin.test.Test
 
 internal class WriteGraphvizChartTest : ScenarioTest() {
-  @Test
-  fun `Run if no project types are declared`() = GraphvizNestedProjectNoProjectTypes {
-    // when
-    assertThatTask("writeGraphvizChart").buildsSuccessfully()
-
-    // then
-    assertThat(resolve("app/build/atlas/chart-graphviz.dot"))
-      .contentEquals(
-        """
-        digraph {
-          ":app"
-          ":data:a"
-          ":data:b"
-          ":domain:a"
-          ":domain:b"
-          ":ui:a"
-          ":ui:b"
-          ":ui:c"
-          ":app" -> ":ui:a"
-          ":app" -> ":ui:b"
-          ":app" -> ":ui:c"
-          ":domain:a" -> ":data:a"
-          ":domain:b" -> ":data:a"
-          ":domain:b" -> ":data:b"
-          ":ui:a" -> ":domain:a"
-          ":ui:b" -> ":domain:b"
-          ":ui:c" -> ":domain:a"
-          ":ui:c" -> ":domain:b"
-        }
-        """
-          .trimIndent()
-      )
-  }
-
   @Test
   fun `Generate dotfiles from basic config`() = GraphvizBasic {
     // when

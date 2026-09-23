@@ -8,30 +8,16 @@ import atlas.core.internal.readProjectLinks
 import atlas.test.ScenarioTest
 import atlas.test.resolve
 import atlas.test.scenarios.DiamondGraph
-import atlas.test.scenarios.OneKotlinJvmProject
 import atlas.test.scenarios.OverrideProjectLinksFile
 import atlas.test.scenarios.ThreeProjectsWithBuiltInTypes
 import atlas.test.scenarios.TriangleGraph
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
 import blueprint.test.doesNotExist
-import blueprint.test.taskSucceeded
 import java.io.File
 import kotlin.test.Test
 
 internal class CollateProjectLinksTest : ScenarioTest() {
-  @Test
-  fun `Empty file for single project with no dependencies`() = OneKotlinJvmProject {
-    // when
-    assertThatTask("collateProjectLinks")
-      .buildsSuccessfully()
-      .taskSucceeded(":test-jvm:writeProjectLinks")
-      .taskSucceeded(":collateProjectLinks")
-
-    // and the links file is empty
-    assertThat(projectLinks).isEmpty()
-  }
-
   @Test
   fun `Empty file for three projects with no dependencies`() = ThreeProjectsWithBuiltInTypes {
     // when

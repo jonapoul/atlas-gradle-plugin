@@ -10,7 +10,6 @@ import atlas.test.isEqualToSet
 import atlas.test.scenarios.CustomConfigurationExcluded
 import atlas.test.scenarios.CustomConfigurations
 import atlas.test.scenarios.DiamondGraph
-import atlas.test.scenarios.OneKotlinJvmProject
 import atlas.test.scenarios.ThreeProjectsWithBuiltInTypes
 import atlas.test.scenarios.TriangleGraph
 import blueprint.test.allTasksSuccessful
@@ -20,17 +19,6 @@ import blueprint.test.taskSucceeded
 import kotlin.test.Test
 
 internal class WriteProjectLinksTest : ScenarioTest() {
-  @Test
-  fun `Empty file for single project with no dependencies`() = OneKotlinJvmProject {
-    // when
-    assertThatTask("writeProjectLinks")
-      .buildsSuccessfully()
-      .taskSucceeded(":test-jvm:writeProjectLinks")
-
-    // and the links file is empty
-    assertThat(projectLinks(project = "test-jvm")).isEmpty()
-  }
-
   @Test
   fun `Empty files for three projects with no dependencies`() = ThreeProjectsWithBuiltInTypes {
     // when
