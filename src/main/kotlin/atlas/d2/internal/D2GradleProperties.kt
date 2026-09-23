@@ -24,7 +24,6 @@ internal class D2GradleProperties(override val providers: ProviderFactory) : IGr
   val animateInterval: Provider<Int> = int("atlas.d2.animateInterval", default = null)
   val asciiMode: Provider<AsciiMode> = enum("atlas.d2.asciiMode", default = null)
   val center: Provider<Boolean> = bool("atlas.d2.center", default = null)
-  val darkTheme: Provider<Theme> = intEnum("atlas.d2.darkTheme", default = null)
   val direction: Provider<Direction> = enum("atlas.d2.direction", default = null)
   val executable: Provider<String> = string("atlas.d2.executable", default = null)
   val executableSource: Provider<ExecutableSource> =
@@ -41,6 +40,7 @@ internal class D2GradleProperties(override val providers: ProviderFactory) : IGr
   val scale: Provider<Float> = float("atlas.d2.scale", default = null)
   val sketch: Provider<Boolean> = bool("atlas.d2.sketch", default = null)
   val theme: Provider<Theme> = intEnum("atlas.d2.theme", default = null)
+  val themeDark: Provider<Theme> = intEnum("atlas.d2.themeDark", default = null)
   val timeout: Provider<Int> = int("atlas.d2.timeout", default = null)
   val version: Provider<String> = string("atlas.d2.version", default = null)
 

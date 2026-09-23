@@ -57,7 +57,7 @@ internal class D2SpecImpl(
   override val scale = objects.float(properties.scale)
   override val sketch = objects.bool(properties.sketch)
   override val theme = objects.intEnum(properties.theme)
-  override val themeDark = objects.intEnum(properties.darkTheme)
+  override val themeDark = objects.intEnum(properties.themeDark)
   override val timeout = objects.int(properties.timeout)
   override val version = objects.string(properties.version)
 

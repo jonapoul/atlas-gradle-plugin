@@ -202,7 +202,7 @@ public interface D2Spec : AtlasSpec {
   /**
    * The color scheme used when the viewer is in dark mode. Only works for SVGs. Unset by default.
    *
-   * Also controlled by the `atlas.d2.darkTheme` Gradle property. See
+   * Also controlled by the `atlas.d2.themeDark` Gradle property. See
    * [the D2 docs](https://d2lang.com/tour/themes/)
    */
   public val themeDark: Property<Theme>
