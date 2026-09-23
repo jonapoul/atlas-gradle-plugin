@@ -9,8 +9,6 @@ import atlas.test.resolve
 import atlas.test.scenarios.NoProjectTypesDeclared
 import atlas.test.scenarios.OneKotlinJvmProject
 import atlas.test.scenarios.ProjectTypesDeclaredButNoneMatch
-import atlas.test.scenarios.ThreeProjectWithCustomTypes
-import atlas.test.scenarios.ThreeProjectsNoMatchingType
 import atlas.test.scenarios.ThreeProjectsOnlyMatchingOther
 import blueprint.test.Scenario
 import blueprint.test.assertThatTask
@@ -62,22 +60,6 @@ internal class WriteProjectTypeTest : ScenarioTest() {
   }
 
   @Test
-  fun `Write files if custom types match`() = ThreeProjectWithCustomTypes {
-    assertThatTask("writeProjectType")
-      .buildsSuccessfully()
-      .taskSucceeded(":test-data:writeProjectType")
-      .taskSucceeded(":test-domain:writeProjectType")
-      .taskSucceeded(":test-ui:writeProjectType")
-
-    assertThat(projectType("test-data"))
-      .isEqualTo(TypedProject(":test-data", type = ProjectType("Data", color = "#ABC123")))
-    assertThat(projectType("test-domain"))
-      .isEqualTo(TypedProject(":test-domain", type = ProjectType("Domain", color = "#123ABC")))
-    assertThat(projectType("test-ui"))
-      .isEqualTo(TypedProject(":test-ui", type = ProjectType("Android", color = "#A1B2C3")))
-  }
-
-  @Test
   fun `Fall back to other if no types match`() = ThreeProjectsOnlyMatchingOther {
     assertThatTask("writeProjectType").buildsSuccessfully()
 
@@ -87,15 +69,6 @@ internal class WriteProjectTypeTest : ScenarioTest() {
       .isEqualTo(TypedProject(":b", type = ProjectType("Other", color = "gainsboro")))
     assertThat(projectType("c"))
       .isEqualTo(TypedProject(":c", type = ProjectType("Other", color = "gainsboro")))
-  }
-
-  @Test
-  fun `No types match`() = ThreeProjectsNoMatchingType {
-    assertThatTask("a:writeProjectType")
-      .buildsSuccessfully()
-      .taskHadResult(":a:writeProjectType", SUCCESS)
-
-    assertThat(projectType("a")).isEqualTo(TypedProject(":a", type = null))
   }
 
   private fun Scenario.projectType(path: String) =

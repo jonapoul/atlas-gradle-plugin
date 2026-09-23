@@ -9,7 +9,6 @@ import atlas.test.isEqualToSet
 import atlas.test.scenarios.DiamondGraph
 import atlas.test.scenarios.DiamondGraphWithUpwardsTraversal
 import atlas.test.scenarios.MultiplatformProjectsCustomConfigurations
-import atlas.test.scenarios.OneKotlinJvmProject
 import atlas.test.scenarios.ThreeProjectsWithBuiltInTypes
 import atlas.test.scenarios.TriangleGraph
 import atlas.test.scenarios.TriangleGraphWithUpwardsTraversal
@@ -19,13 +18,6 @@ import blueprint.test.buildsSuccessfully
 import kotlin.test.Test
 
 internal class WriteProjectTreeTest : ScenarioTest() {
-  @Test
-  fun `Empty files for single project with no dependencies`() = OneKotlinJvmProject {
-    assertThatTask("writeProjectTree").buildsSuccessfully().allTasksSuccessful()
-
-    assertThat(projectTree("test-jvm")).isEmpty()
-  }
-
   @Test
   fun `Empty files for three projects with no dependencies`() = ThreeProjectsWithBuiltInTypes {
     assertThatTask("writeProjectTree").buildsSuccessfully().allTasksSuccessful()

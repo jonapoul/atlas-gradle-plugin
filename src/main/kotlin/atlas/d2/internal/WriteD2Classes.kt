@@ -83,8 +83,14 @@ internal val LinkType.classId
 internal val ProjectType.classId
   get() = "project-$key"
 
+// Stripping can turn two regex configurations into the same key, e.g. "^.*Api$" and ".*Api", so a
+// hash of the original keeps their classes apart
 internal val LinkType.key: String
-  get() = configuration.key
+  get() {
+    val stripped = configuration.key
+    if (stripped == configuration) return stripped
+    return "$stripped-${configuration.hashCode().toUInt().toString(radix = 16)}"
+  }
 internal val ProjectType.key: String
   get() = name.key
 

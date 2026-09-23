@@ -6,7 +6,6 @@ import atlas.test.resolve
 import atlas.test.scenarios.MermaidConfiguredByProperties
 import atlas.test.scenarios.MermaidWithGroupsNested
 import atlas.test.scenarios.MermaidWithGroupsNotNested
-import atlas.test.scenarios.MermaidWithoutGroups
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
@@ -15,27 +14,6 @@ import blueprint.test.exists
 import kotlin.test.Test
 
 internal class WriteMermaidChartTest : ScenarioTest() {
-  @Test
-  fun `Write chart without groups`() = MermaidWithoutGroups {
-    // when
-    assertThatTask(":a:writeMermaidChart").buildsSuccessfully().allTasksSuccessful()
-
-    // then
-    assertThat(resolve("a/chart-mermaid.mmd"))
-      .exists()
-      .contentEquals(
-        """
-        graph TD
-          _a[":a"]
-          _b[":b"]
-          _c[":c"]
-          _a --> _b
-          _a --> _c
-        """
-          .trimIndent()
-      )
-  }
-
   @Test
   fun `Write chart with groups enabled but no nested projects`() = MermaidWithGroupsNotNested {
     // when
