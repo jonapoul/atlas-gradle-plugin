@@ -113,7 +113,7 @@ public abstract class WriteReadme : DefaultTask(), AtlasGenerationTask, TaskWith
       appendLine()
       appendLine(REGION_START)
       appendContents()
-      append(REGION_END)
+      appendLine(REGION_END)
     }
   }
 

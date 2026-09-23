@@ -38,6 +38,7 @@ internal class WriteReadmeTest : ScenarioTest() {
           _a --> _c
         ```
         <!--endregion-->
+
         """
           .trimIndent()
       )
@@ -73,6 +74,7 @@ internal class WriteReadmeTest : ScenarioTest() {
         | implementation | #5555FF |
         | compileOnly | Yellow Dashed |
         <!--endregion-->
+
         """
           .trimIndent()
       )
