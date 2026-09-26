@@ -114,6 +114,13 @@ constructor(
     mutableFrameworks += Mermaid
   }
 
+  internal fun enableFrameworksFromGradleProperties(providers: ProviderFactory) {
+    mutableFrameworks +=
+      Framework.entries.filter { framework ->
+        providers.gradlePropertiesPrefixedBy("atlas.$framework.").get().isNotEmpty()
+      }
+  }
+
   internal companion object {
     internal const val NAME: String = "atlas"
   }

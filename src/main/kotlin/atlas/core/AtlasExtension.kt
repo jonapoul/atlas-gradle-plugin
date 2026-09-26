@@ -122,7 +122,7 @@ public interface AtlasExtension {
   /**
    * Configuration for D2 charts. Any use of it registers the D2 generation tasks, which write
    * `chart-d2.<ext>` into each project. That includes `d2()`, an empty `d2 { }` block, or setting a
-   * property directly like `d2.sketch = true`.
+   * property directly like `d2.sketch = true`. Any `atlas.d2.*` Gradle property does the same.
    */
   public val d2: D2Spec
 
@@ -135,7 +135,8 @@ public interface AtlasExtension {
   /**
    * Configuration for Graphviz charts. Any use of it registers the Graphviz generation tasks, which
    * write `chart-graphviz.<ext>` into each project. That includes `graphviz()`, an empty `graphviz
-   * { }` block, or setting a property directly like `graphviz.pathToDotCommand = "..."`.
+   * { }` block, or setting a property directly like `graphviz.pathToDotCommand = "..."`. Any
+   * `atlas.graphviz.*` Gradle property does the same.
    */
   public val graphviz: GraphvizSpec
 
@@ -148,7 +149,8 @@ public interface AtlasExtension {
   /**
    * Configuration for Mermaid charts. Any use of it registers the Mermaid generation tasks, which
    * write `chart-mermaid.mmd` into each project. That includes `mermaid()`, an empty `mermaid { }`
-   * block, or setting a property directly like `mermaid.theme = Theme.Forest`.
+   * block, or setting a property directly like `mermaid.theme = Theme.Forest`. Any
+   * `atlas.mermaid.*` Gradle property does the same.
    */
   public val mermaid: MermaidSpec
 

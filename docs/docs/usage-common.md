@@ -55,7 +55,7 @@ atlas {
     fileFormat = FileFormat.Svg
   }
 
-  // setting a property directly switches it on too
+  // setting a property directly switches it on too, as does any `atlas.graphviz.*` Gradle property
   graphviz.pathToDotCommand = "/usr/local/bin/dot"
 
   // any framework not mentioned at all gets no tasks
@@ -452,6 +452,8 @@ atlas.mermaid.themeVariables.primaryColor=orange
 The last part is the name you'd write in Kotlin, not the framework's own attribute name. So it's `atlas.graphviz.node.lineColor`, even though the attribute Graphviz ends up seeing is `color`.
 
 Values are parsed and validated the same way as the DSL, so a typo like `atlas.d2.layoutEngine.elk.algorithm=layred` fails the build and tells you the valid options. Lists are comma-separated, e.g. `atlas.d2.layoutEngine.tala.seeds=1,2,3`.
+
+Setting any of a framework's properties, like `atlas.d2.theme`, switches that framework on, the same as its block in the DSL.
 
 If you set the same thing both ways, the DSL wins. A Gradle property is a default you can override in the build, not the other way round.
 
