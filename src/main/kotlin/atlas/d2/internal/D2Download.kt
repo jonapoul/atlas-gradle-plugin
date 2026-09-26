@@ -2,6 +2,8 @@ package atlas.d2.internal
 
 import atlas.core.internal.ATLAS_CONFIGURATION_PREFIX
 import atlas.core.internal.AtlasConfig
+import atlas.core.internal.AtlasWarnings
+import atlas.core.internal.AtlasWarnings.Companion.D2_VERSION_IGNORED
 import atlas.d2.D2Spec
 import atlas.d2.ExecutableSource
 import atlas.d2.ExecutableSource.Download
@@ -20,7 +22,6 @@ import org.gradle.api.artifacts.transform.TransformParameters
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE
 import org.gradle.api.file.FileSystemLocation
 import org.gradle.api.file.RegularFile
-import org.gradle.api.logging.Logger
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.PathSensitive
@@ -67,7 +68,7 @@ internal fun D2SpecImpl.downloadVersion(providers: ProviderFactory): String? =
   )
 
 /** [D2Spec.version] only picks what gets downloaded, so say when nothing will be. */
-internal fun D2SpecImpl.warnIfVersionIgnored(logger: Logger) {
+internal fun D2SpecImpl.warnIfVersionIgnored(warnings: AtlasWarnings) {
   val pinned = version.orNull ?: return
   val reason =
     when {
@@ -75,9 +76,10 @@ internal fun D2SpecImpl.warnIfVersionIgnored(logger: Logger) {
       executableSource.get() == Path -> "executableSource is Path"
       else -> return
     }
-  logger.warn(
-    "Warning: version is set to $pinned, but $reason, so it's ignored and nothing is " +
-      "downloaded. Remove version, or set executableSource to Auto or Download."
+  warnings.warn(
+    D2_VERSION_IGNORED,
+    "Version is set to $pinned, but $reason, so it's ignored and nothing is " +
+      "downloaded. Remove version, or set executableSource to Auto or Download.",
   )
 }
 

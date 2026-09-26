@@ -1,6 +1,5 @@
 package atlas.core.internal
 
-import atlas.core.AtlasPlugin
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.CheckFileDiff
 import atlas.core.tasks.CollateProjectLinks
@@ -12,11 +11,12 @@ import atlas.core.tasks.WriteReadme
 import atlas.d2.internal.d2Releases
 import atlas.d2.internal.downloadVersion
 import atlas.d2.internal.warnIfVersionIgnored
-import blueprint.core.isIntellijSyncing
 import org.gradle.api.Project
 import org.gradle.api.initialization.ProjectDescriptor
 import org.gradle.api.initialization.Settings
 import org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_PROJECT
+import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
@@ -26,6 +26,7 @@ internal fun onSettingsEvaluated(
   settings: Settings,
   wiring: AtlasWiring,
   extension: AtlasExtensionImpl,
+  warnings: AtlasWarnings,
 ) {
   extension.enableFrameworksFromGradleProperties(settings.providers)
   val repositories = settings.dependencyResolutionManagement
@@ -42,8 +43,8 @@ internal fun onSettingsEvaluated(
 
   // Read here rather than on apply, since the settings script sets it after `plugins { }`
   if (d2DownloadVersion != null) repositories.repositories.d2Releases()
-  extension.warnAboutConfig(AtlasPlugin.LOGGER)
-  if (D2 in extension.frameworks) extension.d2Spec.warnIfVersionIgnored(AtlasPlugin.LOGGER)
+  extension.warnAboutConfig(warnings)
+  if (D2 in extension.frameworks) extension.d2Spec.warnIfVersionIgnored(warnings)
 }
 
 private fun chartedSubprojectPaths(project: ProjectDescriptor): List<String> = buildList {
@@ -171,3 +172,6 @@ private fun Project.registerGenerationTaskOnSync(
     tasks.register("prepareKotlinIdeaImport") { task -> task.dependsOn(atlasGenerate) }
   }
 }
+
+private val ProviderFactory.isIntellijSyncing: Provider<Boolean>
+  get() = systemProperty("idea.sync.active").map(String::toBoolean)

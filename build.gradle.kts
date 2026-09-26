@@ -34,7 +34,6 @@ dependencies {
   compileOnly(kotlin("stdlib"))
   compileOnly(libs.kotlin.gradle)
 
-  implementation(libs.blueprint)
   implementation(libs.kotlinx.serialization)
 
   testPluginClasspath(libs.agp)

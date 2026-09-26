@@ -26,7 +26,7 @@ internal class D2ExecutableSettingsTest : ScenarioTest() {
       .withGradleProperty("atlas.d2.executableSource", "path")
       .buildsSuccessfully()
       .outputContains(
-        "Warning: version is set to 0.9.0, but executableSource is Path, so it's ignored"
+        "Warning: Version is set to 0.9.0, but executableSource is Path, so it's ignored"
       )
   }
 

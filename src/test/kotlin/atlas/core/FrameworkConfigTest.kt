@@ -25,11 +25,11 @@ internal class FrameworkConfigTest : ScenarioTest() {
         // then the D2-only and Graphviz-only properties are called out, grouped by framework, but
         // stroke is understood by Mermaid so it isn't mentioned
         .outputContains(
-          "Warning: project type 'Kotlin JVM' sets render3D and shadow, which only D2 uses. " +
+          "Warning: Project type 'Kotlin JVM' sets render3D and shadow, which only D2 uses. " +
             "Configure the d2 { } block to use them, or remove the config."
         )
         .outputContains(
-          "Warning: project type 'Kotlin JVM' sets peripheries, which only Graphviz uses. " +
+          "Warning: Project type 'Kotlin JVM' sets peripheries, which only Graphviz uses. " +
             "Configure the graphviz { } block to use it, or remove the config."
         )
         .outputDoesNotContain("sets stroke")
@@ -47,7 +47,7 @@ internal class FrameworkConfigTest : ScenarioTest() {
     assertThatTask("help")
       .buildsSuccessfully()
       .outputContains(
-        "Warning: link type 'api' uses the dotted style, which Mermaid can't draw - " +
+        "Warning: Link type 'api' uses the dotted style, which Mermaid can't draw - " +
           "Atlas will fall back to the closest style it has."
       )
   }
@@ -58,7 +58,7 @@ internal class FrameworkConfigTest : ScenarioTest() {
     assertThatTask("help")
       .buildsSuccessfully()
       .outputContains(
-        "Warning: no Atlas diagram frameworks are configured, so no charts will be generated."
+        "Warning: No Atlas diagram frameworks are configured, so no charts will be generated."
       )
   }
 
