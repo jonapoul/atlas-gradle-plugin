@@ -2,8 +2,6 @@ package atlas.core.internal
 
 import atlas.core.IntEnum
 import atlas.core.StringEnum
-import blueprint.core.floatProperty
-import blueprint.core.intProperty
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 
@@ -24,10 +22,10 @@ internal fun IGradleProperties.bool(key: String, default: Boolean? = null): Prov
   prop(key, default, String::toBooleanStrict)
 
 internal fun IGradleProperties.float(key: String, default: Float? = null): Provider<Float> =
-  providers.floatProperty(key).orElse(providers.provider { default })
+  prop(key, default, String::toFloat)
 
 internal fun IGradleProperties.int(key: String, default: Int? = null): Provider<Int> =
-  providers.intProperty(key).orElse(providers.provider { default })
+  prop(key, default, String::toInt)
 
 internal fun IGradleProperties.string(key: String, default: String? = null): Provider<String> =
   prop(key, default) { it }
@@ -35,16 +33,19 @@ internal fun IGradleProperties.string(key: String, default: String? = null): Pro
 internal inline fun <reified E> IGradleProperties.enum(
   key: String,
   default: E? = null,
-): Provider<E> where E : StringEnum, E : Enum<E> = string(key, default?.value).map { parseEnum(it) }
+): Provider<E> where E : StringEnum, E : Enum<E> = prop(key, default) { parseEnum<E>(it) }
 
 internal inline fun <reified E> IGradleProperties.intEnum(
   key: String,
   default: E? = null,
-): Provider<E> where E : IntEnum, E : Enum<E> =
-  string(key, default?.value?.toString()).map { parseIntEnum(it) }
+): Provider<E> where E : IntEnum, E : Enum<E> = prop(key, default) { parseIntEnum<E>(it) }
 
-private inline fun <reified T : Any> IGradleProperties.prop(
+// parse needs to be crossinline because it's called from the map lambda. Inlining copies that
+// lambda into each caller as a fresh instance rather than a Kotlin singleton, which Gradle 9.8's
+// config cache rejects once the beforeProject action has been isolated.
+private inline fun <T : Any> IGradleProperties.prop(
   key: String,
   default: T?,
-  noinline mapper: (String) -> T?,
-): Provider<T> = providers.gradleProperty(key).map(mapper).orElse(providers.provider { default })
+  crossinline parse: (String) -> T,
+): Provider<T> =
+  providers.gradleProperty(key).map { value -> parse(value) }.orElse(providers.provider { default })
