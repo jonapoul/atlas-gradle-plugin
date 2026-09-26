@@ -1,6 +1,5 @@
 package atlas.core.internal
 
-import atlas.core.AtlasPlugin
 import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.CheckFileDiff
 import atlas.core.tasks.CollateProjectLinks
@@ -26,6 +25,7 @@ internal fun onSettingsEvaluated(
   settings: Settings,
   wiring: AtlasWiring,
   extension: AtlasExtensionImpl,
+  warnings: AtlasWarnings,
 ) {
   extension.enableFrameworksFromGradleProperties(settings.providers)
   val repositories = settings.dependencyResolutionManagement
@@ -42,8 +42,8 @@ internal fun onSettingsEvaluated(
 
   // Read here rather than on apply, since the settings script sets it after `plugins { }`
   if (d2DownloadVersion != null) repositories.repositories.d2Releases()
-  extension.warnAboutConfig(AtlasPlugin.LOGGER)
-  if (D2 in extension.frameworks) extension.d2Spec.warnIfVersionIgnored(AtlasPlugin.LOGGER)
+  extension.warnAboutConfig(warnings)
+  if (D2 in extension.frameworks) extension.d2Spec.warnIfVersionIgnored(warnings)
 }
 
 private fun chartedSubprojectPaths(project: ProjectDescriptor): List<String> = buildList {

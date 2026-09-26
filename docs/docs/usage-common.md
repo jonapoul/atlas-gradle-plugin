@@ -355,7 +355,7 @@ atlas {
 Every framework's properties are available on every project type, whichever frameworks you've enabled. The ones your configured frameworks don't understand are ignored, and Atlas logs a warning naming them:
 
 ```
-Warning: project type 'Android App' sets render3D and shadow, which only D2 uses.
+Warning: Project type 'Android App' sets render3D and shadow, which only D2 uses.
 Configure the d2 { } block to use them, or remove the config.
 ```
 

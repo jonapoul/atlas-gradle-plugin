@@ -1,6 +1,9 @@
+@file:Suppress("UnstableApiUsage")
+
 package atlas.core
 
 import atlas.core.internal.AtlasExtensionImpl
+import atlas.core.internal.AtlasWarnings
 import atlas.core.internal.AtlasWiring
 import atlas.core.internal.onSettingsEvaluated
 import atlas.core.internal.wireProject
@@ -10,6 +13,7 @@ import org.gradle.api.initialization.Settings
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.problems.Problems
 import org.gradle.api.provider.ProviderFactory
 
 /**
@@ -38,6 +42,7 @@ public class AtlasPlugin
 constructor(
   private val objects: ObjectFactory,
   private val providers: ProviderFactory,
+  private val problems: Problems,
 ) : Plugin<Settings> {
   override fun apply(target: Settings) {
     val extension =
@@ -55,14 +60,15 @@ constructor(
         mermaid = extension.mermaidSpec,
       )
 
+    val warnings = AtlasWarnings(LOGGER, problems.reporter)
     target.gradle.settingsEvaluated { settings ->
-      onSettingsEvaluated(settings, wiring, extension)
+      onSettingsEvaluated(settings, wiring, extension, warnings)
     }
 
     target.gradle.lifecycle.beforeProject { project -> wireProject(project, wiring) }
   }
 
-  internal companion object {
+  private companion object {
     val LOGGER: Logger = Logging.getLogger(AtlasPlugin::class.java)
   }
 }

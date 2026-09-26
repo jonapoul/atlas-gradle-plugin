@@ -6,33 +6,38 @@
 package atlas.core.internal
 
 import atlas.core.Framework
-import org.gradle.api.logging.Logger
+import atlas.core.internal.AtlasWarnings.Companion.NO_FRAMEWORKS
+import atlas.core.internal.AtlasWarnings.Companion.PROJECT_TYPE_NO_MATCHER
+import atlas.core.internal.AtlasWarnings.Companion.UNSUPPORTED_LINK_STYLE
+import atlas.core.internal.AtlasWarnings.Companion.UNUSED_STYLE_PROPERTY
 
 /**
  * Config problems are reported once, from settings, rather than once per project. Everything here
  * is advisory - Atlas still generates whatever it can.
  */
-internal fun AtlasExtensionImpl.warnAboutConfig(logger: Logger) {
+internal fun AtlasExtensionImpl.warnAboutConfig(warnings: AtlasWarnings) {
   if (frameworks.isEmpty()) {
-    logger.warn(
-      "Warning: no Atlas diagram frameworks are configured, so no charts will be generated. " +
-        "Add a d2 { }, graphviz { } or mermaid { } block to your atlas { } config."
+    warnings.warn(
+      NO_FRAMEWORKS,
+      "No Atlas diagram frameworks are configured, so no charts will be generated. " +
+        "Add a d2 { }, graphviz { } or mermaid { } block to your atlas { } config.",
     )
   }
 
-  warnIfProjectTypesSpecifyNothing(logger)
-  warnAboutUnusedProperties(logger)
-  warnAboutUnsupportedLinkStyles(logger)
+  warnIfProjectTypesSpecifyNothing(warnings)
+  warnAboutUnusedProperties(warnings)
+  warnAboutUnsupportedLinkStyles(warnings)
 }
 
-private fun AtlasExtensionImpl.warnIfProjectTypesSpecifyNothing(logger: Logger) {
+private fun AtlasExtensionImpl.warnIfProjectTypesSpecifyNothing(warnings: AtlasWarnings) {
   projectTypes.forEach { type ->
     if (
       !type.pathContains.isPresent && !type.pathMatches.isPresent && !type.hasPluginId.isPresent
     ) {
-      logger.warn(
-        "Warning: Project type '${type.name}' will be ignored - you need to set one of " +
-          "pathContains, pathMatches or hasPluginId."
+      warnings.warn(
+        PROJECT_TYPE_NO_MATCHER,
+        "Project type '${type.name}' will be ignored - you need to set one of " +
+          "pathContains, pathMatches or hasPluginId.",
       )
     }
   }
@@ -42,13 +47,13 @@ private fun AtlasExtensionImpl.warnIfProjectTypesSpecifyNothing(logger: Logger) 
  * Every framework's style properties are available on every project and link type, so it's easy to
  * configure one that nothing will read. Point them out rather than silently dropping them.
  */
-private fun AtlasExtensionImpl.warnAboutUnusedProperties(logger: Logger) {
+private fun AtlasExtensionImpl.warnAboutUnusedProperties(warnings: AtlasWarnings) {
   val configured = frameworks
 
   projectTypes.forEach { type ->
     warnAboutUnusedProperties(
-      logger = logger,
-      description = "project type '${type.name}'",
+      warnings = warnings,
+      description = "Project type '${type.name}'",
       properties = (type as ProjectTypeSpecImpl).styleProperties,
       configured = configured,
     )
@@ -56,8 +61,8 @@ private fun AtlasExtensionImpl.warnAboutUnusedProperties(logger: Logger) {
 
   linkTypes.forEach { type ->
     warnAboutUnusedProperties(
-      logger = logger,
-      description = "link type '${type.name}'",
+      warnings = warnings,
+      description = "Link type '${type.name}'",
       properties = (type as LinkTypeSpecImpl).styleProperties,
       configured = configured,
     )
@@ -65,7 +70,7 @@ private fun AtlasExtensionImpl.warnAboutUnusedProperties(logger: Logger) {
 }
 
 private fun warnAboutUnusedProperties(
-  logger: Logger,
+  warnings: AtlasWarnings,
   description: String,
   properties: StyleProperties,
   configured: Set<Framework>,
@@ -76,25 +81,27 @@ private fun warnAboutUnusedProperties(
     .forEach { (frameworks, names) ->
       val unused = names.distinct()
       val blocks = frameworks.joinToString(separator = " or ") { f -> "$f { }" }
-      logger.warn(
-        "Warning: $description sets ${unused.joinAnd()}, which only " +
+      warnings.warn(
+        UNUSED_STYLE_PROPERTY,
+        "$description sets ${unused.joinAnd()}, which only " +
           "${frameworks.map { it.displayName }.joinAnd()} " +
           "${if (frameworks.size == 1) "uses" else "use"}. Configure the $blocks block to use " +
-          "${if (unused.size == 1) "it" else "them"}, or remove the config."
+          "${if (unused.size == 1) "it" else "them"}, or remove the config.",
       )
     }
 }
 
-private fun AtlasExtensionImpl.warnAboutUnsupportedLinkStyles(logger: Logger) {
+private fun AtlasExtensionImpl.warnAboutUnsupportedLinkStyles(warnings: AtlasWarnings) {
   val configured = frameworks
   linkTypes.forEach { type ->
     val style = type.style.orNull ?: return@forEach
     val unsupported = configured.filterNot { it in style.supportedBy }
     if (unsupported.isNotEmpty()) {
-      logger.warn(
-        "Warning: link type '${type.name}' uses the $style style, which " +
+      warnings.warn(
+        UNSUPPORTED_LINK_STYLE,
+        "Link type '${type.name}' uses the $style style, which " +
           "${unsupported.map { it.displayName }.joinAnd()} can't draw - " +
-          "Atlas will fall back to the closest style it has."
+          "Atlas will fall back to the closest style it has.",
       )
     }
   }
