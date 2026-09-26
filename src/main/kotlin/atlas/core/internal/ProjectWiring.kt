@@ -11,11 +11,12 @@ import atlas.core.tasks.WriteReadme
 import atlas.d2.internal.d2Releases
 import atlas.d2.internal.downloadVersion
 import atlas.d2.internal.warnIfVersionIgnored
-import blueprint.core.isIntellijSyncing
 import org.gradle.api.Project
 import org.gradle.api.initialization.ProjectDescriptor
 import org.gradle.api.initialization.Settings
 import org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_PROJECT
+import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
@@ -171,3 +172,6 @@ private fun Project.registerGenerationTaskOnSync(
     tasks.register("prepareKotlinIdeaImport") { task -> task.dependsOn(atlasGenerate) }
   }
 }
+
+private val ProviderFactory.isIntellijSyncing: Provider<Boolean>
+  get() = systemProperty("idea.sync.active").map(String::toBoolean)
