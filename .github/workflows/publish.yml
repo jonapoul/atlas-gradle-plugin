@@ -129,11 +129,13 @@ jobs:
           fetch-tags: true
 
       # publish-release falls back to GitHub's generated notes when this writes nothing
-      - uses: anthropics/claude-code-action@3b8197d3d486006dd4af54613517f21ac6ac625e # v1.0.227
+      # base-action because claude-code-action rejects push events
+      - uses: anthropics/claude-code-action/base-action@3b8197d3d486006dd4af54613517f21ac6ac625e # v1.0.227
         continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
             REPO: ${{ github.repository }}
             TAG: ${{ github.ref_name }}
