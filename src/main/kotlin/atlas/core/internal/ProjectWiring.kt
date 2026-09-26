@@ -27,6 +27,7 @@ internal fun onSettingsEvaluated(
   wiring: AtlasWiring,
   extension: AtlasExtensionImpl,
 ) {
+  extension.enableFrameworksFromGradleProperties(settings.providers)
   val repositories = settings.dependencyResolutionManagement
   val d2DownloadVersion =
     if (D2 in extension.frameworks) extension.d2Spec.downloadVersion(settings.providers) else null
