@@ -1,0 +1,4 @@
+# Gradle, Kotlin and AGP versions that CI runs the tests and samples against, one set per line
+# gradle kotlin agp
+9.8.0 2.4.20 9.4.1
+9.1.0 2.2.10 9.0.1

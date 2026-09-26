@@ -10,6 +10,15 @@ cd "$SCRIPT_DIR/.." || exit 1
 
 GRADLE="${GRADLE_CMD:-gradle -Dorg.gradle.java.home=/opt/java/openjdk/}"
 
+# Run under a different Gradle version than the image's by generating a throwaway wrapper for it
+if [ -n "${ATLAS_GRADLE_VERSION:-}" ]; then
+  WRAPPER_DIR="$(mktemp -d)"
+  touch "$WRAPPER_DIR/settings.gradle.kts"
+  # shellcheck disable=SC2086 # GRADLE deliberately carries arguments
+  $GRADLE -q wrapper --gradle-version "$ATLAS_GRADLE_VERSION" -p "$WRAPPER_DIR"
+  GRADLE="$WRAPPER_DIR/gradlew -Dorg.gradle.java.home=/opt/java/openjdk/"
+fi
+
 for sample in sample-basic sample-d2 sample-graphviz sample-mermaid; do
   # shellcheck disable=SC2086 # GRADLE deliberately carries arguments
   $GRADLE atlasGenerate -p "samples/$sample"

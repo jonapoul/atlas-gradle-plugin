@@ -175,6 +175,19 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  versions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.read.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: read
+        run: |
+          matrix="$(grep -vE '^\s*(#|$)' supported-versions.txt | jq -R -s -c 'split("\n") | map(select(. != "") | split(" ") | map(select(. != "")) | { gradle: .[0], kotlin: .[1], agp: .[2] })')"
+          echo "$matrix"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
   detekt:
     needs: validation
     if: ${{ !cancelled() && needs.validation.result == 'success' }}
@@ -188,12 +201,20 @@ jobs:
       - run: ./gradlew detektCheck
 
   test:
-    needs: [ validation, build-docker ]
-    if: ${{ !cancelled() && needs.validation.result == 'success' && needs.build-docker.result != 'failure' }}
+    needs: [ validation, build-docker, versions ]
+    if: ${{ !cancelled() && needs.validation.result == 'success' && needs.build-docker.result != 'failure' && needs.versions.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.versions.outputs.matrix) }}
+    name: test (Gradle ${{ matrix.gradle }}, Kotlin ${{ matrix.kotlin }}, AGP ${{ matrix.agp }})
     env:
       ATLAS_IMAGE_TAG: ${{ needs.build-docker.outputs.tag || 'latest' }}
+      ATLAS_GRADLE_VERSION: ${{ matrix.gradle }}
+      ATLAS_KOTLIN_VERSION: ${{ matrix.kotlin }}
+      ATLAS_AGP_VERSION: ${{ matrix.agp }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup-gradle
@@ -224,12 +245,20 @@ jobs:
       - run: ./gradlew licensee validatePlugins checkKotlinAbi
 
   samples:
-    needs: [ validation, build-docker ]
-    if: ${{ !cancelled() && needs.validation.result == 'success' && needs.build-docker.result != 'failure' }}
+    needs: [ validation, build-docker, versions ]
+    if: ${{ !cancelled() && needs.validation.result == 'success' && needs.build-docker.result != 'failure' && needs.versions.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.versions.outputs.matrix) }}
+    name: samples (Gradle ${{ matrix.gradle }}, Kotlin ${{ matrix.kotlin }}, AGP ${{ matrix.agp }})
     env:
       ATLAS_IMAGE_TAG: ${{ needs.build-docker.outputs.tag || 'latest' }}
+      ATLAS_GRADLE_VERSION: ${{ matrix.gradle }}
+      ATLAS_KOTLIN_VERSION: ${{ matrix.kotlin }}
+      ATLAS_AGP_VERSION: ${{ matrix.agp }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -272,6 +301,7 @@ jobs:
     needs:
       - validation
       - build-docker
+      - versions
       - detekt
       - test
       - other-checks

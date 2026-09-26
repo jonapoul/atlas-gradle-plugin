@@ -54,14 +54,9 @@ internal class CheckFileDiffTest : ScenarioTest() {
     GraphvizBasic.withIntermediatesInProjectDir {
       assertThatTask(":a:checkGraphvizChart")
         .failsBuild()
-        .outputContains(
-          """
-          * What went wrong:
-          Execution failed for task ':a:checkGraphvizChart' (registered by plugin 'dev.jonpoulton.atlas').
-          > java.io.FileNotFoundException
-          """
-            .trimIndent()
-        )
+        // Older Gradle versions don't append "(registered by plugin ...)" to the task name
+        .outputContains("Execution failed for task ':a:checkGraphvizChart'")
+        .outputContains("> java.io.FileNotFoundException")
 
       assertThat(resolve("build/reports/problems/problems-report.html"))
         .contentContains("Run `gradle :a:writeGraphvizChart` to generate the file.")
