@@ -17,6 +17,10 @@ x-atlas: &atlas
   # flag has to reach the container - otherwise a missing tool silently skips on CI too.
   environment:
     CI: ${CI:-false}
+    # Picks the Gradle, Kotlin and AGP versions from supported-versions.txt. Blank means the defaults
+    ATLAS_GRADLE_VERSION: ${ATLAS_GRADLE_VERSION:-}
+    ATLAS_KOTLIN_VERSION: ${ATLAS_KOTLIN_VERSION:-}
+    ATLAS_AGP_VERSION: ${ATLAS_AGP_VERSION:-}
 
 secrets:
   # Lets the d2 install call the GitHub API without hitting the unauthenticated rate limit.

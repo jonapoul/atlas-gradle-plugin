@@ -73,7 +73,4 @@ internal open class OrderedNamedContainer<T : Any>(
   @Suppress("OVERRIDE_DEPRECATION", "RedundantOverride", "DEPRECATION")
   override fun <T : Any> toArray(generator: IntFunction<Array<out T>>): Array<out T> =
     super.toArray(generator)
-
-  @Suppress("UnstableApiUsage", "RedundantOverride")
-  override fun disallowChanges() = super.disallowChanges()
 }

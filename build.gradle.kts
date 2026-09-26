@@ -27,6 +27,23 @@ plugins {
   `java-gradle-plugin`
 }
 
+// CI overrides these to test against each entry in supported-versions.txt
+val testGradleVersion =
+  providers
+    .environmentVariable("ATLAS_GRADLE_VERSION")
+    .map { version -> version.takeIf(String::isNotBlank) }
+    .orElse(GradleVersion.current().version)
+val testKotlinVersion =
+  providers
+    .environmentVariable("ATLAS_KOTLIN_VERSION")
+    .map { version -> version.takeIf(String::isNotBlank) }
+    .orElse(libs.versions.kotlin)
+val testAgpVersion =
+  providers
+    .environmentVariable("ATLAS_AGP_VERSION")
+    .map { version -> version.takeIf(String::isNotBlank) }
+    .orElse(libs.versions.agp)
+
 dependencies {
   detektPlugins(libs.detekt.gradle)
 
@@ -36,8 +53,8 @@ dependencies {
 
   implementation(libs.kotlinx.serialization)
 
-  testPluginClasspath(libs.agp)
-  testPluginClasspath(libs.kotlin.gradle)
+  testPluginClasspath(testAgpVersion.map { "com.android.tools.build:gradle:$it" })
+  testPluginClasspath(testKotlinVersion.map { kotlin("gradle-plugin", it) })
 
   testImplementation(kotlin("stdlib"))
   testImplementation(kotlin("test"))
@@ -78,8 +95,11 @@ gradlePlugin {
   }
 }
 
-// Set the minimum supported gradle version
-val minGradleVersion = providers.gradleProperty("atlas.minimumGradleVersion")
+val supportedVersions = layout.projectDirectory.file("supported-versions.txt")
+val minGradleVersion =
+  providers.fileContents(supportedVersions).asText.map { contents ->
+    contents.lines().last { !it.startsWith("#") }.split(" ").first()
+  }
 
 configurations.named("apiElements").configure {
   attributes {
@@ -197,9 +217,7 @@ buildConfig {
   sourceSets.named("test") {
     packageName = "atlas.test"
     useKotlinOutput { topLevelConstants = true }
-    buildConfigField("AGP_VERSION", libs.versions.agp)
-    buildConfigField("KOTLIN_VERSION", libs.versions.kotlin)
-    buildConfigField("GRADLE_VERSION", GradleVersion.current().version)
+    buildConfigField("GRADLE_VERSION", testGradleVersion)
   }
 }
 

@@ -31,6 +31,16 @@ dependencyResolutionManagement {
   versionCatalogs {
     create("libs") {
       from(files("../../gradle/libs.versions.toml"))
+      providers
+        .environmentVariable("ATLAS_KOTLIN_VERSION")
+        .orNull
+        ?.takeIf { it.isNotBlank() }
+        ?.let { version("kotlin", it) }
+      providers
+        .environmentVariable("ATLAS_AGP_VERSION")
+        .orNull
+        ?.takeIf { it.isNotBlank() }
+        ?.let { version("agp", it) }
     }
   }
 }
