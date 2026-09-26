@@ -4,9 +4,10 @@ package atlas.core.tasks
 
 import atlas.core.AtlasSpec
 import atlas.core.internal.AtlasConfig
+import atlas.core.internal.AtlasWarnings.Companion.PROBLEM_DOESNT_EXIST
+import atlas.core.internal.AtlasWarnings.Companion.PROBLEM_NEEDS_REGENERATION
 import atlas.core.internal.Variant
 import atlas.core.internal.diff
-import atlas.core.internal.problemId
 import java.io.File
 import java.io.FileNotFoundException
 import javax.inject.Inject
@@ -81,17 +82,6 @@ public abstract class CheckFileDiff : DefaultTask() {
   }
 
   internal companion object {
-    private val PROBLEM_DOESNT_EXIST =
-      problemId(
-        id = "atlas-check-doesnt-exist",
-        description = "Expected file doesn't exist",
-      )
-    private val PROBLEM_NEEDS_REGENERATION =
-      problemId(
-        id = "atlas-check-regenerate",
-        description = "Chart file needs regenerating",
-      )
-
     internal inline fun <reified T1 : TaskWithOutputFile, T2 : TaskWithOutputFile> register(
       target: Project,
       config: AtlasConfig,

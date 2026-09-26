@@ -1,6 +1,7 @@
 package atlas.core.internal
 
 import org.gradle.api.logging.Logger
+import org.gradle.api.problems.ProblemGroup
 import org.gradle.api.problems.ProblemId
 import org.gradle.api.problems.ProblemReporter
 
@@ -12,16 +13,41 @@ internal class AtlasWarnings(private val logger: Logger, private val reporter: P
   }
 
   companion object {
-    val NO_FRAMEWORKS = problemId("atlas-no-frameworks", "No diagram frameworks configured")
+    private val PROBLEM_GROUP: ProblemGroup = ProblemGroup.create("atlas-group", "Atlas")
+
+    val NO_FRAMEWORKS =
+      problemId(id = "no-frameworks", description = "No diagram frameworks configured")
+
     val PROJECT_TYPE_NO_MATCHER =
-      problemId("atlas-project-type-no-matcher", "Project type has no matcher")
+      problemId(id = "project-type-no-matcher", description = "Project type has no matcher")
+
     val UNUSED_STYLE_PROPERTY =
       problemId(
-        "atlas-unused-style-property",
-        "Style property not used by any configured framework",
+        id = "unused-style-property",
+        description = "Style property not used by any configured framework",
       )
     val UNSUPPORTED_LINK_STYLE =
-      problemId("atlas-unsupported-link-style", "Link style not supported by a framework")
-    val D2_VERSION_IGNORED = problemId("atlas-d2-version-ignored", "D2 version is ignored")
+      problemId(
+        id = "unsupported-link-style",
+        description = "Link style not supported by a framework",
+      )
+
+    val D2_VERSION_IGNORED =
+      problemId(id = "d2-version-ignored", description = "D2 version is ignored")
+
+    val PROBLEM_DOESNT_EXIST =
+      problemId(
+        id = "check-doesnt-exist",
+        description = "Expected file doesn't exist",
+      )
+
+    val PROBLEM_NEEDS_REGENERATION =
+      problemId(
+        id = "check-regenerate",
+        description = "Chart file needs regenerating",
+      )
+
+    private fun problemId(id: String, description: String): ProblemId =
+      ProblemId.create("atlas-$id", description, PROBLEM_GROUP)
   }
 }
