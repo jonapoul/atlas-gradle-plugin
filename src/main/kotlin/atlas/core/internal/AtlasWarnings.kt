@@ -1,7 +1,6 @@
 package atlas.core.internal
 
 import org.gradle.api.logging.Logger
-import org.gradle.api.problems.ProblemGroup
 import org.gradle.api.problems.ProblemId
 import org.gradle.api.problems.ProblemReporter
 
@@ -13,18 +12,16 @@ internal class AtlasWarnings(private val logger: Logger, private val reporter: P
   }
 
   companion object {
-    private val GROUP = ProblemGroup.create("atlas", "Atlas")
-
-    val NO_FRAMEWORKS = problemId("no-frameworks", "No diagram frameworks configured")
+    val NO_FRAMEWORKS = problemId("atlas-no-frameworks", "No diagram frameworks configured")
     val PROJECT_TYPE_NO_MATCHER =
-      problemId("project-type-no-matcher", "Project type has no matcher")
+      problemId("atlas-project-type-no-matcher", "Project type has no matcher")
     val UNUSED_STYLE_PROPERTY =
-      problemId("unused-style-property", "Style property not used by any configured framework")
+      problemId(
+        "atlas-unused-style-property",
+        "Style property not used by any configured framework",
+      )
     val UNSUPPORTED_LINK_STYLE =
-      problemId("unsupported-link-style", "Link style not supported by a framework")
-    val D2_VERSION_IGNORED = problemId("d2-version-ignored", "D2 version is ignored")
-
-    private fun problemId(name: String, displayName: String) =
-      ProblemId.create(name, displayName, GROUP)
+      problemId("atlas-unsupported-link-style", "Link style not supported by a framework")
+    val D2_VERSION_IGNORED = problemId("atlas-d2-version-ignored", "D2 version is ignored")
   }
 }
