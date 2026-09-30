@@ -38,6 +38,12 @@
       "schedule": [
         "at any time"
       ]
+    },
+    {
+      "matchFileNames": [
+        "docs/requirements.txt"
+      ],
+      "groupName": "docs requirements"
     }
   ]
 }
