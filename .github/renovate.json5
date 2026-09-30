@@ -43,7 +43,7 @@
       "matchFileNames": [
         "docs/requirements.txt"
       ],
-      "groupName": "docs requirements"
+      "groupName": "zensical"
     }
   ]
 }
