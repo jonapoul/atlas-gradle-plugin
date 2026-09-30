@@ -168,7 +168,7 @@ warn at configuration time.
   overwriting each other. See `frameworkFilename` in `internal/Extensions.kt`
 - Intermediate files (D2 `.d2`, Graphviz `.dot`) and per-project JSON: `build/atlas/`, unless
   `intermediateFilesInBuildDir` is disabled in that framework's block
-- Documentation: `docs/` (MkDocs, deployed to GitHub Pages)
+- Documentation: `docs/` (Zensical, deployed to GitHub Pages)
 
 ## Important Properties
 
