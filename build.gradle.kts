@@ -98,7 +98,11 @@ gradlePlugin {
 val supportedVersions = layout.projectDirectory.file("supported-versions.txt")
 val minGradleVersion =
   providers.fileContents(supportedVersions).asText.map { contents ->
-    contents.lines().last { !it.startsWith("#") }.split(" ").first()
+    contents.lines()
+      .filter { it.isNotBlank() }
+      .last { !it.startsWith("#") }
+      .split(" ")
+      .first()
   }
 
 configurations.named("apiElements").configure {
