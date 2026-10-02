@@ -176,7 +176,7 @@ jobs:
       startsWith(github.ref, 'refs/tags/') &&
       needs.check-version.outputs.is-snapshot == 'false'
     container:
-      image: gradle:9.8.0-jdk21@sha256:3bad8c6f194befc7a1a9d4a6452aed83bdbb5a6d6f6752e5b0acbfeec52961b9
+      image: gradle:9.8.0-jdk21@sha256:f8a4ce9c1f397646228f9f6bcc1c4035393e348ac0bbe2bd69f5adc4e4a93436
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
