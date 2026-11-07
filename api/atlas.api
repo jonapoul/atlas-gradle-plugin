@@ -9,6 +9,7 @@ public abstract interface class atlas/core/AtlasExtension {
 	public abstract fun getD2 ()Latlas/d2/D2Spec;
 	public abstract fun getDisplayLinkLabels ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFrameworks ()Ljava/util/Set;
+	public abstract fun getGenerateIndex ()Lorg/gradle/api/provider/Property;
 	public abstract fun getGenerateOnSync ()Lorg/gradle/api/provider/Property;
 	public abstract fun getGraphviz ()Latlas/graphviz/GraphvizSpec;
 	public abstract fun getGroupProjects ()Lorg/gradle/api/provider/Property;
@@ -565,6 +566,17 @@ public abstract class atlas/core/tasks/CollateProjectTypes : org/gradle/api/Defa
 
 public abstract interface class atlas/core/tasks/TaskWithOutputFile : org/gradle/api/Task {
 	public abstract fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
+}
+
+public abstract class atlas/core/tasks/WriteIndex : org/gradle/api/DefaultTask, atlas/core/tasks/TaskWithOutputFile {
+	public fun <init> ()V
+	public final fun execute ()V
+	public abstract fun getChartFiles ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getChartFrameworks ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getChartPaths ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getProjectLinks ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getProjectTypes ()Lorg/gradle/api/file/RegularFileProperty;
 }
 
 public abstract class atlas/core/tasks/WriteProjectLinks : org/gradle/api/DefaultTask, atlas/core/tasks/TaskWithOutputFile {

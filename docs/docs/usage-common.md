@@ -16,6 +16,7 @@ atlas {
   alsoTraverseUpwards = false
   checkOutputs = true
   displayLinkLabels = false
+  generateIndex = true
   generateOnSync = false
   groupProjects = false
   ignoredConfigs = setOf("debug", "kover", "ksp", "test")
@@ -83,6 +84,34 @@ Atlas replaces everything in here.
 
 Anything down here is left alone too.
 ```
+
+## Index page
+
+`gradle atlasGenerate` also writes `build/atlas/index.html` in the root project: one page listing every project's chart, and prints its `file://` URL. Open it in a browser to:
+
+- filter projects with a fuzzy search, highlighting the matched letters. Press `/` to focus it and `Esc` to clear it. Tick "Match dependencies" to match any project in a project's dependency tree instead of only its own path
+- sort by path, project type, chart size or modification time, by clicking a column header
+- preview a chart by hovering its row, or step through them with the arrow keys and press `Enter` to open one
+- zoom the preview with the scroll wheel and pan it by dragging. Double-click to reset it
+- switch between frameworks, when more than one is configured
+
+The filter, sort and selected project are kept in the page's URL, so reloading or bookmarking it keeps your place.
+
+Image charts (SVG, PNG, etc.) and PDFs are shown as they are. Mermaid charts are rendered in the browser, which loads Mermaid from jsDelivr the first time you preview one, so it falls back to the chart's source when offline. Links to the charts are relative, so the page keeps working if the whole project tree is moved or published together.
+
+Switch it off with [generateIndex](#generateindex).
+
+<div class="side-by-side">
+  <figure>
+    <figcaption>Dark</figcaption>
+    <img src="../img/index-dark.png" alt="Index dark">
+  </figure>
+
+  <figure>
+    <figcaption>Light</figcaption>
+    <img src="../img/index-light.png" alt="Index light">
+  </figure>
+</div>
 
 ## Properties
 
@@ -165,6 +194,18 @@ Also settable with the `atlas.displayLinkLabels` [Gradle property](#gradle-prope
     <img src="../img/displayLinkLabels-enabled.svg" alt="Enabled">
   </figure>
 </div>
+
+### generateIndex
+
+``` kotlin
+atlas {
+  generateIndex = false
+}
+```
+
+When enabled, `gradle atlasGenerate` also writes the [index page](#index-page) to the root project's `build/atlas/index.html`. Enabled by default.
+
+Also settable with the `atlas.generateIndex` [Gradle property](#gradle-properties).
 
 ### generateOnSync
 
@@ -435,6 +476,7 @@ Most config can also be set from `gradle.properties`, which is handy for changin
 atlas.alsoTraverseUpwards=true
 atlas.checkOutputs=false
 atlas.displayLinkLabels=true
+atlas.generateIndex=false
 atlas.generateOnSync=true
 atlas.groupProjects=true
 atlas.printFilesToConsole=true

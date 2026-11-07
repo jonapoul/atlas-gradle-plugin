@@ -12,6 +12,9 @@ internal class AtlasWarnings(private val logger: Logger, private val reporter: P
     reporter.report(id) { spec -> spec.contextualLabel(message) }
   }
 
+  // ProblemGroup.create and ProblemId.create are deprecated in 9.9, but their replacement
+  // Problems.groups needs 9.9+. Switch once the minimum Gradle version reaches 9.9
+  @Suppress("DEPRECATION")
   companion object {
     private val PROBLEM_GROUP: ProblemGroup = ProblemGroup.create("atlas-group", "Atlas")
 

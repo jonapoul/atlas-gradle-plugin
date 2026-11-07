@@ -36,27 +36,29 @@ internal class ExecD2Test : ScenarioTest() {
       .outputContains(
         """
         :writeD2Classes SKIPPED
-        :a:writeProjectType SKIPPED
-        :b:writeProjectType SKIPPED
-        :c:writeProjectType SKIPPED
-        :collateProjectTypes SKIPPED
         :a:writeProjectLinks SKIPPED
         :b:writeProjectLinks SKIPPED
         :c:writeProjectLinks SKIPPED
         :collateProjectLinks SKIPPED
+        :a:writeProjectType SKIPPED
+        :b:writeProjectType SKIPPED
+        :c:writeProjectType SKIPPED
+        :collateProjectTypes SKIPPED
         :a:writeProjectTree SKIPPED
         :a:writeD2Chart SKIPPED
         :a:execD2Chart SKIPPED
-        :a:writeReadme SKIPPED
-        :a:atlasGenerate SKIPPED
         :b:writeProjectTree SKIPPED
         :b:writeD2Chart SKIPPED
         :b:execD2Chart SKIPPED
-        :b:writeReadme SKIPPED
-        :b:atlasGenerate SKIPPED
         :c:writeProjectTree SKIPPED
         :c:writeD2Chart SKIPPED
         :c:execD2Chart SKIPPED
+        :atlasWriteIndex SKIPPED
+        :atlasGenerate SKIPPED
+        :a:writeReadme SKIPPED
+        :a:atlasGenerate SKIPPED
+        :b:writeReadme SKIPPED
+        :b:atlasGenerate SKIPPED
         :c:writeReadme SKIPPED
         :c:atlasGenerate SKIPPED
 
