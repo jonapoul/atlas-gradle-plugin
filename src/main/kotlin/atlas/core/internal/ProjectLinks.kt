@@ -39,13 +39,17 @@ internal fun writeProjectLinks(
   linkTypes: Set<LinkType>,
 ): List<ProjectLink> {
   val links = projectLinks.toSortedMap()
+  val matchers = linkTypes.map { t -> t to lazy { t.configuration.toRegex(IGNORE_CASE) } }
   val filteredLinks = mutableListOf<ProjectLink>()
   links.forEach { (toPath, configurations) ->
     configurations.sorted().forEach { config ->
-      val type = linkTypes.firstOrNull { t ->
-        // treat the given string first as an exact match, then fall back to treating as regex
-        t.configuration == config || t.configuration.toRegex(IGNORE_CASE).matches(config)
-      }
+      val type =
+        matchers
+          .firstOrNull { (t, regex) ->
+            // treat the given string first as an exact match, then fall back to treating as regex
+            t.configuration == config || regex.value.matches(config)
+          }
+          ?.first
       filteredLinks += ProjectLink(fromPath, toPath, config, type)
     }
   }

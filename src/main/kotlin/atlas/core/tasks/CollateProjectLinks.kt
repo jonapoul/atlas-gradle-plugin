@@ -59,9 +59,10 @@ public abstract class CollateProjectLinks : DefaultTask(), TaskWithOutputFile {
     }
   }
 
-  private fun List<ProjectLink>.filterProjects() = filter { (from, to) ->
-    ignoredProjects.get().none { pattern ->
-      from.matches(pattern) || to.matches(pattern)
+  private fun List<ProjectLink>.filterProjects(): List<ProjectLink> {
+    val ignored = ignoredProjects.get()
+    return filter { (from, to) ->
+      ignored.none { pattern -> from.matches(pattern) || to.matches(pattern) }
     }
   }
 
