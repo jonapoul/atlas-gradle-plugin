@@ -12,7 +12,6 @@ import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
@@ -22,6 +21,7 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * Creates or updates a README.md file to inject the generated chart/legend files. An existing
@@ -55,7 +55,7 @@ import org.gradle.api.tasks.TaskProvider
  *
  * Remember, this readme task will also be run when calling `gradle atlasGenerate`.
  */
-@CacheableTask
+@DisableCachingByDefault(because = "Edits the existing README in place, which isn't an input")
 public abstract class WriteReadme : DefaultTask(), AtlasGenerationTask, TaskWithOutputFile {
   @get:Nested public abstract val diagrams: ListProperty<Diagram>
   @get:Internal public abstract val readmeFile: RegularFileProperty
