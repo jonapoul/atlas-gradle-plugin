@@ -113,6 +113,7 @@ atlas {
 
     layoutEngine.elk {
       algorithm = ElkAlgorithm.Layered
+      edgeEdgeBetweenLayers = 10
       edgeNodeBetweenLayers = 20
       nodeNodeBetweenLayers = 10
       nodeSelfLoop = 50
