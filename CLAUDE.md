@@ -80,7 +80,7 @@ between projects travels as a dependency-resolution artifact**. See `internal/Ag
 kind of file is an `AtlasArtifact` with its own value for the `dev.jonpoulton.atlas.artifact`
 attribute, so one project dependency can carry any number of them:
 
-- Each subproject publishes `ProjectType` and `ProjectLinks`
+- Each subproject publishes `ProjectType` and `ProjectLinks`, plus `chart(framework)` for the index
 - The root resolves those from every subproject, collates them, and publishes `CollatedTypes`,
   `CollatedLinks`, `D2Classes` and per-framework `legend(framework)` back out
 - Each subproject resolves what it needs from `:`
@@ -120,6 +120,10 @@ buildconfig plugin), `docker/Dockerfile` and Renovate.
 `WriteProjectType` + `WriteProjectLinks` per subproject → `CollateProjectTypes` /
 `CollateProjectLinks` at the root → `WriteProjectTree` per subproject → framework diagram tasks →
 `WriteReadme`, which injects every configured framework's diagram into the project README.
+Unless `generateIndex` is off, each subproject also publishes its charts as `chart(framework)`
+artifacts, and the root's `WriteIndex` fills `src/main/resources/atlas/core/tasks/index.html` with
+them plus the collated types and links, writing `build/atlas/index.html`. The root has its own
+`atlasGenerate`, which depends on it.
 
 ### Testing Approach
 
@@ -166,6 +170,7 @@ warn at configuration time.
   from `AtlasConfig.rootDir`. D2's shared `classes-d2.d2` goes there too
 - The framework is a filename suffix rather than a directory, which is what stops two frameworks
   overwriting each other. See `frameworkFilename` in `internal/Extensions.kt`
+- The index page: `build/atlas/index.html` in the root project. Links to charts are relative
 - Intermediate files (D2 `.d2`, Graphviz `.dot`) and per-project JSON: `build/atlas/`, unless
   `intermediateFilesInBuildDir` is disabled in that framework's block
 - Documentation: `docs/` (Zensical, deployed to GitHub Pages)

@@ -28,6 +28,15 @@ import org.gradle.api.provider.SetProperty
 @AtlasDsl
 public interface AtlasExtension {
   /**
+   * When enabled, `gradle atlasGenerate` also writes an HTML page to the root project's
+   * `build/atlas/index.html`, listing every project's chart with a filterable, sortable table and a
+   * preview pane. The page's `file://` URL is printed whenever it's written. Defaults to true.
+   *
+   * Also controlled by the `atlas.generateIndex` Gradle property.
+   */
+  public val generateIndex: Property<Boolean>
+
+  /**
    * When enabled, syncing your IntelliJ IDE (including Android Studio) will automatically trigger
    * regeneration of your project diagrams. Defaults to false.
    *

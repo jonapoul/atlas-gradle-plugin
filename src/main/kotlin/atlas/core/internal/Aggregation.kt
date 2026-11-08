@@ -3,6 +3,7 @@ package atlas.core.internal
 import atlas.core.Framework
 import java.io.File
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ArtifactCollection
 import org.gradle.api.attributes.Attribute
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
@@ -55,6 +56,9 @@ internal value class AtlasArtifact(private val id: String) {
 
     // The shared legend a framework draws once on the root, and every README links to
     fun legend(framework: Framework) = AtlasArtifact("legend-$framework")
+
+    // One project's chart for a framework, which the root links to from its index page
+    fun chart(framework: Framework) = AtlasArtifact("chart-$framework")
   }
 }
 
@@ -62,12 +66,12 @@ internal value class AtlasArtifact(private val id: String) {
 internal fun Project.publishAtlasArtifact(
   artifact: AtlasArtifact,
   file: Provider<RegularFile>,
-  builtBy: TaskProvider<*>,
+  builtBy: TaskProvider<*>? = null,
 ) {
   configurations.consumable(artifact.elementsConfigurationName) { configuration ->
     configuration.attributes.attribute(ATLAS_ARTIFACT_ATTRIBUTE, artifact.attributeValue)
   }
-  artifacts.add(artifact.elementsConfigurationName, file) { it.builtBy(builtBy) }
+  artifacts.add(artifact.elementsConfigurationName, file) { a -> builtBy?.let(a::builtBy) }
 }
 
 /**
@@ -82,7 +86,17 @@ internal fun Project.consumeAtlasArtifact(
   artifact: AtlasArtifact,
   fromPaths: List<String>,
   lenient: Boolean,
-): FileCollection {
+): FileCollection = consumeAtlasArtifacts(artifact, fromPaths, lenient).artifactFiles
+
+/**
+ * As [consumeAtlasArtifact], but keeps hold of which project each file came from. Each
+ * [org.gradle.api.artifacts.result.ResolvedArtifactResult]'s component is the publishing project.
+ */
+internal fun Project.consumeAtlasArtifacts(
+  artifact: AtlasArtifact,
+  fromPaths: List<String>,
+  lenient: Boolean,
+): ArtifactCollection {
   val scopeName = "${artifact.resolvableConfigurationName}Dependencies"
   val scope = configurations.dependencyScope(scopeName)
 
@@ -96,7 +110,7 @@ internal fun Project.consumeAtlasArtifact(
     dependencies.add(scopeName, dependencies.project(mapOf("path" to path)))
   }
 
-  return resolvable.get().incoming.artifactView { it.lenient(lenient) }.files
+  return resolvable.get().incoming.artifactView { it.lenient(lenient) }.artifacts
 }
 
 /**

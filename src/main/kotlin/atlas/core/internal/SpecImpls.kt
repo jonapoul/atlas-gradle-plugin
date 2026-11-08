@@ -48,6 +48,7 @@ constructor(
     objects.bool(coreProperties.alsoTraverseUpwards)
   override val checkOutputs: Property<Boolean> = objects.bool(coreProperties.checkOutputs)
   override val displayLinkLabels: Property<Boolean> = objects.bool(coreProperties.displayLinkLabels)
+  override val generateIndex: Property<Boolean> = objects.bool(coreProperties.generateIndex)
   override val generateOnSync: Property<Boolean> = objects.bool(coreProperties.generateOnSync)
   override val groupProjects: Property<Boolean> = objects.bool(coreProperties.groupProjects)
   override val ignoredConfigs: SetProperty<String> =

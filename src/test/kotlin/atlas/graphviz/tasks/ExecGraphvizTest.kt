@@ -34,29 +34,31 @@ internal class ExecGraphvizTest : ScenarioTest() {
       .buildsSuccessfully()
       .outputContains(
         """
-        :a:writeProjectType SKIPPED
-        :b:writeProjectType SKIPPED
-        :c:writeProjectType SKIPPED
-        :collateProjectTypes SKIPPED
+        :writeGraphvizLegend SKIPPED
+        :execGraphvizLegend SKIPPED
         :a:writeProjectLinks SKIPPED
         :b:writeProjectLinks SKIPPED
         :c:writeProjectLinks SKIPPED
         :collateProjectLinks SKIPPED
+        :a:writeProjectType SKIPPED
+        :b:writeProjectType SKIPPED
+        :c:writeProjectType SKIPPED
+        :collateProjectTypes SKIPPED
         :a:writeProjectTree SKIPPED
         :a:writeGraphvizChart SKIPPED
         :a:execGraphvizChart SKIPPED
-        :writeGraphvizLegend SKIPPED
-        :execGraphvizLegend SKIPPED
-        :a:writeReadme SKIPPED
-        :a:atlasGenerate SKIPPED
         :b:writeProjectTree SKIPPED
         :b:writeGraphvizChart SKIPPED
         :b:execGraphvizChart SKIPPED
-        :b:writeReadme SKIPPED
-        :b:atlasGenerate SKIPPED
         :c:writeProjectTree SKIPPED
         :c:writeGraphvizChart SKIPPED
         :c:execGraphvizChart SKIPPED
+        :atlasWriteIndex SKIPPED
+        :atlasGenerate SKIPPED
+        :a:writeReadme SKIPPED
+        :a:atlasGenerate SKIPPED
+        :b:writeReadme SKIPPED
+        :b:atlasGenerate SKIPPED
         :c:writeReadme SKIPPED
         :c:atlasGenerate SKIPPED
 

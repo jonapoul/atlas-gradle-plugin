@@ -4,6 +4,7 @@ import atlas.core.tasks.AtlasGenerationTask
 import atlas.core.tasks.CheckFileDiff
 import atlas.core.tasks.CollateProjectLinks
 import atlas.core.tasks.CollateProjectTypes
+import atlas.core.tasks.WriteIndex
 import atlas.core.tasks.WriteProjectLinks
 import atlas.core.tasks.WriteProjectTree
 import atlas.core.tasks.WriteProjectType
@@ -99,6 +100,23 @@ private fun wireRoot(context: AtlasContext) =
     )
 
     context.config.frameworks.forEach { framework -> framework.tasks.registerRootTasks(context) }
+
+    val atlasGenerate = registerAtlasGenerateTask()
+    registerGenerationTaskOnSync(atlasGenerate, context.config)
+
+    if (context.config.generateIndex && context.config.frameworks.isNotEmpty()) {
+      val writeIndex =
+        WriteIndex.register(
+          target = this,
+          frameworks = context.config.frameworks,
+          charts = { framework ->
+            consumeAtlasArtifacts(AtlasArtifact.chart(framework), paths, lenient = true)
+          },
+          projectTypes = collateTypes.flatMap { it.outputFile },
+          projectLinks = collateLinks.flatMap { it.outputFile },
+        )
+      atlasGenerate.configure { it.dependsOn(writeIndex) }
+    }
   }
 
 /** Every other project describes itself, then draws its own slice of the graph. */
@@ -130,6 +148,13 @@ private fun wireChild(context: AtlasContext) =
     val charts =
       context.config.frameworks.map { framework -> framework.tasks.registerChildTasks(context) }
     registerReadmeTask(charts)
+
+    // Lets the root's index page link to every project's chart
+    if (context.config.generateIndex) {
+      charts.forEach { chart ->
+        publishAtlasArtifact(AtlasArtifact.chart(chart.framework), chart.chart)
+      }
+    }
   }
 
 private fun Project.registerReadmeTask(charts: List<ChartFiles>) {
