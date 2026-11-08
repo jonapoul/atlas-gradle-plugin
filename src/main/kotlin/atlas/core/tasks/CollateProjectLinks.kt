@@ -54,7 +54,7 @@ public abstract class CollateProjectLinks : DefaultTask(), TaskWithOutputFile {
     logger.info("CollateProjectLinks: ${links.size} links")
     links.forEach { link ->
       logger.info(
-        "CollateProjectLinks:     from=${link.fromPath}, to=${link.toPath}, config=${link.configuration}"
+        "CollateProjectLinks:     from=${link.fromPath}, to=${link.toPath}, config=${link.configuration}",
       )
     }
   }

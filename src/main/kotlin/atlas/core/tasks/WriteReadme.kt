@@ -95,7 +95,7 @@ public abstract class WriteReadme : DefaultTask(), AtlasGenerationTask, TaskWith
     val result =
       REGION_REGEX.find(contents)
         ?: error(
-          "No injectable region found in $file. Requires a block matching regex: $REGION_REGEX"
+          "No injectable region found in $file. Requires a block matching regex: $REGION_REGEX",
         )
 
     val (startRegion, _, endRegion) = result.destructured
@@ -179,7 +179,7 @@ public abstract class WriteReadme : DefaultTask(), AtlasGenerationTask, TaskWith
             diagram.chartFile.set(chart.chart)
             chart.legend?.let { legend ->
               diagram.legendFile.fileProvider(
-                legend.singleFile(AtlasArtifact.legend(chart.framework))
+                legend.singleFile(AtlasArtifact.legend(chart.framework)),
               )
             }
             task.diagrams.add(diagram)

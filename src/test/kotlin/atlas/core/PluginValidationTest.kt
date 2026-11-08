@@ -18,7 +18,7 @@ internal class PluginValidationTest : ScenarioTest() {
       .buildsSuccessfully()
       .outputContains(
         "Warning: Project type 'custom' will be ignored - you need to set one of " +
-          "pathContains, pathMatches or hasPluginId."
+          "pathContains, pathMatches or hasPluginId.",
       )
   }
 

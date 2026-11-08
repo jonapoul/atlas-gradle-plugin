@@ -62,7 +62,7 @@ internal class ExecD2Test : ScenarioTest() {
 
         BUILD SUCCESSFUL
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 

@@ -40,7 +40,7 @@ internal class WriteReadmeTest : ScenarioTest() {
         ```
         <!--endregion-->
         """
-          .trimIndent()
+          .trimIndent(),
       )
     assertThat(resolve("a/README.md").readText()).endsWith("\n")
   }
@@ -76,7 +76,7 @@ internal class WriteReadmeTest : ScenarioTest() {
         | compileOnly | Yellow Dashed |
         <!--endregion-->
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -97,7 +97,7 @@ internal class WriteReadmeTest : ScenarioTest() {
 
       Some suffix
       """
-        .trimIndent()
+        .trimIndent(),
     )
 
     // when

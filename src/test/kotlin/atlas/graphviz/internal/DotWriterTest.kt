@@ -42,7 +42,7 @@ internal class DotWriterTest {
           ":ui:c" -> ":domain:b"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -88,7 +88,7 @@ internal class DotWriterTest {
           ":ui:c" -> ":domain:b"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -141,7 +141,7 @@ internal class DotWriterTest {
           ":ui:c" -> ":domain:b"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -191,7 +191,7 @@ internal class DotWriterTest {
           ":ui:c" -> ":domain:b"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -210,7 +210,7 @@ internal class DotWriterTest {
           ":app" [fillcolor="red"]
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 }

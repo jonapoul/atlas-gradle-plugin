@@ -16,7 +16,7 @@ internal class ProjectTypeContainer(objects: ObjectFactory) :
     container =
       objects.domainObjectContainer(ProjectTypeSpec::class.java) { name ->
         objects.newInstance(ProjectTypeSpecImpl::class.java, name)
-      }
+      },
   ),
   NamedProjectTypeContainer
 
@@ -25,13 +25,13 @@ internal class LinkTypeContainer(objects: ObjectFactory) :
     container =
       objects.domainObjectContainer(LinkTypeSpec::class.java) { name ->
         objects.newInstance(LinkTypeSpecImpl::class.java, name)
-      }
+      },
   ),
   NamedLinkTypeContainer
 
 @Suppress("PreferRegisterOverCreate") // passthrough overrides
 internal open class OrderedNamedContainer<T : Any>(
-  private val container: NamedDomainObjectContainer<T>
+  private val container: NamedDomainObjectContainer<T>,
 ) : NamedDomainObjectContainer<T> by container {
   private val orderedNames = mutableSetOf<String>()
 

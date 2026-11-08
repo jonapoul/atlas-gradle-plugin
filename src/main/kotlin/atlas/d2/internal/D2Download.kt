@@ -244,7 +244,7 @@ internal data class D2Platform(val os: String, val arch: String) {
     private fun unsupported(osName: String, osArch: String): Nothing =
       throw GradleException(
         "D2 publishes no binary for $osName/$osArch. Install d2 yourself and set " +
-          "atlas.d2.executableSource=path, or point atlas.d2.executable at it."
+          "atlas.d2.executableSource=path, or point atlas.d2.executable at it.",
       )
   }
 }

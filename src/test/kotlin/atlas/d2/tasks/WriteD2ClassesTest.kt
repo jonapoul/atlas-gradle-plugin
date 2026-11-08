@@ -48,7 +48,7 @@ internal class WriteD2ClassesTest : ScenarioTest() {
           }
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -68,7 +68,7 @@ internal class WriteD2ClassesTest : ScenarioTest() {
         }
         """
           .trimIndent()
-          .prependIndent("    ")
+          .prependIndent("    "),
       )
       .contains(
         """
@@ -77,7 +77,7 @@ internal class WriteD2ClassesTest : ScenarioTest() {
         }
         """
           .trimIndent()
-          .prependIndent("    ")
+          .prependIndent("    "),
       )
   }
 }

@@ -47,7 +47,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
         }
         ...@../../../build/atlas/classes-d2.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
 
     assertThat(d2FileB)
@@ -61,7 +61,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
         }
         ...@../../../build/atlas/classes-d2.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
 
     assertThat(d2FileC)
@@ -75,7 +75,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
         }
         ...@../../../build/atlas/classes-d2.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -94,7 +94,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
         path_to_my_project: :path:to:my:project
         ...@../../../../../../build/atlas/classes-d2.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -137,7 +137,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
           path_to_my_project: :path:to:my:project
           ...@../../../../atlas/classes-d2.d2
           """
-            .trimIndent()
+            .trimIndent(),
         )
 
       // when we check, then the dummy chart matches despite living at a different depth

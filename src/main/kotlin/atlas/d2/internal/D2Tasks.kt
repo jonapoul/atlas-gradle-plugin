@@ -93,7 +93,7 @@ internal object D2Tasks : FrameworkTasks {
         task.pathToClassesFile.convention(
           task.outputFile.locationOnly.flatMap { chart ->
             importPath(classesFile, chart.asFile.parentFile)
-          }
+          },
         )
       }
 
@@ -154,7 +154,7 @@ internal object D2Tasks : FrameworkTasks {
       logger.warn(
         "Warning: you've configured groupLabelLocation but not groupLabelPosition - this is not supported in D2 " +
           "diagrams. If you want to suppress this warning, add 'atlas.d2.suppressLabelLocationWarning=true' to " +
-          "your gradle.properties file."
+          "your gradle.properties file.",
       )
     }
   }
@@ -168,7 +168,7 @@ internal object D2Tasks : FrameworkTasks {
     if (animated == true && format !in animatedFormats && !shouldSuppress) {
       logger.warn(
         "Warning: you've configured animateLinks but chosen a non-animatable file format ($format). If you want to " +
-          "suppress this warning, add 'atlas.d2.suppressAnimationWarning=true' to your gradle.properties file."
+          "suppress this warning, add 'atlas.d2.suppressAnimationWarning=true' to your gradle.properties file.",
       )
     }
   }

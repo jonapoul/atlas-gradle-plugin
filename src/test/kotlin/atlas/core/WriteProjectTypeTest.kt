@@ -50,7 +50,7 @@ internal class WriteProjectTypeTest : ScenarioTest() {
     // then
     assertThat(projectType("test-jvm"))
       .isEqualTo(
-        TypedProject(":test-jvm", type = ProjectType("Kotlin JVM", color = "mediumorchid"))
+        TypedProject(":test-jvm", type = ProjectType("Kotlin JVM", color = "mediumorchid")),
       )
 
     // when running again, then it's cached

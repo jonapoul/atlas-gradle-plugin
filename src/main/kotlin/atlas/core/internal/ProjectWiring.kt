@@ -153,7 +153,7 @@ private fun Project.registerAtlasGenerateTask() =
     task.group = ATLAS_TASK_GROUP
     task.description = "Aggregates all Atlas generation tasks"
     task.dependsOn(
-      tasks.withType(AtlasGenerationTask::class.java).matching { it !is DummyAtlasGenerationTask }
+      tasks.withType(AtlasGenerationTask::class.java).matching { it !is DummyAtlasGenerationTask },
     )
   }
 

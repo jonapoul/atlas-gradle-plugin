@@ -6,7 +6,7 @@ import atlas.core.StringEnum
 internal inline fun <reified E> parseEnum(string: String): E where E : StringEnum, E : Enum<E> =
   enumValues<E>().firstOrNull { it.value == string }
     ?: error(
-      "No ${E::class.simpleName} matching '$string'. Expected one of ${stringOptionsOf<E>()}."
+      "No ${E::class.simpleName} matching '$string'. Expected one of ${stringOptionsOf<E>()}.",
     )
 
 /**

@@ -57,7 +57,7 @@ public abstract class WriteProjectTree : DefaultTask(), TaskWithOutputFile {
     writeProjectLinks(tree, outputFile)
 
     logger.info(
-      "WriteProjectTree: written ${tree.size} links from ${links.size} across the project"
+      "WriteProjectTree: written ${tree.size} links from ${links.size} across the project",
     )
     tree.forEach { link ->
       logger.info("WriteProjectTree:     link = $link")
