@@ -12,7 +12,7 @@ trim_trailing_whitespace = true
 [*.md]
 max_line_length = 999999
 
-# https://github.com/facebook/ktfmt/blob/main/docs/editorconfig/.editorconfig-google
+# https://github.com/Kotlin/ktfmt/blob/main/docs/editorconfig/.editorconfig-google
 [{*.kt,*.kts}]
 ij_continuation_indent_size = 2
 ij_java_names_count_to_use_import_on_demand = 9999

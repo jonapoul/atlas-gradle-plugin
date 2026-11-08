@@ -13,7 +13,7 @@ junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.12.0" }
-ktfmt = { module = "com.facebook:ktfmt", version = "0.64" } # only used in ktfmt.sh
+ktfmt = { module = "org.jetbrains.kotlinx:ktfmt", version = "0.65" } # only used in ktfmt.sh
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }

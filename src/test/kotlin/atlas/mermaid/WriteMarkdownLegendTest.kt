@@ -29,7 +29,7 @@ internal class WriteMarkdownLegendTest : ScenarioTest() {
         | Kotlin JVM | <img src="https://img.shields.io/badge/-%20-mediumorchid?style=flat-square" height="30" width="100"> |
         | Java | <img src="https://img.shields.io/badge/-%20-orange?style=flat-square" height="30" width="100"> |
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -49,7 +49,7 @@ internal class WriteMarkdownLegendTest : ScenarioTest() {
         | implementation | #5555FF |
         | compileOnly | Yellow Dashed |
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 }

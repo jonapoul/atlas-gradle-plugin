@@ -39,7 +39,7 @@ internal class MermaidWriterTest {
           _ui_c --> _domain_a
           _ui_c --> _domain_b
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -81,7 +81,7 @@ internal class MermaidWriterTest {
           _ui_c --> _domain_a
           _ui_c --> _domain_b
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -129,7 +129,7 @@ internal class MermaidWriterTest {
           _ui_c --> _domain_a
           _ui_c --> _domain_b
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -148,7 +148,7 @@ internal class MermaidWriterTest {
           _app[":app"]
           style _app fill:red
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 }

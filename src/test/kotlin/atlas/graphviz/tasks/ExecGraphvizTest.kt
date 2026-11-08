@@ -62,7 +62,7 @@ internal class ExecGraphvizTest : ScenarioTest() {
 
         BUILD SUCCESSFUL
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -128,7 +128,7 @@ internal class ExecGraphvizTest : ScenarioTest() {
         > A problem occurred starting process 'command '.*?/path/to/custom/dot''
         """
           .trimIndent()
-          .toRegex()
+          .toRegex(),
       )
   }
 }

@@ -95,7 +95,7 @@ internal fun StyleProperties.string(vararg keys: Pair<Framework, String>): Style
   StyleDelegate(this, keys.toMap(), fromString = { it })
 
 internal inline fun <reified E> StyleProperties.enum(
-  vararg keys: Pair<Framework, String>
+  vararg keys: Pair<Framework, String>,
 ): StyleDelegate<E> where E : StringEnum, E : Enum<E> =
   StyleDelegate(
     properties = this,

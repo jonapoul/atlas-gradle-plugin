@@ -25,7 +25,7 @@ internal fun buildGraphElements(
     nodeData =
       cleanedProjects
         .filter { project -> shouldIncludeProject(project, cleanedLinks, thisPath, replacements) }
-        .map { project -> project to project.projectPath.split(":").filter { it.isNotEmpty() } }
+        .map { project -> project to project.projectPath.split(":").filter { it.isNotEmpty() } },
   )
 }
 

@@ -55,7 +55,7 @@ internal class CollateProjectLinksTest : ScenarioTest() {
             configuration = "implementation",
             type = null,
           ),
-        )
+        ),
       )
   }
 
@@ -104,7 +104,7 @@ internal class CollateProjectLinksTest : ScenarioTest() {
             configuration = "implementation",
             type = null,
           ),
-        )
+        ),
       )
   }
 
@@ -142,7 +142,7 @@ internal class CollateProjectLinksTest : ScenarioTest() {
             configuration = "implementation",
             type = null,
           ),
-        )
+        ),
       )
   }
 

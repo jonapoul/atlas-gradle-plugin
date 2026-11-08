@@ -38,7 +38,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":a" -> ":c"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
 
     assertThat(dotFileB)
@@ -48,7 +48,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":b" [fillcolor="orange"]
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
     assertThat(dotFileC)
       .contentEquals(
@@ -57,7 +57,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":c" [fillcolor="orange"]
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -82,7 +82,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":a" -> ":c"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -107,7 +107,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":a" -> ":c"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -129,7 +129,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           "a" -> "c"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -153,7 +153,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":a" -> ":d" [style="dotted",color="#FF55FF"]
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -188,7 +188,7 @@ internal class WriteGraphvizChartTest : ScenarioTest() {
           ":ui:c" -> ":domain:b"
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 }

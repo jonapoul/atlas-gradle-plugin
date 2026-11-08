@@ -61,7 +61,7 @@ internal class WriteProjectLinksTest : ScenarioTest() {
       )
     assertThat(projectLinks(project = "mid-a"))
       .isEqualToSet(
-        ProjectLink(fromPath = ":mid-a", toPath = ":bottom", configuration = "api", type = null)
+        ProjectLink(fromPath = ":mid-a", toPath = ":bottom", configuration = "api", type = null),
       )
     assertThat(projectLinks(project = "mid-b"))
       .isEqualToSet(
@@ -70,7 +70,7 @@ internal class WriteProjectLinksTest : ScenarioTest() {
           toPath = ":bottom",
           configuration = "implementation",
           type = null,
-        )
+        ),
       )
     assertThat(projectLinks(project = "bottom")).isEqualTo(emptySet())
   }

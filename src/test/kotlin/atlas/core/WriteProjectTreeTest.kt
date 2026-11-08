@@ -78,7 +78,7 @@ internal class WriteProjectTreeTest : ScenarioTest() {
     // and the mid only sees itself and bottom
     assertThat(projectTree("mid-a"))
       .isEqualToSet(
-        ProjectLink(fromPath = ":mid-a", toPath = ":bottom", configuration = "api", type = null)
+        ProjectLink(fromPath = ":mid-a", toPath = ":bottom", configuration = "api", type = null),
       )
 
     assertThat(projectTree("mid-b"))
@@ -88,7 +88,7 @@ internal class WriteProjectTreeTest : ScenarioTest() {
           toPath = ":bottom",
           configuration = "implementation",
           type = null,
-        )
+        ),
       )
 
     // and the bottom sees nothing

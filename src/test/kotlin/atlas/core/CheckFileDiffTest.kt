@@ -91,7 +91,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
           |            ":a" -> ":c"
           |          }
           """
-            .trimMargin()
+            .trimMargin(),
         )
     }
 
@@ -129,7 +129,7 @@ internal class CheckFileDiffTest : ScenarioTest() {
         |            >];
         |          }
         """
-          .trimMargin()
+          .trimMargin(),
       )
   }
 

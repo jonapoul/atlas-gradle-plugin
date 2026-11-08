@@ -54,7 +54,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -73,7 +73,7 @@ internal class D2WriterTest {
         ui_c: :ui:c
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -124,7 +124,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -176,7 +176,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -234,7 +234,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -253,7 +253,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -280,7 +280,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -310,7 +310,7 @@ internal class D2WriterTest {
         }
         ...@../classes.d2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 

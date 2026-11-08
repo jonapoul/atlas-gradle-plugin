@@ -56,7 +56,7 @@ internal class GraphHierarchyTest {
           dataSubGraph,
           domainSubGraph,
           uiSubGraph,
-        )
+        ),
       )
   }
 
@@ -112,7 +112,7 @@ internal class GraphHierarchyTest {
           dataSubGraph,
           domainSubGraph,
           uiSubGraph,
-        )
+        ),
       )
   }
 

@@ -35,7 +35,7 @@ internal class WriteGraphvizLegendTest : ScenarioTest() {
           >];
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -68,7 +68,7 @@ internal class WriteGraphvizLegendTest : ScenarioTest() {
           >];
         }
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 }

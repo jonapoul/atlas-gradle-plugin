@@ -31,7 +31,7 @@ internal class WriteMermaidChartTest : ScenarioTest() {
           _a --> _b
           _a --> _c
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -65,7 +65,7 @@ internal class WriteMermaidChartTest : ScenarioTest() {
           _b_b2 --> _c_c3
           _b_b2 --> _c_inner_c2
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -95,7 +95,7 @@ internal class WriteMermaidChartTest : ScenarioTest() {
           _a --> _b
           _a --> _c
         """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 }
