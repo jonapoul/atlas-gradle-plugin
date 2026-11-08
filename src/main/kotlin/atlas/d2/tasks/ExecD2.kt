@@ -145,12 +145,15 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     }
 
     logger.info("Starting d2: '$command'")
-    val result = execOperations.exec { spec ->
-      spec.errorOutput = errorBuffer
-      spec.standardOutput = outputFile.outputStream()
-      spec.isIgnoreExitValue = true
-      spec.commandLine(command)
-    }
+    val result =
+      outputFile.outputStream().use { stream ->
+        execOperations.exec { spec ->
+          spec.errorOutput = errorBuffer
+          spec.standardOutput = stream
+          spec.isIgnoreExitValue = true
+          spec.commandLine(command)
+        }
+      }
 
     if (result.exitValue != 0) {
       val cmd = command.joinToString(separator = " ")
