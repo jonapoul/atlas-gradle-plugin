@@ -40,7 +40,7 @@ internal class D2Writer(
   }
 
   override fun IndentedStringBuilder.appendSubgraphHeader(graph: Subgraph) {
-    val key = graph.path[subgraphNestingLevel].cleaned()
+    val key = graph.path[subgraphNestingLevel]
     appendLine("$key: :${graph.name} {")
     indent { appendLine("class: $CONTAINER_CLASS") }
   }
@@ -63,24 +63,26 @@ internal class D2Writer(
   }
 
   private fun IndentedStringBuilder.appendLinks() {
-    links
-      .map { l -> l.copy(fromPath = l.fromPath.cleaned(), toPath = l.toPath.cleaned()) }
-      .sortedWith(compareBy({ it.fromPath.fullKey() }, { it.toPath.fullKey() }))
-      .forEach { l ->
-        val suffix = l.type?.let { type -> " { class: ${type.classId} }" }.orEmpty()
-        appendLine("${l.fromPath.fullKey()} -> ${l.toPath.fullKey()}$suffix")
-      }
+    chartLinks.sortedWith(compareBy({ it.fromPath.fullKey() }, { it.toPath.fullKey() })).forEach { l
+      ->
+      val suffix = l.type?.let { type -> " { class: ${type.classId} }" }.orEmpty()
+      appendLine("${l.fromPath.fullKey()} -> ${l.toPath.fullKey()}$suffix")
+    }
   }
 
   private fun IndentedStringBuilder.appendLegend() {
     val projectTypes =
-      typedProjects
+      chartProjects
         .filter { it.projectPath in linkedPaths }
         .mapNotNull { it.type }
         .distinct()
         .ifEmpty {
           // single-project case
-          typedProjects.firstOrNull { it.projectPath == thisPath }?.type?.let(::listOf).orEmpty()
+          chartProjects
+            .firstOrNull { it.projectPath == chartThisPath }
+            ?.type
+            ?.let(::listOf)
+            .orEmpty()
         }
 
     val linkTypes = links.mapNotNull { it.type }.distinct()
@@ -126,9 +128,7 @@ internal class D2Writer(
   // diagram anyway.
   private fun String.fullKey(): String {
     val stripped =
-      DISALLOWED_SUBSTRINGS.fold(initial = cleaned().removePrefix(":").removePrefix("-")) {
-        acc,
-        string ->
+      DISALLOWED_SUBSTRINGS.fold(initial = removePrefix(":").removePrefix("-")) { acc, string ->
         acc.replace(string, "")
       }
 

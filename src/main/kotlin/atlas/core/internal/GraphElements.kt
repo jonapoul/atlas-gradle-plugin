@@ -109,8 +109,18 @@ internal abstract class ChartWriter {
   protected abstract val groupProjects: Boolean
   protected abstract val thisPath: String
 
-  // Paths at either end of [links], so checking whether a project is in the chart doesn't scan them
-  protected val linkedPaths: Set<String> by lazy { links.linkedPaths() }
+  // [typedProjects], [links] and [thisPath] with the path replacements applied. Writers only use
+  // these, so every path is replaced exactly once and nodes always match the links pointing at
+  // them.
+  protected val chartProjects: List<TypedProject> by lazy {
+    typedProjects.map { it.cleaned(replacements) }
+  }
+  protected val chartLinks: List<ProjectLink> by lazy { links.map { it.cleaned(replacements) } }
+  protected val chartThisPath: String by lazy { thisPath.cleaned(replacements) }
+
+  // Paths at either end of [chartLinks], so checking whether a project is in the chart doesn't
+  // scan them
+  protected val linkedPaths: Set<String> by lazy { chartLinks.linkedPaths() }
 
   // How many subgraphs deep we currently are, i.e. 0 while writing top-level nodes
   protected var subgraphNestingLevel: Int = 0
@@ -124,7 +134,7 @@ internal abstract class ChartWriter {
 
   protected fun IndentedStringBuilder.appendProjects() {
     if (groupProjects) {
-      val elements = buildGraphElements(typedProjects, links, thisPath, replacements)
+      val elements = buildGraphElements(chartProjects.toSet(), chartLinks.toSet(), chartThisPath)
       for (element in elements) {
         appendGraphNode(element)
       }
@@ -153,28 +163,22 @@ internal abstract class ChartWriter {
   }
 
   protected fun IndentedStringBuilder.appendUngroupedNodes() {
-    typedProjects
+    chartProjects
       .filter { it.projectPath in linkedPaths }
-      .map { it.cleaned() }
       .sortedBy { it.projectPath }
-      .forEach { appendProject(it.cleaned()) }
+      .forEach { appendProject(it) }
 
-    if (links.isEmpty() || typedProjects.size == 1) {
+    if (chartLinks.isEmpty() || chartProjects.size == 1) {
       // Single-project case - we still want this project to be shown along with its type
-      typedProjects.firstOrNull { it.projectPath == thisPath }?.let { appendProject(it.cleaned()) }
+      chartProjects.firstOrNull { it.projectPath == chartThisPath }?.let { appendProject(it) }
     }
   }
 
   protected fun String.nodeLabel(): String {
-    val path = cleaned()
-    if (!groupProjects) return path
-    val segment = path.split(":").filter { it.isNotEmpty() }.getOrNull(subgraphNestingLevel)
-    return if (segment == null) path else ":$segment"
+    if (!groupProjects) return this
+    val segment = split(":").filter { it.isNotEmpty() }.getOrNull(subgraphNestingLevel)
+    return if (segment == null) this else ":$segment"
   }
-
-  protected fun String.cleaned(): String = cleaned(replacements)
-
-  protected fun TypedProject.cleaned(): TypedProject = cleaned(replacements)
 
   internal companion object {
     internal val SUPPORTED_CHAR_REGEX: Regex =

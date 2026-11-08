@@ -20,8 +20,6 @@ internal class MermaidWriter(
   override val groupProjects: Boolean,
   private val config: MermaidConfig,
 ) : ChartWriter() {
-  private val projectsByPath by lazy { typedProjects.associateBy { it.projectPath } }
-
   override fun invoke(): String = buildIndentedString {
     appendConfig()
     appendLine("graph TD")
@@ -78,15 +76,15 @@ internal class MermaidWriter(
   }
 
   private fun IndentedStringBuilder.appendTypes() {
-    for (project in typedProjects) {
-      if (project.projectPath !in linkedPaths && project.projectPath != thisPath) continue
+    for (project in chartProjects) {
+      if (project.projectPath !in linkedPaths && project.projectPath != chartThisPath) continue
 
       val attrs = Attrs("fill" to project.type?.color)
 
       project.type?.properties(Mermaid)?.forEach { (key, value) -> attrs[key] = value }
 
       if (attrs.isNotEmpty()) {
-        appendLine("style ${project.cleaned().label} $attrs")
+        appendLine("style ${project.label} $attrs")
       }
     }
   }
@@ -94,13 +92,13 @@ internal class MermaidWriter(
   // See https://mermaid.js.org/syntax/flowchart.html#links-between-nodes
   private fun IndentedStringBuilder.appendLinks() {
     val animateLinks = config.animateLinks == true
-    links.forEachIndexed { i, link ->
+    chartLinks.forEachIndexed { i, link ->
       val arrowPrefix = if (animateLinks) "link$i@" else ""
       val style = link.type?.style ?: Solid
 
       val arrow = getArrow(link.type, style)
-      val from = projectsByPath.getValue(link.fromPath).cleaned().label
-      val to = projectsByPath.getValue(link.toPath).cleaned().label
+      val from = link.fromPath.label
+      val to = link.toPath.label
       appendLine("$from $arrowPrefix$arrow $to")
 
       link.type?.let { type ->
@@ -115,7 +113,7 @@ internal class MermaidWriter(
     }
 
     if (animateLinks) {
-      for (i in links.indices) {
+      for (i in chartLinks.indices) {
         appendLine("link$i@{ animate: true }")
       }
     }
