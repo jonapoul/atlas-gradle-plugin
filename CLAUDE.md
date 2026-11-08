@@ -175,6 +175,8 @@ warn at configuration time.
 The Java version comes from the root `.java-version` (via Blueprint's `javaVersion()`/`jvmTarget()`),
 and is what CI's `setup-java` and the `gradle:*-jdk*` docker images pin.
 
-`atlas.minimumGradleVersion` in `gradle.properties`: the APIs used are available from 8.8
+`supported-versions.txt` lists the Gradle, Kotlin and AGP versions CI tests against, one set per
+line. The last line is the minimum supported Gradle version, which `build.gradle.kts` sets as the
+plugin's `GradlePluginApiVersion` attribute. The APIs used are available from 8.8
 (`gradle.lifecycle.beforeProject`) and 8.4 (configuration role factories), but isolated projects is
 only really usable on 9.x.
