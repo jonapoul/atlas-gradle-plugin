@@ -18,8 +18,6 @@ internal class AtlasContext(
   val config: AtlasConfig,
   private val wiring: AtlasWiring,
 ) {
-  private val resolved = mutableMapOf<String, FileCollection>()
-
   val d2: D2SpecImpl
     get() = wiring.d2
 
@@ -38,14 +36,13 @@ internal class AtlasContext(
   val isRoot: Boolean
     get() = project.path == ":"
 
-  /**
-   * Resolves a file the root project publishes. Memoised because several framework tasks want the
-   * same artifact, and each one may only declare its configurations once.
-   */
+  private val rootDependencies by lazy {
+    project.atlasDependencies("atlasFromRoot", listOf(":"), default = AtlasArtifact.CollatedLinks)
+  }
+
+  /** Resolves a file the root project publishes. */
   fun fromRoot(artifact: AtlasArtifact): FileCollection =
-    resolved.getOrPut(artifact.attributeValue) {
-      project.consumeAtlasArtifact(artifact, listOf(":"), lenient = false)
-    }
+    rootDependencies.atlasArtifacts(artifact, lenient = false).artifactFiles
 
   fun specFor(framework: Framework) =
     when (framework) {

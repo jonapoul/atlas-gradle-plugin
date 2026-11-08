@@ -1,11 +1,13 @@
 package atlas.graphviz.tasks
 
 import assertk.assertThat
+import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.isEqualTo
 import atlas.graphviz.RequiresGraphviz
 import atlas.test.RequiresLn
 import atlas.test.RequiresWhereis
 import atlas.test.ScenarioTest
+import atlas.test.dryRunTasks
 import atlas.test.resolve
 import atlas.test.scenarios.GraphVizBasicWithPngOutput
 import atlas.test.scenarios.GraphVizCustomDotExecutable
@@ -19,7 +21,6 @@ import blueprint.test.childExists
 import blueprint.test.exists
 import blueprint.test.failsBuild
 import blueprint.test.noTasksFailed
-import blueprint.test.outputContains
 import blueprint.test.outputContainsMatch
 import blueprint.test.tasksSucceeded
 import blueprint.test.withArgument
@@ -32,39 +33,35 @@ internal class ExecGraphvizTest : ScenarioTest() {
     assertThatTask("atlasGenerate")
       .withArgument("--dry-run")
       .buildsSuccessfully()
-      .outputContains(
-        """
-        :writeGraphvizLegend SKIPPED
-        :execGraphvizLegend SKIPPED
-        :a:writeProjectLinks SKIPPED
-        :b:writeProjectLinks SKIPPED
-        :c:writeProjectLinks SKIPPED
-        :collateProjectLinks SKIPPED
-        :a:writeProjectType SKIPPED
-        :b:writeProjectType SKIPPED
-        :c:writeProjectType SKIPPED
-        :collateProjectTypes SKIPPED
-        :a:writeProjectTree SKIPPED
-        :a:writeGraphvizChart SKIPPED
-        :a:execGraphvizChart SKIPPED
-        :b:writeProjectTree SKIPPED
-        :b:writeGraphvizChart SKIPPED
-        :b:execGraphvizChart SKIPPED
-        :c:writeProjectTree SKIPPED
-        :c:writeGraphvizChart SKIPPED
-        :c:execGraphvizChart SKIPPED
-        :atlasWriteIndex SKIPPED
-        :atlasGenerate SKIPPED
-        :a:writeReadme SKIPPED
-        :a:atlasGenerate SKIPPED
-        :b:writeReadme SKIPPED
-        :b:atlasGenerate SKIPPED
-        :c:writeReadme SKIPPED
-        :c:atlasGenerate SKIPPED
-
-        BUILD SUCCESSFUL
-        """
-          .trimIndent(),
+      .dryRunTasks()
+      .containsExactlyInAnyOrder(
+        ":writeGraphvizLegend",
+        ":execGraphvizLegend",
+        ":a:writeProjectLinks",
+        ":b:writeProjectLinks",
+        ":c:writeProjectLinks",
+        ":collateProjectLinks",
+        ":a:writeProjectType",
+        ":b:writeProjectType",
+        ":c:writeProjectType",
+        ":collateProjectTypes",
+        ":a:writeProjectTree",
+        ":a:writeGraphvizChart",
+        ":a:execGraphvizChart",
+        ":b:writeProjectTree",
+        ":b:writeGraphvizChart",
+        ":b:execGraphvizChart",
+        ":c:writeProjectTree",
+        ":c:writeGraphvizChart",
+        ":c:execGraphvizChart",
+        ":atlasWriteIndex",
+        ":atlasGenerate",
+        ":a:writeReadme",
+        ":a:atlasGenerate",
+        ":b:writeReadme",
+        ":b:atlasGenerate",
+        ":c:writeReadme",
+        ":c:atlasGenerate",
       )
   }
 

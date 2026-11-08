@@ -74,18 +74,23 @@ internal fun wireProject(target: Project, wiring: AtlasWiring) {
 /** The root collates every subproject's contribution, and draws the shared legends. */
 private fun wireRoot(context: AtlasContext) =
   with(context.project) {
-    val paths = context.config.subprojectPaths
+    val subprojects =
+      atlasDependencies(
+        name = "atlasFromSubprojects",
+        fromPaths = context.config.subprojectPaths,
+        default = ProjectType,
+      )
 
     val collateTypes =
       CollateProjectTypes.register(
         target = this,
-        projectTypeFiles = consumeAtlasArtifact(ProjectType, paths, lenient = true),
+        projectTypeFiles = subprojects.atlasArtifacts(ProjectType, lenient = true).artifactFiles,
       )
     val collateLinks =
       CollateProjectLinks.register(
         target = this,
         config = context.config,
-        projectLinkFiles = consumeAtlasArtifact(ProjectLinks, paths, lenient = true),
+        projectLinkFiles = subprojects.atlasArtifacts(ProjectLinks, lenient = true).artifactFiles,
       )
 
     publishAtlasArtifact(
@@ -110,7 +115,7 @@ private fun wireRoot(context: AtlasContext) =
           target = this,
           frameworks = context.config.frameworks,
           charts = { framework ->
-            consumeAtlasArtifacts(AtlasArtifact.chart(framework), paths, lenient = true)
+            subprojects.atlasArtifacts(AtlasArtifact.chart(framework), lenient = true)
           },
           projectTypes = collateTypes.flatMap { it.outputFile },
           projectLinks = collateLinks.flatMap { it.outputFile },

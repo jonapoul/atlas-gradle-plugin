@@ -4,6 +4,7 @@ import atlas.core.Framework
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ArtifactCollection
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.attributes.Attribute
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
@@ -31,9 +32,6 @@ internal value class AtlasArtifact(private val id: String) {
 
   val elementsConfigurationName: String
     get() = "$ATLAS_CONFIGURATION_PREFIX${suffix}Elements"
-
-  val resolvableConfigurationName: String
-    get() = "$ATLAS_CONFIGURATION_PREFIX${suffix}Classpath"
 
   private val suffix: String
     get() = id.split("-").joinToString(separator = "") { it.replaceFirstChar(Char::uppercaseChar) }
@@ -75,43 +73,49 @@ internal fun Project.publishAtlasArtifact(
 }
 
 /**
- * Resolves [artifact] from each project in [fromPaths].
+ * One resolvable configuration depending on every project in [fromPaths], shared by every kind of
+ * [AtlasArtifact] resolved from them. Each kind is picked out by its own view, see
+ * [atlasArtifacts]. [default] only matters if something resolves the configuration itself, like the
+ * `dependencies` task, which would otherwise find every Atlas variant ambiguous.
+ */
+internal fun Project.atlasDependencies(
+  name: String,
+  fromPaths: List<String>,
+  default: AtlasArtifact,
+): Configuration {
+  val scope = configurations.dependencyScope("${name}Dependencies").get()
+  fromPaths.forEach { path ->
+    dependencies.add(scope.name, dependencies.project(mapOf("path" to path)))
+  }
+
+  return configurations
+    .resolvable(name) { configuration ->
+      configuration.extendsFrom(scope)
+      configuration.attributes.attribute(ATLAS_ARTIFACT_ATTRIBUTE, default.attributeValue)
+    }
+    .get()
+}
+
+/**
+ * Resolves [artifact] from every project this configuration depends on. Each
+ * [org.gradle.api.artifacts.result.ResolvedArtifactResult]'s component is the publishing project.
  *
  * [lenient] is for the root collating from every subproject, where a project may legitimately
  * publish nothing - for example one with no build file, which Atlas leaves out of the graph
  * entirely. Resolving from the root is the other way around: it always publishes, so a failure
  * there is a real one and should be reported as itself rather than silently resolving to no files.
  */
-internal fun Project.consumeAtlasArtifact(
+internal fun Configuration.atlasArtifacts(
   artifact: AtlasArtifact,
-  fromPaths: List<String>,
   lenient: Boolean,
-): FileCollection = consumeAtlasArtifacts(artifact, fromPaths, lenient).artifactFiles
-
-/**
- * As [consumeAtlasArtifact], but keeps hold of which project each file came from. Each
- * [org.gradle.api.artifacts.result.ResolvedArtifactResult]'s component is the publishing project.
- */
-internal fun Project.consumeAtlasArtifacts(
-  artifact: AtlasArtifact,
-  fromPaths: List<String>,
-  lenient: Boolean,
-): ArtifactCollection {
-  val scopeName = "${artifact.resolvableConfigurationName}Dependencies"
-  val scope = configurations.dependencyScope(scopeName)
-
-  val resolvable =
-    configurations.resolvable(artifact.resolvableConfigurationName) { configuration ->
-      configuration.extendsFrom(scope.get())
-      configuration.attributes.attribute(ATLAS_ARTIFACT_ATTRIBUTE, artifact.attributeValue)
+): ArtifactCollection =
+  incoming
+    .artifactView { view ->
+      view.withVariantReselection()
+      view.attributes { it.attribute(ATLAS_ARTIFACT_ATTRIBUTE, artifact.attributeValue) }
+      view.lenient(lenient)
     }
-
-  fromPaths.forEach { path ->
-    dependencies.add(scopeName, dependencies.project(mapOf("path" to path)))
-  }
-
-  return resolvable.get().incoming.artifactView { it.lenient(lenient) }.artifacts
-}
+    .artifacts
 
 /**
  * The single file this collection resolves to. Atlas publishes at most one artifact per project per
@@ -126,7 +130,7 @@ internal fun FileCollection.singleFile(artifact: AtlasArtifact): Provider<File> 
     val file = locations.singleOrNull()?.asFile
     checkNotNull(file) {
       "Expected the root project to publish exactly one '${artifact.attributeValue}' artifact, but " +
-        "resolving ${artifact.resolvableConfigurationName} found ${locations.size}. This is a bug " +
+        "resolving it found ${locations.size}. This is a bug " +
         "in Atlas - please report it at $ISSUES_URL."
     }
   }

@@ -85,7 +85,10 @@ attribute, so one project dependency can carry any number of them:
   `CollatedLinks`, `D2Classes` and per-framework `legend(framework)` back out
 - Each subproject resolves what it needs from `:`
 
-The two directions use different configurations distinguished by attribute, so there's no cycle.
+Each direction has one resolvable configuration, `atlasFromSubprojects` on the root and
+`atlasFromRoot` everywhere else, so there's no cycle. Every kind of artifact is resolved from it
+through an artifact view with `withVariantReselection()`, which picks the variant by that kind's
+attribute value alone. See `atlasDependencies` and `atlasArtifacts`.
 Only root-collating-from-subprojects resolves leniently, because a subproject may legitimately
 publish nothing (e.g. a group directory with no build file). `AtlasContext.fromRoot` resolves
 strictly: the root always publishes, so a failure there is real and must be reported as itself -
