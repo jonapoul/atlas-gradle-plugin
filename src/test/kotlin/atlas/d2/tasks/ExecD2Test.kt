@@ -13,6 +13,7 @@ import atlas.test.scenarios.D2FailOnProjectRepos
 import atlas.test.scenarios.D2PinnedVersion
 import atlas.test.scenarios.D2WithProjectRepositories
 import atlas.test.scenarios.GroovyD2PreferSettings
+import atlas.test.writeFakeD2
 import blueprint.test.Scenario as BlueprintScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
@@ -110,12 +111,13 @@ internal class ExecD2Test : ScenarioTest() {
 
   @Test
   fun `Pass extra CLI flags to D2`() = D2CliFlags {
+    rootDir.writeFakeD2()
     rootDir.resolve("font.ttf").writeText("")
 
     // when
     assertThatTask(":a:execD2Chart").buildsSuccessfully().taskHadResult(":a:execD2Chart", SUCCESS)
 
-    // then the flags reached the command, which is echo'd here
+    // then the flags reached the command, which the fake d2 writes out
     val args = resolve("a/chart-d2.txt").readText()
     val font = rootDir.resolve("font.ttf").absolutePath
     assertThat(args)

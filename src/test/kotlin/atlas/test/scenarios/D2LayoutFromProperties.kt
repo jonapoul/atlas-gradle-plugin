@@ -1,11 +1,12 @@
 package atlas.test.scenarios
 
 import atlas.test.D2Scenario
+import atlas.test.FAKE_D2
 
 /**
  * Layout engine settings supplied through Gradle properties rather than `layoutEngine { }`.
- * `nodeSelfLoop` is set both ways, to prove the DSL wins. Runs `echo` in place of `d2`, like
- * [D2CliFlags], so the rendered "chart" is the list of arguments D2 would get.
+ * `nodeSelfLoop` is set both ways, to prove the DSL wins. Runs a fake `d2`, like [D2CliFlags], so
+ * the rendered "chart" is the list of arguments D2 would get.
  */
 internal object D2LayoutFromProperties : D2Scenario by D2Basic {
   override val atlasConfig =
@@ -13,7 +14,7 @@ internal object D2LayoutFromProperties : D2Scenario by D2Basic {
     projectTypes.useDefaults()
 
     d2 {
-      executable = file("/bin/echo")
+      executable = file("$FAKE_D2")
       fileFormat = FileFormat.Ascii
 
       layoutEngine.elk.nodeSelfLoop = 25

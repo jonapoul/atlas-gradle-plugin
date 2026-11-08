@@ -122,7 +122,7 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
         fonts = fonts,
       )
 
-    val errorBuffer = ByteArrayOutputStream()
+    val output = ByteArrayOutputStream()
     val command =
       listOf(
         executable.orNull?.asFile?.absolutePath ?: "d2",
@@ -131,19 +131,17 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
       ) + flags
 
     logger.info("Starting d2: '$command'")
-    val result =
-      outputFile.outputStream().use { stream ->
-        execOperations.exec { spec ->
-          spec.errorOutput = errorBuffer
-          spec.standardOutput = stream
-          spec.isIgnoreExitValue = true
-          spec.commandLine(command)
-        }
-      }
+    // d2 writes the chart itself, so anything it prints is only worth showing if it fails
+    val result = execOperations.exec { spec ->
+      spec.standardOutput = output
+      spec.errorOutput = output
+      spec.isIgnoreExitValue = true
+      spec.commandLine(command)
+    }
 
     if (result.exitValue != 0) {
       val cmd = command.joinToString(separator = " ")
-      throw GradleException("Error code ${result.exitValue} running '$cmd':\n $errorBuffer")
+      throw GradleException("Error code ${result.exitValue} running '$cmd':\n $output")
     }
 
     logIfConfigured(outputFile)

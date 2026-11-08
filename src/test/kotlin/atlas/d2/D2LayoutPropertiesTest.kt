@@ -6,6 +6,7 @@ import atlas.test.ScenarioTest
 import atlas.test.contains
 import atlas.test.resolve
 import atlas.test.scenarios.D2LayoutFromProperties
+import atlas.test.writeFakeD2
 import blueprint.test.assertThatTask
 import blueprint.test.buildsSuccessfully
 import blueprint.test.contentContains
@@ -15,13 +16,15 @@ import kotlin.test.Test
 internal class D2LayoutPropertiesTest : ScenarioTest() {
   @Test
   fun `Configure the layout engine through gradle properties`() = D2LayoutFromProperties {
+    rootDir.writeFakeD2()
+
     // when
     assertThatTask(":a:execD2Chart").buildsSuccessfully().taskSucceeded(":a:execD2Chart")
 
     // then the engine itself came from atlas.d2.layoutEngine
     assertThat(resolve("build/atlas/classes-d2.d2")).contentContains("layout-engine: elk")
 
-    // and its sub-properties reached the command, which is echo'd here
+    // and its sub-properties reached the command, which the fake d2 writes out
     val args = resolve("a/chart-d2.txt").readText()
     assertThat(args)
       .contains("--elk-algorithm=mrtree")
