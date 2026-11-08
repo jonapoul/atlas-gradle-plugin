@@ -22,6 +22,7 @@ pluginManagement {
 
 plugins {
   id("io.github.gmazzo.publications.report") version "1.4.2"
+  id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 dependencyResolutionManagement {
