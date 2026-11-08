@@ -9,7 +9,6 @@ import atlas.core.internal.ProjectLink
 import atlas.core.internal.Subgraph
 import atlas.core.internal.TypedProject
 import atlas.core.internal.buildIndentedString
-import atlas.core.internal.contains
 import atlas.core.internal.sortedByKeys
 import atlas.mermaid.MermaidConfig
 
@@ -21,6 +20,8 @@ internal class MermaidWriter(
   override val groupProjects: Boolean,
   private val config: MermaidConfig,
 ) : ChartWriter() {
+  private val projectsByPath by lazy { typedProjects.associateBy { it.projectPath } }
+
   override fun invoke(): String = buildIndentedString {
     appendConfig()
     appendLine("graph TD")
@@ -78,7 +79,7 @@ internal class MermaidWriter(
 
   private fun IndentedStringBuilder.appendTypes() {
     for (project in typedProjects) {
-      if (project !in links && project.projectPath != thisPath) continue
+      if (project.projectPath !in linkedPaths && project.projectPath != thisPath) continue
 
       val attrs = Attrs("fill" to project.type?.color)
 
@@ -98,8 +99,8 @@ internal class MermaidWriter(
       val style = link.type?.style ?: Solid
 
       val arrow = getArrow(link.type, style)
-      val from = typedProjects.first { it.projectPath == link.fromPath }.cleaned().label
-      val to = typedProjects.first { it.projectPath == link.toPath }.cleaned().label
+      val from = projectsByPath.getValue(link.fromPath).cleaned().label
+      val to = projectsByPath.getValue(link.toPath).cleaned().label
       appendLine("$from $arrowPrefix$arrow $to")
 
       link.type?.let { type ->

@@ -11,7 +11,6 @@ import atlas.core.internal.ProjectLink
 import atlas.core.internal.Subgraph
 import atlas.core.internal.TypedProject
 import atlas.core.internal.buildIndentedString
-import atlas.core.internal.contains
 
 internal class D2Writer(
   override val typedProjects: Set<TypedProject>,
@@ -76,7 +75,7 @@ internal class D2Writer(
   private fun IndentedStringBuilder.appendLegend() {
     val projectTypes =
       typedProjects
-        .filter { it in links }
+        .filter { it.projectPath in linkedPaths }
         .mapNotNull { it.type }
         .distinct()
         .ifEmpty {

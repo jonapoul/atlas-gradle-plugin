@@ -83,10 +83,13 @@ internal data class ProjectLink(
       ?: configuration.compareTo(other.configuration)
 }
 
-internal operator fun Iterable<ProjectLink>.contains(p: TypedProject): Boolean =
-  any { (from, to, _) ->
-    from == p.projectPath || to == p.projectPath
+/** Every project path at either end of these links. */
+internal fun Iterable<ProjectLink>.linkedPaths(): Set<String> = buildSet {
+  this@linkedPaths.forEach { link ->
+    add(link.fromPath)
+    add(link.toPath)
   }
+}
 
 @Suppress("LazyCollectionOperators") // see createProjectLinks
 private fun ConfigurationContainer.filterUseful(ignoredConfigs: Iterable<String>) = filter { c ->

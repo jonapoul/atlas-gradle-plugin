@@ -21,20 +21,18 @@ internal fun buildGraphElements(
 ): List<GraphElement> {
   val cleanedProjects = typedProjects.map { it.cleaned(replacements) }
   val cleanedLinks = links.map { it.cleaned(replacements) }
+  val linkedPaths = cleanedLinks.linkedPaths()
+  val cleanedThisPath = thisPath.cleaned(replacements)
   return buildHierarchy(
     nodeData =
       cleanedProjects
-        .filter { project -> shouldIncludeProject(project, cleanedLinks, thisPath, replacements) }
+        .filter { project ->
+          project.projectPath in linkedPaths ||
+            (cleanedLinks.isEmpty() && project.projectPath == cleanedThisPath)
+        }
         .map { project -> project to project.projectPath.split(":").filter { it.isNotEmpty() } },
   )
 }
-
-private fun shouldIncludeProject(
-  project: TypedProject,
-  links: List<ProjectLink>,
-  thisPath: String,
-  replacements: Set<Replacement>,
-) = project in links || (links.isEmpty() && project.projectPath == thisPath.cleaned(replacements))
 
 private fun buildHierarchy(nodeData: List<Pair<TypedProject, List<String>>>): List<GraphElement> {
   val elements = mutableListOf<GraphElement>()
@@ -111,6 +109,9 @@ internal abstract class ChartWriter {
   protected abstract val groupProjects: Boolean
   protected abstract val thisPath: String
 
+  // Paths at either end of [links], so checking whether a project is in the chart doesn't scan them
+  protected val linkedPaths: Set<String> by lazy { links.linkedPaths() }
+
   // How many subgraphs deep we currently are, i.e. 0 while writing top-level nodes
   protected var subgraphNestingLevel: Int = 0
     private set
@@ -153,7 +154,7 @@ internal abstract class ChartWriter {
 
   protected fun IndentedStringBuilder.appendUngroupedNodes() {
     typedProjects
-      .filter { it in links }
+      .filter { it.projectPath in linkedPaths }
       .map { it.cleaned() }
       .sortedBy { it.projectPath }
       .forEach { appendProject(it.cleaned()) }
