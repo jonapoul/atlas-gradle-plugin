@@ -47,11 +47,7 @@ public abstract class WriteProjectTree : DefaultTask(), TaskWithOutputFile {
     val allLinks = readProjectLinks(collatedLinks.get().asFile)
     val links = filterLinks(allLinks)
 
-    val tree = mutableSetOf<ProjectLink>()
-    if (alsoTraverseUpwards.get()) {
-      calculate(thisPath, Up, links, tree)
-    }
-    calculate(thisPath, Down, links, tree)
+    val tree = projectTree(links, thisPath, alsoTraverseUpwards.get())
 
     val outputFile = outputFile.get().asFile
     writeProjectLinks(tree, outputFile)
@@ -95,38 +91,42 @@ public abstract class WriteProjectTree : DefaultTask(), TaskWithOutputFile {
     return links.first()
   }
 
-  private enum class Direction {
-    Up,
-    Down,
-  }
-
-  private fun calculate(
-    targetPath: String,
-    direction: Direction,
-    links: Set<ProjectLink>,
-    tree: MutableSet<ProjectLink>,
-  ) {
-    when (direction) {
-      Up -> {
-        val relevantLinks = links.filter { it.toPath == targetPath }
-        tree += relevantLinks
-        for (link in relevantLinks) {
-          calculate(link.fromPath, direction, links, tree)
-        }
-      }
-
-      Down -> {
-        val relevantLinks = links.filter { it.fromPath == targetPath }
-        tree += relevantLinks
-        for (link in relevantLinks) {
-          calculate(link.toPath, direction, links, tree)
-        }
-      }
-    }
-  }
-
   internal companion object {
     private const val NAME = "writeProjectTree"
+
+    /**
+     * Every link reachable downwards from [thisPath], plus upwards too if [alsoTraverseUpwards].
+     * Each project is visited once, so a project reachable by many routes doesn't get walked once
+     * per route.
+     */
+    internal fun projectTree(
+      links: Collection<ProjectLink>,
+      thisPath: String,
+      alsoTraverseUpwards: Boolean,
+    ): Set<ProjectLink> = buildSet {
+      if (alsoTraverseUpwards) {
+        addAll(reachable(thisPath, links.groupBy { it.toPath }) { it.fromPath })
+      }
+      addAll(reachable(thisPath, links.groupBy { it.fromPath }) { it.toPath })
+    }
+
+    private fun reachable(
+      start: String,
+      linksByPath: Map<String, List<ProjectLink>>,
+      next: (ProjectLink) -> String,
+    ): Set<ProjectLink> {
+      val found = hashSetOf<ProjectLink>()
+      val visited = hashSetOf(start)
+      val queue = ArrayDeque(listOf(start))
+      while (queue.isNotEmpty()) {
+        linksByPath[queue.removeFirst()].orEmpty().forEach { link ->
+          found += link
+          val path = next(link)
+          if (visited.add(path)) queue += path
+        }
+      }
+      return found
+    }
 
     internal fun get(target: Project): TaskProvider<WriteProjectTree> =
       target.tasks.named(NAME, WriteProjectTree::class.java)

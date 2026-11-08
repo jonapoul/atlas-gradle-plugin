@@ -9,7 +9,6 @@ import atlas.core.internal.ProjectLink
 import atlas.core.internal.Subgraph
 import atlas.core.internal.TypedProject
 import atlas.core.internal.buildIndentedString
-import atlas.core.internal.contains
 import atlas.core.internal.sortedByKeys
 import atlas.mermaid.MermaidConfig
 
@@ -77,15 +76,15 @@ internal class MermaidWriter(
   }
 
   private fun IndentedStringBuilder.appendTypes() {
-    for (project in typedProjects) {
-      if (project !in links && project.projectPath != thisPath) continue
+    for (project in chartProjects) {
+      if (project.projectPath !in linkedPaths && project.projectPath != chartThisPath) continue
 
       val attrs = Attrs("fill" to project.type?.color)
 
       project.type?.properties(Mermaid)?.forEach { (key, value) -> attrs[key] = value }
 
       if (attrs.isNotEmpty()) {
-        appendLine("style ${project.cleaned().label} $attrs")
+        appendLine("style ${project.label} $attrs")
       }
     }
   }
@@ -93,13 +92,13 @@ internal class MermaidWriter(
   // See https://mermaid.js.org/syntax/flowchart.html#links-between-nodes
   private fun IndentedStringBuilder.appendLinks() {
     val animateLinks = config.animateLinks == true
-    links.forEachIndexed { i, link ->
+    chartLinks.forEachIndexed { i, link ->
       val arrowPrefix = if (animateLinks) "link$i@" else ""
       val style = link.type?.style ?: Solid
 
       val arrow = getArrow(link.type, style)
-      val from = typedProjects.first { it.projectPath == link.fromPath }.cleaned().label
-      val to = typedProjects.first { it.projectPath == link.toPath }.cleaned().label
+      val from = link.fromPath.label
+      val to = link.toPath.label
       appendLine("$from $arrowPrefix$arrow $to")
 
       link.type?.let { type ->
@@ -114,7 +113,7 @@ internal class MermaidWriter(
     }
 
     if (animateLinks) {
-      for (i in links.indices) {
+      for (i in chartLinks.indices) {
         appendLine("link$i@{ animate: true }")
       }
     }

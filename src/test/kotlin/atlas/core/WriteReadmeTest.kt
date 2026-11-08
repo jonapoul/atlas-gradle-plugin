@@ -141,4 +141,23 @@ internal class WriteReadmeTest : ScenarioTest() {
       .taskHadResult(":a:writeReadme", SUCCESS)
     assertThat(readme).contentEquals(expected)
   }
+
+  @Test
+  fun `Edits outside the chart region survive the build cache`() = MermaidBasic {
+    // given a generated readme, cached
+    assertThatTask(":a:writeReadme").withArgument("--build-cache").buildsSuccessfully()
+
+    // and the user then adds to it
+    val readme = resolve("a/README.md")
+    readme.writeText(readme.readText() + "\nMy own notes\n")
+
+    // when the task runs again with the same inputs
+    assertThatTask(":a:writeReadme")
+      .withArgument("--build-cache")
+      .buildsSuccessfully()
+      .taskHadResult(":a:writeReadme", SUCCESS)
+
+    // then it edits the readme in place, rather than restoring the cached one
+    assertThat(readme.readText()).endsWith("My own notes\n")
+  }
 }

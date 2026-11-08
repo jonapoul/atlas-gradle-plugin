@@ -10,6 +10,7 @@ import atlas.core.tasks.TaskWithOutputFile
 import atlas.graphviz.FileFormat
 import atlas.graphviz.GraphvizSpec
 import atlas.graphviz.LayoutEngine
+import java.io.OutputStream
 import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -52,15 +53,19 @@ public abstract class ExecGraphviz : DefaultTask(), AtlasGenerationTask, TaskWit
 
   @TaskAction
   public fun execute() {
-    execOperations.exec(::configureExec).rethrowFailure().assertNormalExitValue()
-
     val outputFile = outputFile.get().asFile
+    outputFile.outputStream().use { stream ->
+      execOperations
+        .exec { spec -> configureExec(spec, stream) }
+        .rethrowFailure()
+        .assertNormalExitValue()
+    }
+
     logIfConfigured(outputFile)
   }
 
-  private fun configureExec(spec: ExecSpec) {
+  private fun configureExec(spec: ExecSpec, output: OutputStream) {
     val dotFile = dotFile.get().asFile.absolutePath
-    val outputFile = outputFile.get().asFile
     val outputFormat = outputFormat.get()
     val engine = engine.orNull
     val dotCommand = pathToDotCommand.getOrElse("dot")
@@ -75,7 +80,7 @@ public abstract class ExecGraphviz : DefaultTask(), AtlasGenerationTask, TaskWit
     logger.info("Starting Graphviz: $command")
 
     spec.commandLine(command)
-    spec.standardOutput = outputFile.outputStream()
+    spec.standardOutput = output
   }
 
   internal companion object {

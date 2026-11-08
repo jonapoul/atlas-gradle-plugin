@@ -1,10 +1,12 @@
 package atlas.d2.tasks
 
 import assertk.assertThat
+import assertk.assertions.containsExactlyInAnyOrder
 import assertk.assertions.doesNotContain
 import atlas.d2.RequiresD2
 import atlas.test.ScenarioTest
 import atlas.test.contains
+import atlas.test.dryRunTasks
 import atlas.test.resolve
 import atlas.test.scenarios.D2Basic
 import atlas.test.scenarios.D2CliFlags
@@ -13,6 +15,7 @@ import atlas.test.scenarios.D2FailOnProjectRepos
 import atlas.test.scenarios.D2PinnedVersion
 import atlas.test.scenarios.D2WithProjectRepositories
 import atlas.test.scenarios.GroovyD2PreferSettings
+import atlas.test.writeFakeD2
 import blueprint.test.Scenario as BlueprintScenario
 import blueprint.test.allTasksSuccessful
 import blueprint.test.assertThatTask
@@ -33,38 +36,34 @@ internal class ExecD2Test : ScenarioTest() {
     assertThatTask("atlasGenerate")
       .withArgument("--dry-run")
       .buildsSuccessfully()
-      .outputContains(
-        """
-        :writeD2Classes SKIPPED
-        :a:writeProjectLinks SKIPPED
-        :b:writeProjectLinks SKIPPED
-        :c:writeProjectLinks SKIPPED
-        :collateProjectLinks SKIPPED
-        :a:writeProjectType SKIPPED
-        :b:writeProjectType SKIPPED
-        :c:writeProjectType SKIPPED
-        :collateProjectTypes SKIPPED
-        :a:writeProjectTree SKIPPED
-        :a:writeD2Chart SKIPPED
-        :a:execD2Chart SKIPPED
-        :b:writeProjectTree SKIPPED
-        :b:writeD2Chart SKIPPED
-        :b:execD2Chart SKIPPED
-        :c:writeProjectTree SKIPPED
-        :c:writeD2Chart SKIPPED
-        :c:execD2Chart SKIPPED
-        :atlasWriteIndex SKIPPED
-        :atlasGenerate SKIPPED
-        :a:writeReadme SKIPPED
-        :a:atlasGenerate SKIPPED
-        :b:writeReadme SKIPPED
-        :b:atlasGenerate SKIPPED
-        :c:writeReadme SKIPPED
-        :c:atlasGenerate SKIPPED
-
-        BUILD SUCCESSFUL
-        """
-          .trimIndent(),
+      .dryRunTasks()
+      .containsExactlyInAnyOrder(
+        ":writeD2Classes",
+        ":a:writeProjectLinks",
+        ":b:writeProjectLinks",
+        ":c:writeProjectLinks",
+        ":collateProjectLinks",
+        ":a:writeProjectType",
+        ":b:writeProjectType",
+        ":c:writeProjectType",
+        ":collateProjectTypes",
+        ":a:writeProjectTree",
+        ":a:writeD2Chart",
+        ":a:execD2Chart",
+        ":b:writeProjectTree",
+        ":b:writeD2Chart",
+        ":b:execD2Chart",
+        ":c:writeProjectTree",
+        ":c:writeD2Chart",
+        ":c:execD2Chart",
+        ":atlasWriteIndex",
+        ":atlasGenerate",
+        ":a:writeReadme",
+        ":a:atlasGenerate",
+        ":b:writeReadme",
+        ":b:atlasGenerate",
+        ":c:writeReadme",
+        ":c:atlasGenerate",
       )
   }
 
@@ -110,12 +109,13 @@ internal class ExecD2Test : ScenarioTest() {
 
   @Test
   fun `Pass extra CLI flags to D2`() = D2CliFlags {
+    rootDir.writeFakeD2()
     rootDir.resolve("font.ttf").writeText("")
 
     // when
     assertThatTask(":a:execD2Chart").buildsSuccessfully().taskHadResult(":a:execD2Chart", SUCCESS)
 
-    // then the flags reached the command, which is echo'd here
+    // then the flags reached the command, which the fake d2 writes out
     val args = resolve("a/chart-d2.txt").readText()
     val font = rootDir.resolve("font.ttf").absolutePath
     assertThat(args)

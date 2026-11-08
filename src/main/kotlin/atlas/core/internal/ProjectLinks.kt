@@ -39,13 +39,17 @@ internal fun writeProjectLinks(
   linkTypes: Set<LinkType>,
 ): List<ProjectLink> {
   val links = projectLinks.toSortedMap()
+  val matchers = linkTypes.map { t -> t to lazy { t.configuration.toRegex(IGNORE_CASE) } }
   val filteredLinks = mutableListOf<ProjectLink>()
   links.forEach { (toPath, configurations) ->
     configurations.sorted().forEach { config ->
-      val type = linkTypes.firstOrNull { t ->
-        // treat the given string first as an exact match, then fall back to treating as regex
-        t.configuration == config || t.configuration.toRegex(IGNORE_CASE).matches(config)
-      }
+      val type =
+        matchers
+          .firstOrNull { (t, regex) ->
+            // treat the given string first as an exact match, then fall back to treating as regex
+            t.configuration == config || regex.value.matches(config)
+          }
+          ?.first
       filteredLinks += ProjectLink(fromPath, toPath, config, type)
     }
   }
@@ -83,10 +87,13 @@ internal data class ProjectLink(
       ?: configuration.compareTo(other.configuration)
 }
 
-internal operator fun Iterable<ProjectLink>.contains(p: TypedProject): Boolean =
-  any { (from, to, _) ->
-    from == p.projectPath || to == p.projectPath
+/** Every project path at either end of these links. */
+internal fun Iterable<ProjectLink>.linkedPaths(): Set<String> = buildSet {
+  this@linkedPaths.forEach { link ->
+    add(link.fromPath)
+    add(link.toPath)
   }
+}
 
 @Suppress("LazyCollectionOperators") // see createProjectLinks
 private fun ConfigurationContainer.filterUseful(ignoredConfigs: Iterable<String>) = filter { c ->

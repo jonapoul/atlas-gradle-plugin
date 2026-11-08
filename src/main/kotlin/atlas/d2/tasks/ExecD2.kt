@@ -93,74 +93,88 @@ public abstract class ExecD2 : DefaultTask(), AtlasGenerationTask, TaskWithOutpu
     "Uses D2 to convert a text diagram into a ${outputFormat.get()} file"
 
   @TaskAction
-  @Suppress("CyclomaticComplexMethod")
   public fun execute() {
-    val inputFile = inputFile.get().asFile.absolutePath
     val outputFile = outputFile.get().asFile
-    val executable = executable.orNull?.asFile?.absolutePath ?: "d2"
-    val cliArguments = cliArguments.getOrElse(emptyMap()).toMutableMap()
+    val fonts =
+      mapOf(
+          "font-regular" to fontRegular,
+          "font-italic" to fontItalic,
+          "font-bold" to fontBold,
+          "font-semibold" to fontSemibold,
+          "font-mono" to fontMono,
+          "font-mono-bold" to fontMonoBold,
+          "font-mono-italic" to fontMonoItalic,
+          "font-mono-semibold" to fontMonoSemibold,
+        )
+        .mapNotNull { (key, font) -> font.orNull?.let { key to it.asFile } }
+        .toMap()
 
-    // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
-    if (outputFormat.get() == Gif) {
-      animateInterval.orNull?.let { cliArguments += "animate-interval" to it.toString() }
-    }
-
-    if (outputFormat.get() == Ascii) {
-      asciiMode.orNull?.let { cliArguments += "ascii-mode" to it.value }
-    }
-
-    if (outputFormat.get() == Svg && noXmlTag.getOrElse(false)) {
-      cliArguments += "no-xml-tag" to "true"
-    }
-
-    if (omitVersion.getOrElse(false)) {
-      cliArguments += "omit-version" to "true"
-    }
-
-    scale.orNull?.let { cliArguments += "scale" to it.toString() }
-    timeoutSeconds.orNull?.let { cliArguments += "timeout" to it.toString() }
-
-    mapOf(
-        "font-regular" to fontRegular,
-        "font-italic" to fontItalic,
-        "font-bold" to fontBold,
-        "font-semibold" to fontSemibold,
-        "font-mono" to fontMono,
-        "font-mono-bold" to fontMonoBold,
-        "font-mono-italic" to fontMonoItalic,
-        "font-mono-semibold" to fontMonoSemibold,
+    val flags =
+      cliFlags(
+        format = outputFormat.get(),
+        cliArguments = cliArguments.getOrElse(emptyMap()),
+        animateInterval = animateInterval.orNull,
+        asciiMode = asciiMode.orNull,
+        noXmlTag = noXmlTag.getOrElse(false),
+        omitVersion = omitVersion.getOrElse(false),
+        scale = scale.orNull,
+        timeoutSeconds = timeoutSeconds.orNull,
+        fonts = fonts,
       )
-      .forEach { (key, font) ->
-        font.orNull?.let {
-          cliArguments += key to it.asFile.absolutePath
-        }
-      }
 
-    val errorBuffer = ByteArrayOutputStream()
-    val command = buildList {
-      add(executable)
-      add(inputFile)
-      add(outputFile)
-      cliArguments.forEach { (key, value) -> add("--$key=$value") }
-    }
+    val output = ByteArrayOutputStream()
+    val command =
+      listOf(
+        executable.orNull?.asFile?.absolutePath ?: "d2",
+        inputFile.get().asFile.absolutePath,
+        outputFile.absolutePath,
+      ) + flags
 
     logger.info("Starting d2: '$command'")
+    // d2 writes the chart itself, so anything it prints is only worth showing if it fails
     val result = execOperations.exec { spec ->
-      spec.errorOutput = errorBuffer
-      spec.standardOutput = outputFile.outputStream()
+      spec.standardOutput = output
+      spec.errorOutput = output
       spec.isIgnoreExitValue = true
       spec.commandLine(command)
     }
 
     if (result.exitValue != 0) {
       val cmd = command.joinToString(separator = " ")
-      throw GradleException("Error code ${result.exitValue} running '$cmd':\n $errorBuffer")
+      throw GradleException("Error code ${result.exitValue} running '$cmd':\n $output")
     }
 
     logIfConfigured(outputFile)
   }
 
   internal companion object {
+    /** The `--key=value` flags passed to d2 after its input and output paths. */
+    @Suppress("LongParameterList")
+    internal fun cliFlags(
+      format: FileFormat,
+      cliArguments: Map<String, String> = emptyMap(),
+      animateInterval: Int? = null,
+      asciiMode: AsciiMode? = null,
+      noXmlTag: Boolean = false,
+      omitVersion: Boolean = false,
+      scale: Float? = null,
+      timeoutSeconds: Int? = null,
+      fonts: Map<String, File> = emptyMap(),
+    ): List<String> {
+      val args = cliArguments.toMutableMap()
+
+      // D2 defaults this to 1000ms for gifs, so it's only passed along when explicitly configured.
+      if (format == Gif) animateInterval?.let { args += "animate-interval" to it.toString() }
+      if (format == Ascii) asciiMode?.let { args += "ascii-mode" to it.value }
+      if (format == Svg && noXmlTag) args += "no-xml-tag" to "true"
+      if (omitVersion) args += "omit-version" to "true"
+      scale?.let { args += "scale" to it.toString() }
+      timeoutSeconds?.let { args += "timeout" to it.toString() }
+      fonts.forEach { (key, font) -> args += key to font.absolutePath }
+
+      return args.map { (key, value) -> "--$key=$value" }
+    }
+
     internal fun get(target: Project, name: String): TaskProvider<ExecD2> =
       target.tasks.named(name, ExecD2::class.java)
 

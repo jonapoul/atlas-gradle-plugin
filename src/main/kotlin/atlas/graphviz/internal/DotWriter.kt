@@ -45,18 +45,16 @@ internal data class DotWriter(
   private fun IndentedStringBuilder.appendLinks() {
     val displayLinkLabels = config.displayLinkLabels == true
 
-    links
-      .map { link -> link.copy(fromPath = link.fromPath.cleaned(), toPath = link.toPath.cleaned()) }
-      .sortedWith(compareBy({ it.fromPath }, { it.toPath }))
-      .forEach { (fromPath, toPath, _, type) ->
-        val attrs =
-          Attrs(
-            "style" to type?.style?.value,
-            "color" to type?.color,
-            "label" to if (displayLinkLabels) type?.displayName else null,
-          ) + type?.properties(Graphviz)
-        appendLine("\"$fromPath\" -> \"$toPath\"$attrs")
-      }
+    chartLinks.sortedWith(compareBy({ it.fromPath }, { it.toPath })).forEach {
+      (fromPath, toPath, _, type) ->
+      val attrs =
+        Attrs(
+          "style" to type?.style?.value,
+          "color" to type?.color,
+          "label" to if (displayLinkLabels) type?.displayName else null,
+        ) + type?.properties(Graphviz)
+      appendLine("\"$fromPath\" -> \"$toPath\"$attrs")
+    }
   }
 
   override fun IndentedStringBuilder.appendSubgraphHeader(graph: Subgraph) {
@@ -73,7 +71,7 @@ internal data class DotWriter(
   }
 
   override fun IndentedStringBuilder.appendProject(project: TypedProject) {
-    val nodePath = project.projectPath.cleaned()
+    val nodePath = project.projectPath
     val label = project.projectPath.nodeLabel()
 
     // Graphviz labels a node with its ID by default, so only say otherwise when it differs
