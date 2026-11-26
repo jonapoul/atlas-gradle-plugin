@@ -23,7 +23,7 @@ blueprint = { id = "dev.jonpoulton.blueprint", version.ref = "blueprint" }
 blueprintTest = { id = "dev.jonpoulton.blueprint.test", version.ref = "blueprint" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "6.1.2" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.6" }
-dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
+dokka = { id = "org.jetbrains.dokka", version = "2.3.0" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
