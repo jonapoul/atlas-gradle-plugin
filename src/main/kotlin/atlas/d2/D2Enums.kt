@@ -194,6 +194,76 @@ public enum class ElkAlgorithm(override val value: String) : StringEnum {
   override fun toString(): String = value
 }
 
+/** How [ElkAlgorithm.Layered] draws links. Requires D2 0.10.0 or newer. */
+public enum class ElkEdgeRouting(override val value: String) : StringEnum {
+  /** Horizontal and vertical segments only. D2's default. */
+  Orthogonal("orthogonal"),
+
+  /** Straight segments at any angle. */
+  Polyline("polyline");
+
+  override fun toString(): String = value
+}
+
+/** How [ElkAlgorithm.Layered] wraps a long chart into several rows. Requires D2 0.10.0 or newer. */
+public enum class ElkWrappingStrategy(override val value: String) : StringEnum {
+  /** No wrapping. D2's default. */
+  Off("off"),
+  SingleEdge("single_edge"),
+  MultiEdge("multi_edge");
+
+  override fun toString(): String = value
+}
+
+/** The force model [ElkAlgorithm.Force] uses. Requires D2 0.10.0 or newer. */
+public enum class ElkForceModel(override val value: String) : StringEnum {
+  /** D2's default. */
+  FruchtermanReingold("fruchterman_reingold"),
+  Eades("eades");
+
+  override fun toString(): String = value
+}
+
+/** How [ElkAlgorithm.MrTree] walks the spanning tree. Requires D2 0.10.0 or newer. */
+public enum class ElkMrTreeSearchOrder(override val value: String) : StringEnum {
+  /** Depth first. D2's default. */
+  Dfs("dfs"),
+
+  /** Breadth first. */
+  Bfs("bfs");
+
+  override fun toString(): String = value
+}
+
+/** How [ElkAlgorithm.MrTree] orders siblings. Requires D2 0.10.0 or newer. */
+public enum class ElkMrTreeWeighting(override val value: String) : StringEnum {
+  /** Declaration order. D2's default. */
+  ModelOrder("model_order"),
+  Descendants("descendants"),
+  Fan("fan");
+
+  override fun toString(): String = value
+}
+
+/** How [ElkAlgorithm.Radial] divides up angular space. Requires D2 0.10.0 or newer. */
+public enum class ElkRadialWedgeCriteria(override val value: String) : StringEnum {
+  /** D2's default. */
+  NodeSize("node_size"),
+  LeafNumber("leaf_number");
+
+  override fun toString(): String = value
+}
+
+/** How [ElkAlgorithm.Radial] compacts the chart. Requires D2 0.10.0 or newer. */
+public enum class ElkRadialCompactor(override val value: String) : StringEnum {
+  /** D2's default. */
+  None("none"),
+  RadialCompaction("radial_compaction"),
+  WedgeCompaction("wedge_compaction");
+
+  override fun toString(): String = value
+}
+
 /** Which characters D2 draws [FileFormat.Ascii] charts with. */
 public enum class AsciiMode(override val value: String) : StringEnum {
   /** Basic ASCII characters only, e.g. `+`, `-` and `|`. */

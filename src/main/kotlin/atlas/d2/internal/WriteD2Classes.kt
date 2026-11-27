@@ -107,7 +107,8 @@ private fun IndentedStringBuilder.appendLink(config: D2ClassesConfig, type: Link
   appendLine("${type.classId} {")
   indent {
     for ((key, value) in linkAttributes(config, type)) {
-      appendLine("$key: \"$value\"")
+      val quoted = if (key == "label") value.d2Quoted() else "\"$value\""
+      appendLine("$key: $quoted")
     }
   }
   appendLine("}")

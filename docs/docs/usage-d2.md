@@ -493,6 +493,27 @@ atlas {
         nodeNodeBetweenLayers = 70
         nodeSelfLoop = 50
 
+        // these need D2 0.10.0 or newer
+        edgeEdgeBetweenLayers = 50
+        nodeNode = 20
+        edgeNode = 40
+        edgeEdge = 10
+        edgeRouting = ElkEdgeRouting.Orthogonal
+        mergeEdges = false
+        feedbackEdges = false
+        wrappingStrategy = ElkWrappingStrategy.Off
+        forceNodeModelOrder = false
+
+        // only used by some algorithms
+        forceModel = ElkForceModel.FruchtermanReingold // Force
+        forceRepulsion = 5f // Force, with the Eades model
+        stressDesiredEdgeLength = 100 // Stress
+        mrTreeSearchOrder = ElkMrTreeSearchOrder.Dfs // MrTree
+        mrTreeWeighting = ElkMrTreeWeighting.ModelOrder // MrTree
+        radialRadius = 0 // Radial
+        radialWedgeCriteria = ElkRadialWedgeCriteria.NodeSize // Radial
+        radialCompactor = ElkRadialCompactor.None // Radial
+
         // padding is either a raw D2 string, or set with one of the helpers
         padding = "[top=50,left=50,bottom=50,right=50]"
         padding(all = 50)
@@ -511,7 +532,7 @@ atlas {
 Defines the underlying engine used by D2 to organise the project nodes in each chart. [See this link in the D2 docs for more detailed information](https://d2lang.com/tour/layouts/). The available options are:
 
 - **Dagre**: default option.
-- **Elk**: Framework from Eclipse for diagram generation - also supported by [Mermaid](usage-mermaid.md).
+- **Elk**: Framework from Eclipse for diagram generation - also supported by [Mermaid](usage-mermaid.md). Charts with lots of links get tall, because each link between two layers adds `edgeEdgeBetweenLayers` of space. Lowering it, or turning on `mergeEdges`, tightens them up. Everything below `nodeSelfLoop` in the example needs D2 0.10.0 or newer, and older versions fail on the unknown flag.
 - **Tala**: D2's own engine, built for software architecture diagrams. It was a paid closed-source plugin until D2 0.9.0, which open sourced it and bundled it into the standard installation, so it now works out of the box. Its only setting is `seeds`: D2 lays the chart out once per seed and keeps the best complete result, so more seeds gives a tidier chart and a slower build. Layout is deterministic for a given set of seeds, which matters if you commit your charts. D2 takes at most 16 of them.
 
 Screenshots below are with all default settings.

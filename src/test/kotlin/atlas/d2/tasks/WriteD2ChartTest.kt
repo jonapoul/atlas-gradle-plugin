@@ -34,15 +34,15 @@ internal class WriteD2ChartTest : ScenarioTest() {
     assertThat(d2FileA)
       .contentEquals(
         """
-        a: :a { class: project-KotlinJVM }
-        b: :b { class: project-Java }
-        c: :c { class: project-Java }
-        a -> b
-        a -> c
+        'a': ':a' { class: project-KotlinJVM }
+        'b': ':b' { class: project-Java }
+        'c': ':c' { class: project-Java }
+        'a' -> 'b'
+        'a' -> 'c'
         vars: {
           d2-legend: {
-            project-KotlinJVM: Kotlin JVM { class: project-KotlinJVM }
-            project-Java: Java { class: project-Java }
+            project-KotlinJVM: 'Kotlin JVM' { class: project-KotlinJVM }
+            project-Java: 'Java' { class: project-Java }
           }
         }
         ...@../../../build/atlas/classes-d2.d2
@@ -53,10 +53,10 @@ internal class WriteD2ChartTest : ScenarioTest() {
     assertThat(d2FileB)
       .contentEquals(
         """
-        b: :b { class: project-Java }
+        'b': ':b' { class: project-Java }
         vars: {
           d2-legend: {
-            project-Java: Java { class: project-Java }
+            project-Java: 'Java' { class: project-Java }
           }
         }
         ...@../../../build/atlas/classes-d2.d2
@@ -67,10 +67,10 @@ internal class WriteD2ChartTest : ScenarioTest() {
     assertThat(d2FileC)
       .contentEquals(
         """
-        c: :c { class: project-Java }
+        'c': ':c' { class: project-Java }
         vars: {
           d2-legend: {
-            project-Java: Java { class: project-Java }
+            project-Java: 'Java' { class: project-Java }
           }
         }
         ...@../../../build/atlas/classes-d2.d2
@@ -91,7 +91,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
       .exists()
       .contentEquals(
         """
-        path_to_my_project: :path:to:my:project
+        'path_to_my_project': ':path:to:my:project'
         ...@../../../../../../build/atlas/classes-d2.d2
         """
           .trimIndent(),
@@ -134,7 +134,7 @@ internal class WriteD2ChartTest : ScenarioTest() {
         .exists()
         .contentEquals(
           """
-          path_to_my_project: :path:to:my:project
+          'path_to_my_project': ':path:to:my:project'
           ...@../../../../atlas/classes-d2.d2
           """
             .trimIndent(),

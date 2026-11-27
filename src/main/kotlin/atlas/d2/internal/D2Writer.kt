@@ -40,8 +40,8 @@ internal class D2Writer(
   }
 
   override fun IndentedStringBuilder.appendSubgraphHeader(graph: Subgraph) {
-    val key = graph.path[subgraphNestingLevel]
-    appendLine("$key: :${graph.name} {")
+    val key = graph.path[subgraphNestingLevel].stripped().d2Quoted()
+    appendLine("$key: ${":${graph.name}".d2Quoted()} {")
     indent { appendLine("class: $CONTAINER_CLASS") }
   }
 
@@ -51,8 +51,9 @@ internal class D2Writer(
 
   override fun IndentedStringBuilder.appendProject(project: TypedProject) {
     val (path, type) = project
-    val key = path.localKey()
-    val name = if (groupProjects) ":$key" else path
+    val localKey = path.localKey()
+    val key = localKey.d2Quoted()
+    val name = (if (groupProjects) ":$localKey" else path).d2Quoted()
     if (type == null) {
       // just list the project with label
       appendLine("$key: $name")
@@ -66,7 +67,7 @@ internal class D2Writer(
     chartLinks.sortedWith(compareBy({ it.fromPath.fullKey() }, { it.toPath.fullKey() })).forEach { l
       ->
       val suffix = l.type?.let { type -> " { class: ${type.classId} }" }.orEmpty()
-      appendLine("${l.fromPath.fullKey()} -> ${l.toPath.fullKey()}$suffix")
+      appendLine("${l.fromPath.quotedFullKey()} -> ${l.toPath.quotedFullKey()}$suffix")
     }
   }
 
@@ -113,7 +114,7 @@ internal class D2Writer(
   }
 
   private fun IndentedStringBuilder.appendProjectType(type: ProjectType) {
-    appendLine("${type.classId}: ${type.name} { class: ${type.classId} }")
+    appendLine("${type.classId}: ${type.name.d2Quoted()} { class: ${type.classId} }")
   }
 
   private fun IndentedStringBuilder.appendLinkType(
@@ -121,17 +122,14 @@ internal class D2Writer(
     exampleNodes: Pair<ProjectType, ProjectType>,
   ) {
     val (a, b) = exampleNodes
-    appendLine("${a.classId} -> ${b.classId}: ${type.displayName} { class: ${type.classId} }")
+    val label = type.displayName.d2Quoted()
+    appendLine("${a.classId} -> ${b.classId}: $label { class: ${type.classId} }")
   }
 
   // Colons in d2 have special meaning, so strip them out of the key string. Not visible in the
   // diagram anyway.
   private fun String.fullKey(): String {
-    val stripped =
-      DISALLOWED_SUBSTRINGS.fold(initial = removePrefix(":").removePrefix("-")) { acc, string ->
-        acc.replace(string, "")
-      }
-
+    val stripped = removePrefix(":").removePrefix("-").stripped()
     return if (groupProjects) {
       // Dots are nested group identifiers, so only use them if we have grouping enabled
       stripped.replace(":", ".")
@@ -140,6 +138,15 @@ internal class D2Writer(
       stripped.replace(":", "_")
     }
   }
+
+  // Every segment is quoted, so that one named after a D2 keyword (e.g. `:feature:style`) is still
+  // read as a shape
+  private fun String.quotedFullKey(): String =
+    if (groupProjects) fullKey().split(".").joinToString(".") { it.d2Quoted() }
+    else fullKey().d2Quoted()
+
+  private fun String.stripped(): String =
+    DISALLOWED_SUBSTRINGS.fold(initial = this) { acc, string -> acc.replace(string, "") }
 
   private fun String.localKey(): String =
     if (groupProjects) {
@@ -153,3 +160,7 @@ internal class D2Writer(
     val DISALLOWED_SUBSTRINGS = setOf("{", "}", "->", "--", "<-", "<->", "|", "#", "\"", "'")
   }
 }
+
+/** A single-quoted D2 string, which D2 reads literally: no keywords, comments or substitutions. */
+internal fun String.d2Quoted(): String =
+  "'" + replace("\r", " ").replace("\n", " ").replace("'", "''") + "'"

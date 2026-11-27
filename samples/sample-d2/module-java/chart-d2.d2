@@ -1,13 +1,13 @@
-java: :java { class: project-Java }
-other: :other { class: project-Other }
-java -> other { class: link-implementation }
+'java': ':java' { class: project-Java }
+'other': ':other' { class: project-Other }
+'java' -> 'other' { class: link-implementation }
 vars: {
   d2-legend: {
-    project-Java: Java { class: project-Java }
-    project-Other: Other { class: project-Other }
+    project-Java: 'Java' { class: project-Java }
+    project-Other: 'Other' { class: project-Other }
     project-dummy1.class: hidden
     project-dummy2.class: hidden
-    project-dummy1 -> project-dummy2: implementation { class: link-implementation }
+    project-dummy1 -> project-dummy2: 'implementation' { class: link-implementation }
   }
 }
 ...@../atlas/classes-d2.d2

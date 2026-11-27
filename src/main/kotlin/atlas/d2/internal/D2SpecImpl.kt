@@ -21,6 +21,13 @@ import atlas.d2.D2Spec
 import atlas.d2.D2TalaSpec
 import atlas.d2.D2ThemeOverridesSpec
 import atlas.d2.ElkAlgorithm
+import atlas.d2.ElkEdgeRouting
+import atlas.d2.ElkForceModel
+import atlas.d2.ElkMrTreeSearchOrder
+import atlas.d2.ElkMrTreeWeighting
+import atlas.d2.ElkRadialCompactor
+import atlas.d2.ElkRadialWedgeCriteria
+import atlas.d2.ElkWrappingStrategy
 import atlas.d2.FillPattern
 import atlas.d2.Font
 import atlas.d2.LayoutEngine.Dagre
@@ -169,6 +176,23 @@ internal class D2ElkSpecImpl(parent: InternalPropertiesSpec) :
   override var nodeNodeBetweenLayers by int("elk-nodeNodeBetweenLayers")
   override var nodeSelfLoop by int("elk-nodeSelfLoop")
   override var padding by string("elk-padding")
+  override var edgeEdgeBetweenLayers by int("elk-edgeEdgeBetweenLayers")
+  override var nodeNode by int("elk-nodeNode")
+  override var edgeNode by int("elk-edgeNode")
+  override var edgeEdge by int("elk-edgeEdge")
+  override var edgeRouting by enum<ElkEdgeRouting>("elk-edgeRouting")
+  override var mergeEdges by bool("elk-mergeEdges")
+  override var feedbackEdges by bool("elk-feedbackEdges")
+  override var wrappingStrategy by enum<ElkWrappingStrategy>("elk-wrappingStrategy")
+  override var forceNodeModelOrder by bool("elk-forceNodeModelOrder")
+  override var forceModel by enum<ElkForceModel>("elk-forceModel")
+  override var forceRepulsion by float("elk-forceRepulsion")
+  override var stressDesiredEdgeLength by int("elk-stressDesiredEdgeLength")
+  override var mrTreeSearchOrder by enum<ElkMrTreeSearchOrder>("elk-mrtreeSearchOrder")
+  override var mrTreeWeighting by enum<ElkMrTreeWeighting>("elk-mrtreeWeighting")
+  override var radialRadius by int("elk-radialRadius")
+  override var radialWedgeCriteria by enum<ElkRadialWedgeCriteria>("elk-radialWedgeCriteria")
+  override var radialCompactor by enum<ElkRadialCompactor>("elk-radialCompactor")
 
   override fun padding(all: Int): Unit = padding(top = all, left = all, bottom = all, right = all)
 
