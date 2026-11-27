@@ -1,36 +1,36 @@
-java: :java { class: project-Java }
-other: :other { class: project-Other }
-android: :android {
+'java': ':java' { class: project-Java }
+'other': ':other' { class: project-Other }
+'android': ':android' {
   class: container
-  app: :app { class: project-AndroidApp }
-  lib: :lib { class: project-AndroidLibrary }
+  'app': ':app' { class: project-AndroidApp }
+  'lib': ':lib' { class: project-AndroidLibrary }
 }
-kotlin: :kotlin {
+'kotlin': ':kotlin' {
   class: container
-  jvm: :jvm { class: project-KotlinJVM }
-  kmp: :kmp { class: project-KotlinMultiplatform }
+  'jvm': ':jvm' { class: project-KotlinJVM }
+  'kmp': ':kmp' { class: project-KotlinMultiplatform }
 }
-android.app -> android.lib { class: link-implementation }
-android.app -> kotlin.kmp { class: link-implementation }
-android.lib -> kotlin.jvm { class: link-implementation }
-android.lib -> other { class: link-implementation }
-java -> other { class: link-implementation }
-kotlin.kmp -> android.lib { class: link-api }
-kotlin.kmp -> java { class: link-jvmMainImplementation }
-kotlin.kmp -> kotlin.jvm { class: link-api }
+'android'.'app' -> 'android'.'lib' { class: link-implementation }
+'android'.'app' -> 'kotlin'.'kmp' { class: link-implementation }
+'android'.'lib' -> 'kotlin'.'jvm' { class: link-implementation }
+'android'.'lib' -> 'other' { class: link-implementation }
+'java' -> 'other' { class: link-implementation }
+'kotlin'.'kmp' -> 'android'.'lib' { class: link-api }
+'kotlin'.'kmp' -> 'java' { class: link-jvmMainImplementation }
+'kotlin'.'kmp' -> 'kotlin'.'jvm' { class: link-api }
 vars: {
   d2-legend: {
-    project-AndroidApp: Android App { class: project-AndroidApp }
-    project-AndroidLibrary: Android Library { class: project-AndroidLibrary }
-    project-Java: Java { class: project-Java }
-    project-KotlinJVM: Kotlin JVM { class: project-KotlinJVM }
-    project-KotlinMultiplatform: Kotlin Multiplatform { class: project-KotlinMultiplatform }
-    project-Other: Other { class: project-Other }
+    project-AndroidApp: 'Android App' { class: project-AndroidApp }
+    project-AndroidLibrary: 'Android Library' { class: project-AndroidLibrary }
+    project-Java: 'Java' { class: project-Java }
+    project-KotlinJVM: 'Kotlin JVM' { class: project-KotlinJVM }
+    project-KotlinMultiplatform: 'Kotlin Multiplatform' { class: project-KotlinMultiplatform }
+    project-Other: 'Other' { class: project-Other }
     project-dummy1.class: hidden
     project-dummy2.class: hidden
-    project-dummy1 -> project-dummy2: implementation { class: link-implementation }
-    project-dummy1 -> project-dummy2: api { class: link-api }
-    project-dummy1 -> project-dummy2: jvmMainImplementation { class: link-jvmMainImplementation }
+    project-dummy1 -> project-dummy2: 'implementation' { class: link-implementation }
+    project-dummy1 -> project-dummy2: 'api' { class: link-api }
+    project-dummy1 -> project-dummy2: 'jvmMainImplementation' { class: link-jvmMainImplementation }
   }
 }
 ...@../../atlas/classes-d2.d2
