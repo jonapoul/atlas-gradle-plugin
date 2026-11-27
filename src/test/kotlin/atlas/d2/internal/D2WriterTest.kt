@@ -12,6 +12,7 @@ import atlas.test.ProjectWithNoLinks
 import atlas.test.SingleNestedProjectWithNoLinks
 import atlas.test.TwoLevelsOfSubprojects
 import atlas.test.projectLink
+import atlas.test.typedProject
 import blueprint.test.isEqualToTrimmed
 import kotlin.test.Test
 
@@ -27,24 +28,24 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        app: :app
-        data_a: :data:a
-        data_b: :data:b
-        domain_a: :domain:a
-        domain_b: :domain:b
-        ui_a: :ui:a
-        ui_b: :ui:b
-        ui_c: :ui:c
-        app -> ui_a { class: link-implementation }
-        app -> ui_b { class: link-implementation }
-        app -> ui_c { class: link-implementation }
-        domain_a -> data_a { class: link-implementation }
-        domain_b -> data_a { class: link-implementation }
-        domain_b -> data_b { class: link-implementation }
-        ui_a -> domain_a { class: link-implementation }
-        ui_b -> domain_b { class: link-implementation }
-        ui_c -> domain_a { class: link-implementation }
-        ui_c -> domain_b { class: link-implementation }
+        'app': :app
+        'data_a': :data:a
+        'data_b': :data:b
+        'domain_a': :domain:a
+        'domain_b': :domain:b
+        'ui_a': :ui:a
+        'ui_b': :ui:b
+        'ui_c': :ui:c
+        'app' -> 'ui_a' { class: link-implementation }
+        'app' -> 'ui_b' { class: link-implementation }
+        'app' -> 'ui_c' { class: link-implementation }
+        'domain_a' -> 'data_a' { class: link-implementation }
+        'domain_b' -> 'data_a' { class: link-implementation }
+        'domain_b' -> 'data_b' { class: link-implementation }
+        'ui_a' -> 'domain_a' { class: link-implementation }
+        'ui_b' -> 'domain_b' { class: link-implementation }
+        'ui_c' -> 'domain_a' { class: link-implementation }
+        'ui_c' -> 'domain_b' { class: link-implementation }
         vars: {
           d2-legend: {
             project-dummy1.class: hidden
@@ -70,7 +71,7 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        ui_c: :ui:c
+        'ui_c': :ui:c
         ...@../classes.d2
         """
           .trimIndent(),
@@ -88,33 +89,33 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        app: :app
-        data: :data {
+        'app': :app
+        'data': :data {
           class: container
-          a: :a
-          b: :b
+          'a': :a
+          'b': :b
         }
-        domain: :domain {
+        'domain': :domain {
           class: container
-          a: :a
-          b: :b
+          'a': :a
+          'b': :b
         }
-        ui: :ui {
+        'ui': :ui {
           class: container
-          a: :a
-          b: :b
-          c: :c
+          'a': :a
+          'b': :b
+          'c': :c
         }
-        app -> ui.a { class: link-implementation }
-        app -> ui.b { class: link-implementation }
-        app -> ui.c { class: link-implementation }
-        domain.a -> data.a { class: link-implementation }
-        domain.b -> data.a { class: link-implementation }
-        domain.b -> data.b { class: link-implementation }
-        ui.a -> domain.a { class: link-implementation }
-        ui.b -> domain.b { class: link-implementation }
-        ui.c -> domain.a { class: link-implementation }
-        ui.c -> domain.b { class: link-implementation }
+        'app' -> 'ui'.'a' { class: link-implementation }
+        'app' -> 'ui'.'b' { class: link-implementation }
+        'app' -> 'ui'.'c' { class: link-implementation }
+        'domain'.'a' -> 'data'.'a' { class: link-implementation }
+        'domain'.'b' -> 'data'.'a' { class: link-implementation }
+        'domain'.'b' -> 'data'.'b' { class: link-implementation }
+        'ui'.'a' -> 'domain'.'a' { class: link-implementation }
+        'ui'.'b' -> 'domain'.'b' { class: link-implementation }
+        'ui'.'c' -> 'domain'.'a' { class: link-implementation }
+        'ui'.'c' -> 'domain'.'b' { class: link-implementation }
         vars: {
           d2-legend: {
             project-dummy1.class: hidden
@@ -140,33 +141,33 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        app: :app
-        data: :data {
+        'app': :app
+        'data': :data {
           class: container
-          a: :a
-          b: :b
+          'a': :a
+          'b': :b
         }
-        domain: :domain {
+        'domain': :domain {
           class: container
-          a: :a
-          b: :b
+          'a': :a
+          'b': :b
         }
-        ui: :ui {
+        'ui': :ui {
           class: container
-          a: :a
-          b: :b
-          c: :c
+          'a': :a
+          'b': :b
+          'c': :c
         }
-        app -> ui.a { class: link-implementation }
-        app -> ui.b { class: link-implementation }
-        app -> ui.c { class: link-implementation }
-        domain.a -> data.a { class: link-implementation }
-        domain.b -> data.a { class: link-implementation }
-        domain.b -> data.b { class: link-implementation }
-        ui.a -> domain.a { class: link-implementation }
-        ui.b -> domain.b { class: link-implementation }
-        ui.c -> domain.a { class: link-implementation }
-        ui.c -> domain.b { class: link-implementation }
+        'app' -> 'ui'.'a' { class: link-implementation }
+        'app' -> 'ui'.'b' { class: link-implementation }
+        'app' -> 'ui'.'c' { class: link-implementation }
+        'domain'.'a' -> 'data'.'a' { class: link-implementation }
+        'domain'.'b' -> 'data'.'a' { class: link-implementation }
+        'domain'.'b' -> 'data'.'b' { class: link-implementation }
+        'ui'.'a' -> 'domain'.'a' { class: link-implementation }
+        'ui'.'b' -> 'domain'.'b' { class: link-implementation }
+        'ui'.'c' -> 'domain'.'a' { class: link-implementation }
+        'ui'.'c' -> 'domain'.'b' { class: link-implementation }
         vars: {
           d2-legend: {
             project-dummy1.class: hidden
@@ -191,40 +192,40 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        app: :app
-        data: :data {
+        'app': :app
+        'data': :data {
           class: container
-          a: :a
-          b: :b
-          sub: :sub {
+          'a': :a
+          'b': :b
+          'sub': :sub {
             class: container
-            sub1: :sub1
-            sub2: :sub2
+            'sub1': :sub1
+            'sub2': :sub2
           }
         }
-        domain: :domain {
+        'domain': :domain {
           class: container
-          a: :a
-          b: :b
+          'a': :a
+          'b': :b
         }
-        ui: :ui {
+        'ui': :ui {
           class: container
-          a: :a
-          b: :b
-          c: :c
+          'a': :a
+          'b': :b
+          'c': :c
         }
-        app -> ui.a { class: link-implementation }
-        app -> ui.b { class: link-implementation }
-        app -> ui.c { class: link-implementation }
-        domain.a -> data.a { class: link-implementation }
-        domain.a -> data.sub.sub1 { class: link-implementation }
-        domain.a -> data.sub.sub2 { class: link-implementation }
-        domain.b -> data.a { class: link-implementation }
-        domain.b -> data.b { class: link-implementation }
-        ui.a -> domain.a { class: link-implementation }
-        ui.b -> domain.b { class: link-implementation }
-        ui.c -> domain.a { class: link-implementation }
-        ui.c -> domain.b { class: link-implementation }
+        'app' -> 'ui'.'a' { class: link-implementation }
+        'app' -> 'ui'.'b' { class: link-implementation }
+        'app' -> 'ui'.'c' { class: link-implementation }
+        'domain'.'a' -> 'data'.'a' { class: link-implementation }
+        'domain'.'a' -> 'data'.'sub'.'sub1' { class: link-implementation }
+        'domain'.'a' -> 'data'.'sub'.'sub2' { class: link-implementation }
+        'domain'.'b' -> 'data'.'a' { class: link-implementation }
+        'domain'.'b' -> 'data'.'b' { class: link-implementation }
+        'ui'.'a' -> 'domain'.'a' { class: link-implementation }
+        'ui'.'b' -> 'domain'.'b' { class: link-implementation }
+        'ui'.'c' -> 'domain'.'a' { class: link-implementation }
+        'ui'.'c' -> 'domain'.'b' { class: link-implementation }
         vars: {
           d2-legend: {
             project-dummy1.class: hidden
@@ -245,7 +246,7 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        app: :app { class: project-red }
+        'app': :app { class: project-red }
         vars: {
           d2-legend: {
             project-red: red { class: project-red }
@@ -269,9 +270,9 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        a: :a {
+        'a': :a {
           class: container
-          b: :b { class: project-red }
+          'b': :b { class: project-red }
         }
         vars: {
           d2-legend: {
@@ -295,11 +296,11 @@ internal class D2WriterTest {
     assertThat(writer())
       .isEqualToTrimmed(
         """
-        a: :a
-        b: :b
-        c: :c
-        a -> b { class: link-api }
-        a -> c { class: link-implementation }
+        'a': :a
+        'b': :b
+        'c': :c
+        'a' -> 'b' { class: link-api }
+        'a' -> 'c' { class: link-implementation }
         vars: {
           d2-legend: {
             project-dummy1.class: hidden
@@ -312,6 +313,42 @@ internal class D2WriterTest {
         """
           .trimIndent(),
       )
+  }
+
+  @Test
+  fun `Projects named after D2 keywords are quoted`() {
+    val writer =
+      d2Writer(
+        layout = KeywordNamedProjects,
+        groupProjects = true,
+        thisPath = ":feature:style",
+      )
+
+    assertThat(writer())
+      .isEqualToTrimmed(
+        """
+        'feature': :feature {
+          class: container
+          'Label': :Label
+          'style': :style
+        }
+        'feature'.'style' -> 'feature'.'Label' { class: link-implementation }
+        vars: {
+          d2-legend: {
+            project-dummy1.class: hidden
+            project-dummy2.class: hidden
+            project-dummy1 -> project-dummy2: implementation { class: link-implementation }
+          }
+        }
+        ...@../classes.d2
+        """
+          .trimIndent(),
+      )
+  }
+
+  private object KeywordNamedProjects : ProjectLayout {
+    override val projects = setOf(typedProject(":feature:Label"), typedProject(":feature:style"))
+    override val links = setOf(projectLink(fromPath = ":feature:style", toPath = ":feature:Label"))
   }
 
   private object D2AbcWithLinkStyles : ProjectLayout by Abc {
