@@ -41,7 +41,7 @@ internal class D2Writer(
 
   override fun IndentedStringBuilder.appendSubgraphHeader(graph: Subgraph) {
     val key = graph.path[subgraphNestingLevel].stripped().d2Quoted()
-    appendLine("$key: :${graph.name} {")
+    appendLine("$key: ${":${graph.name}".d2Quoted()} {")
     indent { appendLine("class: $CONTAINER_CLASS") }
   }
 
@@ -53,7 +53,7 @@ internal class D2Writer(
     val (path, type) = project
     val localKey = path.localKey()
     val key = localKey.d2Quoted()
-    val name = if (groupProjects) ":$localKey" else path
+    val name = (if (groupProjects) ":$localKey" else path).d2Quoted()
     if (type == null) {
       // just list the project with label
       appendLine("$key: $name")
@@ -114,7 +114,7 @@ internal class D2Writer(
   }
 
   private fun IndentedStringBuilder.appendProjectType(type: ProjectType) {
-    appendLine("${type.classId}: ${type.name} { class: ${type.classId} }")
+    appendLine("${type.classId}: ${type.name.d2Quoted()} { class: ${type.classId} }")
   }
 
   private fun IndentedStringBuilder.appendLinkType(
@@ -122,7 +122,8 @@ internal class D2Writer(
     exampleNodes: Pair<ProjectType, ProjectType>,
   ) {
     val (a, b) = exampleNodes
-    appendLine("${a.classId} -> ${b.classId}: ${type.displayName} { class: ${type.classId} }")
+    val label = type.displayName.d2Quoted()
+    appendLine("${a.classId} -> ${b.classId}: $label { class: ${type.classId} }")
   }
 
   // Colons in d2 have special meaning, so strip them out of the key string. Not visible in the
