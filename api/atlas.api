@@ -662,18 +662,52 @@ public final class atlas/d2/D2DagreSpec$DefaultImpls {
 
 public abstract interface class atlas/d2/D2ElkSpec : atlas/core/PropertiesSpec {
 	public abstract fun getAlgorithm ()Latlas/d2/ElkAlgorithm;
+	public abstract fun getEdgeEdge ()Ljava/lang/Integer;
+	public abstract fun getEdgeEdgeBetweenLayers ()Ljava/lang/Integer;
+	public abstract fun getEdgeNode ()Ljava/lang/Integer;
 	public abstract fun getEdgeNodeBetweenLayers ()Ljava/lang/Integer;
+	public abstract fun getEdgeRouting ()Latlas/d2/ElkEdgeRouting;
+	public abstract fun getFeedbackEdges ()Ljava/lang/Boolean;
+	public abstract fun getForceModel ()Latlas/d2/ElkForceModel;
+	public abstract fun getForceNodeModelOrder ()Ljava/lang/Boolean;
+	public abstract fun getForceRepulsion ()Ljava/lang/Float;
+	public abstract fun getMergeEdges ()Ljava/lang/Boolean;
+	public abstract fun getMrTreeSearchOrder ()Latlas/d2/ElkMrTreeSearchOrder;
+	public abstract fun getMrTreeWeighting ()Latlas/d2/ElkMrTreeWeighting;
+	public abstract fun getNodeNode ()Ljava/lang/Integer;
 	public abstract fun getNodeNodeBetweenLayers ()Ljava/lang/Integer;
 	public abstract fun getNodeSelfLoop ()Ljava/lang/Integer;
 	public abstract fun getPadding ()Ljava/lang/String;
+	public abstract fun getRadialCompactor ()Latlas/d2/ElkRadialCompactor;
+	public abstract fun getRadialRadius ()Ljava/lang/Integer;
+	public abstract fun getRadialWedgeCriteria ()Latlas/d2/ElkRadialWedgeCriteria;
+	public abstract fun getStressDesiredEdgeLength ()Ljava/lang/Integer;
+	public abstract fun getWrappingStrategy ()Latlas/d2/ElkWrappingStrategy;
 	public abstract fun padding (I)V
 	public abstract fun padding (II)V
 	public abstract fun padding (IIII)V
 	public abstract fun setAlgorithm (Latlas/d2/ElkAlgorithm;)V
+	public abstract fun setEdgeEdge (Ljava/lang/Integer;)V
+	public abstract fun setEdgeEdgeBetweenLayers (Ljava/lang/Integer;)V
+	public abstract fun setEdgeNode (Ljava/lang/Integer;)V
 	public abstract fun setEdgeNodeBetweenLayers (Ljava/lang/Integer;)V
+	public abstract fun setEdgeRouting (Latlas/d2/ElkEdgeRouting;)V
+	public abstract fun setFeedbackEdges (Ljava/lang/Boolean;)V
+	public abstract fun setForceModel (Latlas/d2/ElkForceModel;)V
+	public abstract fun setForceNodeModelOrder (Ljava/lang/Boolean;)V
+	public abstract fun setForceRepulsion (Ljava/lang/Float;)V
+	public abstract fun setMergeEdges (Ljava/lang/Boolean;)V
+	public abstract fun setMrTreeSearchOrder (Latlas/d2/ElkMrTreeSearchOrder;)V
+	public abstract fun setMrTreeWeighting (Latlas/d2/ElkMrTreeWeighting;)V
+	public abstract fun setNodeNode (Ljava/lang/Integer;)V
 	public abstract fun setNodeNodeBetweenLayers (Ljava/lang/Integer;)V
 	public abstract fun setNodeSelfLoop (Ljava/lang/Integer;)V
 	public abstract fun setPadding (Ljava/lang/String;)V
+	public abstract fun setRadialCompactor (Latlas/d2/ElkRadialCompactor;)V
+	public abstract fun setRadialRadius (Ljava/lang/Integer;)V
+	public abstract fun setRadialWedgeCriteria (Latlas/d2/ElkRadialWedgeCriteria;)V
+	public abstract fun setStressDesiredEdgeLength (Ljava/lang/Integer;)V
+	public abstract fun setWrappingStrategy (Latlas/d2/ElkWrappingStrategy;)V
 }
 
 public final class atlas/d2/D2ElkSpec$DefaultImpls {
@@ -864,6 +898,79 @@ public final class atlas/d2/ElkAlgorithm : java/lang/Enum, atlas/core/StringEnum
 	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkAlgorithm;
 	public static fun values ()[Latlas/d2/ElkAlgorithm;
+}
+
+public final class atlas/d2/ElkEdgeRouting : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Orthogonal Latlas/d2/ElkEdgeRouting;
+	public static final field Polyline Latlas/d2/ElkEdgeRouting;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkEdgeRouting;
+	public static fun values ()[Latlas/d2/ElkEdgeRouting;
+}
+
+public final class atlas/d2/ElkForceModel : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Eades Latlas/d2/ElkForceModel;
+	public static final field FruchtermanReingold Latlas/d2/ElkForceModel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkForceModel;
+	public static fun values ()[Latlas/d2/ElkForceModel;
+}
+
+public final class atlas/d2/ElkMrTreeSearchOrder : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Bfs Latlas/d2/ElkMrTreeSearchOrder;
+	public static final field Dfs Latlas/d2/ElkMrTreeSearchOrder;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkMrTreeSearchOrder;
+	public static fun values ()[Latlas/d2/ElkMrTreeSearchOrder;
+}
+
+public final class atlas/d2/ElkMrTreeWeighting : java/lang/Enum, atlas/core/StringEnum {
+	public static final field Descendants Latlas/d2/ElkMrTreeWeighting;
+	public static final field Fan Latlas/d2/ElkMrTreeWeighting;
+	public static final field ModelOrder Latlas/d2/ElkMrTreeWeighting;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkMrTreeWeighting;
+	public static fun values ()[Latlas/d2/ElkMrTreeWeighting;
+}
+
+public final class atlas/d2/ElkRadialCompactor : java/lang/Enum, atlas/core/StringEnum {
+	public static final field None Latlas/d2/ElkRadialCompactor;
+	public static final field RadialCompaction Latlas/d2/ElkRadialCompactor;
+	public static final field WedgeCompaction Latlas/d2/ElkRadialCompactor;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkRadialCompactor;
+	public static fun values ()[Latlas/d2/ElkRadialCompactor;
+}
+
+public final class atlas/d2/ElkRadialWedgeCriteria : java/lang/Enum, atlas/core/StringEnum {
+	public static final field LeafNumber Latlas/d2/ElkRadialWedgeCriteria;
+	public static final field NodeSize Latlas/d2/ElkRadialWedgeCriteria;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkRadialWedgeCriteria;
+	public static fun values ()[Latlas/d2/ElkRadialWedgeCriteria;
+}
+
+public final class atlas/d2/ElkWrappingStrategy : java/lang/Enum, atlas/core/StringEnum {
+	public static final field MultiEdge Latlas/d2/ElkWrappingStrategy;
+	public static final field Off Latlas/d2/ElkWrappingStrategy;
+	public static final field SingleEdge Latlas/d2/ElkWrappingStrategy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Latlas/d2/ElkWrappingStrategy;
+	public static fun values ()[Latlas/d2/ElkWrappingStrategy;
 }
 
 public final class atlas/d2/ExecutableSource : java/lang/Enum, atlas/core/StringEnum {

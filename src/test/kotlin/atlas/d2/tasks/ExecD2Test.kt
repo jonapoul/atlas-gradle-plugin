@@ -125,6 +125,11 @@ internal class ExecD2Test : ScenarioTest() {
       .contains("--font-regular=$font")
       .contains("--font-mono-bold=$font")
       .contains("--elk-nodeSelfLoop=50")
+      .contains("--elk-edgeEdgeBetweenLayers=10")
+      .contains("--elk-mergeEdges=true")
+      .contains("--elk-edgeRouting=polyline")
+      .contains("--elk-forceRepulsion=2.5")
+      .contains("--elk-mrtreeSearchOrder=bfs")
       // only used for SVGs
       .doesNotContain("--no-xml-tag")
   }
